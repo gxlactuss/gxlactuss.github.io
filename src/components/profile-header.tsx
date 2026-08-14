@@ -33,6 +33,19 @@ export function ProfileHeader() {
             ))}
           </ul>
           <p className="mt-2 font-mono text-xs text-fg-muted">{site.location}</p>
+
+          {/* Its own badge rather than a fourth grey line — the point is that
+              this one gets read, and grey text next to grey text doesn't. */}
+          {profile.cgpa && (
+            <p className="mt-3 inline-flex items-baseline gap-2 rounded-md border border-accent/40 bg-accent/10 px-2.5 py-1.5">
+              <span className="font-mono text-[10px] uppercase tracking-widest text-fg-muted">
+                CGPA
+              </span>
+              <span className="font-mono text-base font-medium leading-none text-accent dark:text-accent-strong">
+                {profile.cgpa}
+              </span>
+            </p>
+          )}
         </div>
       </div>
 

@@ -23,10 +23,12 @@ export const site = {
 /** The block beside your photo. Set `age` to null to hide that line. */
 export const profile = {
   photo: "/profile.jpg",
-  age: null as number | null, // TODO: set your age, or leave null to omit
+  age: 19 as number | null,
   college: "KJSIIT",
   degree: "BTech in Computer Engineering",
   graduation: "2025–2029",
+  /** Rendered as its own badge, not buried in the facts list. Null hides it. */
+  cgpa: "9.71" as string | null,
 } as const;
 
 export const nav = [
