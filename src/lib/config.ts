@@ -35,7 +35,6 @@ export const nav = [
   { label: "projects", href: "/#projects" },
   { label: "shenanigans", href: "/#shenanigans" },
   { label: "resume", href: "/#resume" },
-  { label: "writing", href: "/blog" },
 ] as const;
 
 export type Project = {
