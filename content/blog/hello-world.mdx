@@ -1,0 +1,39 @@
+---
+title: Hello, world
+description: A placeholder post so the blog isn't empty. Delete this one once you've written a real one.
+date: 2026-08-14
+draft: false
+---
+
+This file lives at `content/blog/hello-world.mdx`. Add a new `.mdx` file in that
+folder and it shows up on the blog automatically — no code changes, no rebuilding
+an index somewhere.
+
+## Frontmatter
+
+Every post needs the block at the top of this file:
+
+```yaml
+---
+title: Hello, world
+description: Shown on the blog index and in link previews.
+date: 2026-08-14
+draft: false
+---
+```
+
+Set `draft: true` and the post is visible in `npm run dev` but hidden from the
+built site — useful for drafting in place.
+
+## What you can write
+
+Standard markdown, plus GitHub extensions like tables and strikethrough. Code
+blocks are syntax-highlighted at build time:
+
+```ts
+export function greet(name: string) {
+  return `hey ${name}`;
+}
+```
+
+That's the whole system. Write the file, commit, push.
