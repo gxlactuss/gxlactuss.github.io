@@ -23,6 +23,27 @@
   --accent: oklch(0.72 0.14 250);
 }
 
+/*
+  GitHub's own contribution scale. Kept as literals rather than derived from the
+  site accent: the green is what makes the widget read as "GitHub" at a glance.
+  Level 0 uses the site's own surface so empty days sit in the page, not on it.
+*/
+:root {
+  --gh-0: var(--bg-subtle);
+  --gh-1: #9be9a8;
+  --gh-2: #40c463;
+  --gh-3: #30a14e;
+  --gh-4: #216e39;
+}
+
+.dark {
+  --gh-0: var(--bg-subtle);
+  --gh-1: #0e4429;
+  --gh-2: #006d32;
+  --gh-3: #26a641;
+  --gh-4: #39d353;
+}
+
 @theme inline {
   --color-bg: var(--bg);
   --color-bg-subtle: var(--bg-subtle);

@@ -1,14 +1,16 @@
 import Link from "next/link";
 import { ComingSoon } from "@/components/coming-soon";
+import { ContributionCalendar } from "@/components/contribution-calendar";
 import { Friends } from "@/components/friends";
 import { ProjectCard } from "@/components/project-card";
 import { Section } from "@/components/section";
 import { SocialLinks } from "@/components/social-links";
 import { projects, shenanigans, site } from "@/lib/config";
+import { getContributionDays } from "@/lib/contributions";
 import { formatDate, getPosts } from "@/lib/posts";
 
 export default async function Home() {
-  const posts = await getPosts();
+  const [posts, contributionDays] = await Promise.all([getPosts(), getContributionDays(30)]);
   const recent = posts.slice(0, 3);
 
   return (
@@ -36,6 +38,10 @@ export default async function Home() {
             <ProjectCard key={p.title} project={p} />
           ))}
         </div>
+      </Section>
+
+      <Section id="github" title="GitHub">
+        <ContributionCalendar days={contributionDays} />
       </Section>
 
       <Section id="open-source" title="Open Source">
