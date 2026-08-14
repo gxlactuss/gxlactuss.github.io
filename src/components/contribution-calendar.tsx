@@ -44,7 +44,9 @@ export function ContributionCalendar({ days }: { days: ContributionDay[] }) {
   ).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" })}`;
 
   return (
-    <div>
+    // Fixed to the grid's own width and centred, so the caption row, the cells
+    // and the total all share one set of edges instead of three.
+    <div className="mx-auto w-[336px] max-w-full">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
         <span className="font-mono text-xs text-fg-muted">{range}</span>
         <div className="flex items-center gap-1.5 font-mono text-[11px] text-fg-muted">
@@ -56,7 +58,7 @@ export function ContributionCalendar({ days }: { days: ContributionDay[] }) {
         </div>
       </div>
 
-      <div className="max-w-[336px]">
+      <div>
         <div className="grid grid-cols-7 gap-1.5" aria-hidden="true">
           {WEEKDAYS.map((d, i) => (
             <span key={i} className="text-center font-mono text-[11px] text-fg-muted">
@@ -87,7 +89,7 @@ export function ContributionCalendar({ days }: { days: ContributionDay[] }) {
         </ul>
       </div>
 
-      <p className="mt-4 text-sm text-fg-muted">
+      <p className="mt-4 text-center text-sm text-fg-muted">
         <strong className="font-medium text-fg">{total}</strong> contributions in the last{" "}
         {days.length} days ·{" "}
         <a

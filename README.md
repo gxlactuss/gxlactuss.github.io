@@ -15,13 +15,42 @@ npm run typecheck  # tsc --noEmit
 | What | Where |
 |---|---|
 | Name, intro, socials, nav | [src/lib/config.ts](src/lib/config.ts) |
+| Profile block (age, college, degree) | `profile` in [src/lib/config.ts](src/lib/config.ts) |
 | Projects, shenanigans, friends | [src/lib/config.ts](src/lib/config.ts) |
 | Blog posts | [content/blog/](content/blog/) — one `.mdx` file per post |
 | Colors and typography | [src/app/globals.css](src/app/globals.css) |
+| Profile photo, resume, videos | [public/](public/) |
 | Deploy workflow | [.github/workflows/deploy.yml](.github/workflows/deploy.yml) |
 
 Everything on the home page is driven by `config.ts`. To add a project, append
 to the `projects` array — no components to touch.
+
+## The three things waiting on a file
+
+Each shows an honest placeholder until the file exists, rather than a link that
+404s:
+
+1. **Resume** — drop a PDF at `public/resume.pdf`. The section detects it at
+   build time and swaps the placeholder for View / Download buttons.
+2. **Project videos** — drop a file at `public/videos/<name>.mp4` and set
+   `video: "/videos/<name>.mp4"` on that project in `config.ts`. Optionally add
+   `poster` for the still frame shown before playback.
+3. **Project write-ups** — `body` on each project is an array of paragraphs
+   shown on its `/projects/<slug>` page. They currently hold placeholder text.
+
+## Theme
+
+Black and neon orange, defined in [src/app/globals.css](src/app/globals.css):
+
+- `--accent` / `--accent-strong` are the orange; every component reads them, so
+  changing the palette is a two-line edit.
+- **Light mode uses a deeper burnt orange on purpose.** The neon orange sits at
+  oklch lightness 0.78 and fails contrast badly on white; the light palette
+  keeps the hue and drops the lightness.
+- `--gh-0…4` is the contributions ramp, in the same hue rather than GitHub's
+  green. Replace those ten values to go back to green — nothing else reads them.
+- Important words are wrapped in `<mark class="hl">`. On the home page they come
+  from `site.introHighlights`; in blog posts, `**bold**` gets the same colour.
 
 ## Adding a blog post
 

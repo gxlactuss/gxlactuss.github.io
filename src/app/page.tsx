@@ -2,10 +2,11 @@ import Link from "next/link";
 import { ComingSoon } from "@/components/coming-soon";
 import { ContributionCalendar } from "@/components/contribution-calendar";
 import { Friends } from "@/components/friends";
+import { ProfileHeader } from "@/components/profile-header";
 import { ProjectCard } from "@/components/project-card";
+import { ResumeCard } from "@/components/resume-card";
 import { Section } from "@/components/section";
-import { SocialLinks } from "@/components/social-links";
-import { projects, shenanigans, site } from "@/lib/config";
+import { projects, shenanigans } from "@/lib/config";
 import { getContributionDays } from "@/lib/contributions";
 import { formatDate, getPosts } from "@/lib/posts";
 
@@ -15,16 +16,12 @@ export default async function Home() {
 
   return (
     <div className="py-16">
-      <h1 className="text-2xl font-medium tracking-tight">{site.name}</h1>
-      <p className="mt-3 leading-relaxed text-fg-muted">{site.intro}</p>
-      <p className="mt-3 font-mono text-xs text-fg-muted">{site.location}</p>
-
-      <SocialLinks className="mt-5" />
+      <ProfileHeader />
 
       <Section id="projects" title="Projects">
         <div className="grid gap-3">
           {projects.map((p) => (
-            <ProjectCard key={p.title} project={p} />
+            <ProjectCard key={p.slug} project={p} />
           ))}
         </div>
       </Section>
@@ -35,9 +32,13 @@ export default async function Home() {
         </p>
         <div className="grid gap-3">
           {shenanigans.map((p) => (
-            <ProjectCard key={p.title} project={p} />
+            <ProjectCard key={p.slug} project={p} />
           ))}
         </div>
+      </Section>
+
+      <Section id="resume" title="Resume">
+        <ResumeCard />
       </Section>
 
       <Section id="github" title="GitHub">

@@ -5,43 +5,56 @@
   renders correctly; dark values are applied by the .dark class that ThemeScript
   sets before first paint.
 */
+/*
+  Black + neon orange. Dark is the intended look; the greys are warmed very
+  slightly toward the accent's hue so the palette reads as one family.
+
+  Light mode deliberately does NOT use the neon orange: at oklch lightness 0.78
+  it fails contrast badly on white. It drops to a deeper burnt orange instead,
+  which is the same hue and actually readable.
+*/
 :root {
-  --bg: oklch(0.98 0.004 265);
-  --bg-subtle: oklch(0.955 0.005 265);
-  --border: oklch(0.9 0.006 265);
-  --fg: oklch(0.22 0.01 265);
-  --fg-muted: oklch(0.52 0.012 265);
-  --accent: oklch(0.55 0.16 255);
+  --bg: oklch(0.985 0.003 60);
+  --bg-subtle: oklch(0.96 0.005 60);
+  --border: oklch(0.9 0.008 60);
+  --fg: oklch(0.19 0.008 60);
+  --fg-muted: oklch(0.5 0.012 60);
+  --accent: oklch(0.58 0.18 45);
+  --accent-strong: oklch(0.52 0.19 42);
 }
 
 .dark {
-  --bg: oklch(0.17 0.008 265);
-  --bg-subtle: oklch(0.21 0.009 265);
-  --border: oklch(0.29 0.01 265);
-  --fg: oklch(0.93 0.005 265);
-  --fg-muted: oklch(0.66 0.012 265);
-  --accent: oklch(0.72 0.14 250);
+  /* Near-black rather than pure #000: a true black makes the orange vibrate
+     and hairline borders disappear entirely. */
+  --bg: oklch(0.145 0.004 60);
+  --bg-subtle: oklch(0.19 0.006 60);
+  --border: oklch(0.27 0.01 60);
+  --fg: oklch(0.95 0.004 60);
+  --fg-muted: oklch(0.66 0.012 60);
+  --accent: oklch(0.78 0.19 55);
+  --accent-strong: oklch(0.84 0.2 60);
 }
 
 /*
-  GitHub's own contribution scale. Kept as literals rather than derived from the
-  site accent: the green is what makes the widget read as "GitHub" at a glance.
-  Level 0 uses the site's own surface so empty days sit in the page, not on it.
+  Contribution scale, ramped through the accent hue rather than GitHub's green
+  so the widget belongs to this site. Level 0 is the page's own surface, so
+  empty days sit in the page rather than on it.
+  (To go back to GitHub green, replace these ten values — nothing else reads them.)
 */
 :root {
   --gh-0: var(--bg-subtle);
-  --gh-1: #9be9a8;
-  --gh-2: #40c463;
-  --gh-3: #30a14e;
-  --gh-4: #216e39;
+  --gh-1: oklch(0.88 0.07 60);
+  --gh-2: oklch(0.79 0.13 55);
+  --gh-3: oklch(0.68 0.17 48);
+  --gh-4: oklch(0.57 0.19 42);
 }
 
 .dark {
   --gh-0: var(--bg-subtle);
-  --gh-1: #0e4429;
-  --gh-2: #006d32;
-  --gh-3: #26a641;
-  --gh-4: #39d353;
+  --gh-1: oklch(0.33 0.07 50);
+  --gh-2: oklch(0.48 0.13 52);
+  --gh-3: oklch(0.63 0.17 55);
+  --gh-4: oklch(0.79 0.2 58);
 }
 
 @theme inline {
@@ -51,6 +64,7 @@
   --color-fg: var(--fg);
   --color-fg-muted: var(--fg-muted);
   --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
@@ -73,6 +87,20 @@ body {
 
 a {
   text-underline-offset: 3px;
+}
+
+/*
+  Important words. A <mark> so it carries meaning to assistive tech, but the
+  browser's yellow block background is dropped — the colour alone is the signal.
+*/
+.hl {
+  background: transparent;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.dark .hl {
+  color: var(--accent-strong);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -115,6 +143,16 @@ a {
 .prose a {
   color: var(--accent);
   text-decoration: underline;
+}
+
+/* Bold in an article is an "important word" too — same treatment as .hl. */
+.prose strong {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.dark .prose strong {
+  color: var(--accent-strong);
 }
 
 .prose ul,
