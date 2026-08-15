@@ -24,7 +24,7 @@ export const site = {
 export const profile = {
   photo: "/profile.jpg",
   age: 19 as number | null,
-  college: "KJSIIT",
+  college: "KJSIT",
   degree: "BTech in Computer Engineering",
   graduation: "2025–2029",
   /** Rendered as its own badge, not buried in the facts list. Null hides it. */
