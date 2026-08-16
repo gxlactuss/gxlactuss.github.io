@@ -21,6 +21,7 @@
   --fg-muted: oklch(0.5 0.012 60);
   --accent: oklch(0.58 0.18 45);
   --accent-strong: oklch(0.52 0.19 42);
+  --dot: oklch(0.85 0.012 60);
 }
 
 .dark {
@@ -33,6 +34,7 @@
   --fg-muted: oklch(0.66 0.012 60);
   --accent: oklch(0.78 0.19 55);
   --accent-strong: oklch(0.84 0.2 60);
+  --dot: oklch(0.34 0.014 60);
 }
 
 /*
@@ -75,10 +77,33 @@ html {
   scroll-padding-top: 5rem;
 }
 
-body {
+/* The ground colour lives on <html> so body::before can paint the dot grid
+   above it — a background on <body> would cover the pseudo-element. */
+html {
   background: var(--bg);
+}
+
+body {
   color: var(--fg);
   -webkit-font-smoothing: antialiased;
+}
+
+/*
+  Dot grid. Fixed rather than scrolling: the page is a single long column, and a
+  grid that slides past under the text turns into visual noise. Masked to fade
+  out down the viewport so it's texture near the top and clean space by the
+  footer, and it never competes with body copy.
+*/
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(circle at center, var(--dot) 1px, transparent 1.5px);
+  background-size: 26px 26px;
+  -webkit-mask-image: radial-gradient(ellipse 110% 75% at 50% 0%, #000 25%, transparent 80%);
+  mask-image: radial-gradient(ellipse 110% 75% at 50% 0%, #000 25%, transparent 80%);
 }
 
 ::selection {

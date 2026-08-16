@@ -120,6 +120,29 @@ export const resume = {
   filename: "Mohit-Samant-Resume.pdf",
 } as const;
 
+export type Paper = {
+  title: string;
+  /** Venue, or where it's hosted. Optional. */
+  venue?: string;
+  year?: string;
+  /**
+   * Either an external URL (arXiv, a journal, etc.) or a path to a PDF you drop
+   * in `public/papers/`. A local path is checked on disk at build time, so the
+   * entry renders as plain text until the file actually exists.
+   */
+  href?: string;
+};
+
+export const research: { published: Paper[]; preprints: Paper[] } = {
+  published: [],
+  preprints: [
+    {
+      title: "Network Intrusion Detection System (NIDS) prediction model",
+      href: "/papers/nids-prediction-model.pdf",
+    },
+  ],
+};
+
 /**
  * Built from `site` so the handles live in exactly one place. Rendered under the
  * intro and again in the footer; `icon` keys into the set in social-links.tsx.
