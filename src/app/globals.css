@@ -72,22 +72,27 @@
 }
 
 /*
-  Custom pointer: a white arrow with a dark outline, drawn as an inline SVG so
-  it ships with the CSS — no extra request, and it scales on hiDPI screens
-  where a PNG cursor would look soft.
+  Custom pointer: a tailless four-sided arrowhead with rounded corners, inlined
+  as an SVG so it ships with the CSS — no extra request, and it stays sharp on
+  hiDPI where a PNG cursor would look soft.
 
-  The dark outline is load-bearing, not decoration: a plain white arrow
-  disappears against the light theme. The trailing "4 2" is the hotspot, placed
-  on the arrow's tip so clicks land where the point is.
+  Each variant is the same path drawn twice: a fat dark stroke for the rounded
+  silhouette, then a thinner fill on top, leaving a ~1.2px rim. Doing it this
+  way rather than with `paint-order` keeps the result identical everywhere,
+  since a cursor image is a rendering context worth being conservative in.
+
+  The dark rim is load-bearing, not decoration: a plain white arrow disappears
+  against the light theme. The trailing "3 2" is the hotspot, on the visual tip
+  so clicks land at the point.
 
   Every rule keeps a keyword fallback after the URL, so a browser that refuses
   SVG cursors still gets a sensible native one.
 */
 :root {
-  --cursor-arrow: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='24'%20height='24'%20viewBox='0%200%2024%2024'%3E%3Cpath%20d='M4%202L4%2019L8.4%2015.1L11.3%2021.6L14%2020.4L11.2%2014.1L16.6%2014.1Z'%20fill='%23ffffff'%20stroke='%23111111'%20stroke-width='1.3'%20stroke-linejoin='round'/%3E%3C/svg%3E")
-    4 2;
-  --cursor-arrow-accent: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='24'%20height='24'%20viewBox='0%200%2024%2024'%3E%3Cpath%20d='M4%202L4%2019L8.4%2015.1L11.3%2021.6L14%2020.4L11.2%2014.1L16.6%2014.1Z'%20fill='%23ff8a3d'%20stroke='%23111111'%20stroke-width='1.3'%20stroke-linejoin='round'/%3E%3C/svg%3E")
-    4 2;
+  --cursor-arrow: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='24'%20height='24'%20viewBox='0%200%2024%2024'%3E%3Cpath%20d='M4.5%203L4.5%2017L8.8%2013.6L14.6%2012.2Z'%20fill='%23111111'%20stroke='%23111111'%20stroke-width='3.6'%20stroke-linejoin='round'/%3E%3Cpath%20d='M4.5%203L4.5%2017L8.8%2013.6L14.6%2012.2Z'%20fill='%23ffffff'%20stroke='%23ffffff'%20stroke-width='1.2'%20stroke-linejoin='round'/%3E%3C/svg%3E")
+    3 2;
+  --cursor-arrow-accent: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='24'%20height='24'%20viewBox='0%200%2024%2024'%3E%3Cpath%20d='M4.5%203L4.5%2017L8.8%2013.6L14.6%2012.2Z'%20fill='%23111111'%20stroke='%23111111'%20stroke-width='3.6'%20stroke-linejoin='round'/%3E%3Cpath%20d='M4.5%203L4.5%2017L8.8%2013.6L14.6%2012.2Z'%20fill='%23ff8a3d'%20stroke='%23ff8a3d'%20stroke-width='1.2'%20stroke-linejoin='round'/%3E%3C/svg%3E")
+    3 2;
 }
 
 body {
