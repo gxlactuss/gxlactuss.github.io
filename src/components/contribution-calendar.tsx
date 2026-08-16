@@ -9,13 +9,31 @@ function utc(date: string) {
   return new Date(`${date}T00:00:00Z`);
 }
 
-function label(date: string, count: number) {
-  const when = utc(date).toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    timeZone: "UTC",
-  });
-  return `${count === 0 ? "No" : count} contribution${count === 1 ? "" : "s"} on ${when}`;
+/** 1st, 2nd, 3rd, 4th … with the 11–13 exception English insists on. */
+function ordinal(n: number) {
+  const rem100 = n % 100;
+  if (rem100 >= 11 && rem100 <= 13) return `${n}th`;
+  switch (n % 10) {
+    case 1:
+      return `${n}st`;
+    case 2:
+      return `${n}nd`;
+    case 3:
+      return `${n}rd`;
+    default:
+      return `${n}th`;
+  }
+}
+
+/** "8th August 2026" */
+function longDate(date: string) {
+  const d = utc(date);
+  const month = d.toLocaleDateString("en-GB", { month: "long", timeZone: "UTC" });
+  return `${ordinal(d.getUTCDate())} ${month} ${d.getUTCFullYear()}`;
+}
+
+function countLabel(count: number) {
+  return `${count === 0 ? "No" : count} contribution${count === 1 ? "" : "s"}`;
 }
 
 function Swatch({ level, className = "" }: { level: number; className?: string }) {
@@ -72,18 +90,32 @@ export function ContributionCalendar({ days }: { days: ContributionDay[] }) {
             <li key={`blank-${i}`} aria-hidden="true" />
           ))}
           {days.map((day) => (
-            <li key={day.date} className="group relative">
-              {/* title gives a native tooltip; aria-label carries it to screen
-                  readers. Both mean the widget needs no client-side JS. */}
+            // tabIndex makes the tooltip reachable by keyboard as well as
+            // hover; group-focus-within drives the same reveal.
+            <li
+              key={day.date}
+              tabIndex={0}
+              aria-label={`${countLabel(day.count)} on ${longDate(day.date)}`}
+              className="group relative rounded-[4px] outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
               <Swatch
                 level={day.level}
                 className="aspect-square w-full transition-transform group-hover:scale-110"
               />
+
+              {/* Rendered up front and revealed with CSS, so the whole widget
+                  still ships zero client-side JavaScript. */}
               <span
-                title={label(day.date, day.count)}
-                aria-label={label(day.date, day.count)}
-                className="absolute inset-0"
-              />
+                role="tooltip"
+                className="pointer-events-none absolute bottom-full left-1/2 z-30 mb-2 hidden -translate-x-1/2 whitespace-nowrap rounded-md border border-border bg-bg-subtle px-2 py-1.5 text-center shadow-lg group-hover:block group-focus-within:block"
+              >
+                <span className="block text-xs font-medium text-fg">
+                  {countLabel(day.count)}
+                </span>
+                <span className="block font-mono text-[11px] text-fg-muted">
+                  {longDate(day.date)}
+                </span>
+              </span>
             </li>
           ))}
         </ul>

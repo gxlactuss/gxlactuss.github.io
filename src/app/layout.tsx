@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { CursorEmbers } from "@/components/cursor-embers";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ThemeScript } from "@/components/theme-toggle";
@@ -31,7 +30,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeScript />
       </head>
       <body className={`${sans.variable} ${mono.variable} font-sans`}>
-        <CursorEmbers />
         <SiteHeader />
         <main className="mx-auto max-w-2xl px-5">{children}</main>
         <SiteFooter />
