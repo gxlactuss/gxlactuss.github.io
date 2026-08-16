@@ -3,6 +3,7 @@ import { ContributionCalendar } from "@/components/contribution-calendar";
 import { Friends } from "@/components/friends";
 import { ProfileHeader } from "@/components/profile-header";
 import { ProjectCard } from "@/components/project-card";
+import { ResearchList } from "@/components/research-list";
 import { ResumeCard } from "@/components/resume-card";
 import { Section } from "@/components/section";
 import { projects, shenanigans } from "@/lib/config";
@@ -47,7 +48,7 @@ export default async function Home() {
       </Section>
 
       <Section id="research" title="Research">
-        <ComingSoon note="Papers and preprints will show up here." />
+        <ResearchList />
       </Section>
 
       <Section id="friends" title="My Friends">

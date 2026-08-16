@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { HeroComets } from "@/components/hero-comets";
 import { Highlight } from "@/components/highlight";
 import { SocialLinks } from "@/components/social-links";
 import { profile, site } from "@/lib/config";
@@ -14,8 +15,12 @@ export function ProfileHeader() {
   ].filter((f): f is string => Boolean(f));
 
   return (
-    <header>
-      <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-6">
+    // `isolate` gives the comet canvas its own stacking context, so a negative
+    // z-index puts it behind this content and nothing else.
+    <header className="relative isolate">
+      <HeroComets />
+
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-6">
         <Image
           src={profile.photo}
           alt={site.name}

@@ -14,11 +14,7 @@ type Ember = {
 };
 
 /** Hard cap so a frantic mouse can't sink the frame rate. */
-const MAX_EMBERS = 520;
-/** One spawn point per this many pixels of travel, so speed sets density. */
-const PX_PER_EMBER = 3;
-/** Embers per spawn point — more than one, or the trail reads as dotted. */
-const PER_POINT = 2;
+const MAX_EMBERS = 150;
 
 /**
  * An ember trail that burns off the pointer.
@@ -68,22 +64,23 @@ export function CursorEmbers() {
     let prevX = -1;
     let prevY = -1;
 
-    function spawn(x: number, y: number, count = PER_POINT) {
+    function spawn(x: number, y: number, count = 1) {
       for (let i = 0; i < count; i++) {
         if (embers.length >= MAX_EMBERS) return;
         const angle = Math.random() * Math.PI * 2;
-        const speed = Math.random() * 0.5;
-        const max = 420 + Math.random() * 460;
+        const speed = Math.random() * 0.28;
+        // Short-lived on purpose: an ember that dies this fast burns out before
+        // the pointer has travelled far enough to leave a streak behind it.
+        const max = 200 + Math.random() * 180;
         embers.push({
-          x: x + (Math.random() - 0.5) * 7,
-          y: y + (Math.random() - 0.5) * 7,
+          x: x + (Math.random() - 0.5) * 6,
+          y: y + (Math.random() - 0.5) * 6,
           vx: Math.cos(angle) * speed,
-          // Biased upward from birth — embers rise, sparks fall, and rising is
-          // what reads as heat.
-          vy: Math.sin(angle) * speed - 0.3,
+          // Slight upward bias — embers rise, and rising is what reads as heat.
+          vy: Math.sin(angle) * speed - 0.16,
           life: max,
           max,
-          size: 1.4 + Math.random() * 2.9,
+          size: 1 + Math.random() * 1.9,
         });
       }
     }
@@ -94,17 +91,12 @@ export function CursorEmbers() {
         prevX = x;
         prevY = y;
       }
-      const dx = x - prevX;
-      const dy = y - prevY;
-      const dist = Math.hypot(dx, dy);
+      const dist = Math.hypot(x - prevX, y - prevY);
 
-      // Spawn along the segment travelled since the last event, or a fast flick
-      // leaves a dotted line instead of a trail.
-      const steps = Math.min(Math.floor(dist / PX_PER_EMBER), 22);
-      for (let i = 1; i <= steps; i++) {
-        spawn(prevX + dx * (i / steps), prevY + dy * (i / steps));
-      }
-      if (dist > 0.5) spawn(x, y, 3); // hottest right at the pointer
+      // Only ever spawn at the pointer itself. Interpolating along the path is
+      // what drew the streak; without it the burn stays put and there's no
+      // trail, however fast you move.
+      if (dist > 1.5) spawn(x, y, 2);
 
       prevX = x;
       prevY = y;
@@ -135,24 +127,25 @@ export function CursorEmbers() {
         const t = p.life / p.max; // 1 at birth, 0 at death
         p.x += p.vx * step;
         p.y += p.vy * step;
-        p.vy -= 0.014 * step; // keep accelerating upward
+        p.vy -= 0.008 * step; // keep drifting upward
         p.vx *= 0.985;
 
-        // Cools as it dies: pale yellow core through orange to deep red.
-        const hue = 10 + t * 40;
-        const light = 42 + t * 38;
+        // Held inside a narrow orange band. The old range ran up to hue 50 at
+        // 80% lightness, which is where it went yellow-white and shouty.
+        const hue = 18 + t * 14;
+        const light = 46 + t * 12;
         const radius = Math.max(p.size * t, 0.25);
 
-        // Soft halo, then a bright core — two cheap circles read as glow
-        // without paying for shadowBlur on every particle.
+        // Soft halo, then a core — two cheap circles read as glow without
+        // paying for shadowBlur on every particle.
         ctx!.beginPath();
-        ctx!.arc(p.x, p.y, radius * 3.4, 0, Math.PI * 2);
-        ctx!.fillStyle = `hsla(${hue}, 100%, ${light}%, ${t * 0.17})`;
+        ctx!.arc(p.x, p.y, radius * 3, 0, Math.PI * 2);
+        ctx!.fillStyle = `hsla(${hue}, 92%, ${light}%, ${t * 0.08})`;
         ctx!.fill();
 
         ctx!.beginPath();
         ctx!.arc(p.x, p.y, radius, 0, Math.PI * 2);
-        ctx!.fillStyle = `hsla(${hue}, 100%, ${light + 8}%, ${t * 0.9})`;
+        ctx!.fillStyle = `hsla(${hue}, 95%, ${light + 4}%, ${t * 0.5})`;
         ctx!.fill();
       }
 
