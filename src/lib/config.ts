@@ -7,7 +7,7 @@ export const site = {
   name: "Mohit Samant",
   // Used for <title>, OG tags and canonical URLs. Change this if you later
   // point a custom domain at the site.
-  url: "https://gxlactuss.github.io",
+  url: "https://mohitsamant.me",
   // The two sentences a visitor reads first. Keep it concrete and in your voice.
   intro:
     "I build iOS apps and the backends behind them — mostly Swift and Python, mostly things I wanted to exist and couldn't find. Lately that's been study tools that do something the obvious version doesn't.",
