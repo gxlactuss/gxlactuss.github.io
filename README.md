@@ -125,6 +125,34 @@ server. The consequences worth knowing:
 If you ever want the guestbook back, the site has to move to a host that runs a
 server — Vercel's free tier does, and the rest of the code is unchanged.
 
+## Guestbook
+
+Backed by this repo's **GitHub Discussions** through [giscus](https://giscus.app).
+The site is a static export with no server, so it can't hold entries or run an
+OAuth callback itself — giscus keeps the data in Discussions and does sign-in
+inside its own iframe. Visitors need a GitHub account to post.
+
+**To switch it on (one time):**
+
+1. Install the giscus app on this repo: <https://github.com/apps/giscus>
+   (Discussions is already enabled.)
+2. Set `enabled: true` in the `giscus` block of
+   [src/lib/config.ts](src/lib/config.ts).
+3. Push.
+
+Until step 1 is done the widget renders "giscus is not installed on this
+repository" to every visitor, which is why the page shows a placeholder while
+`enabled` is false.
+
+Entries appear at
+<https://github.com/gxlactuss/gxlactuss.github.io/discussions> — moderating a
+post means deleting the comment there.
+
+**If you ever want the original guestbook back** — custom sign-in with
+GitHub/Google/Discord and your own Postgres table — the site has to move to a
+host that runs a server. Vercel's free tier does, and nothing else about the
+site would need to change.
+
 ## Re-enabling the auto-pulled Open Source section
 
 The Open Source section shows a "coming soon" card. The live version — a
