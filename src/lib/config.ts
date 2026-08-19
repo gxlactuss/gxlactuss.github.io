@@ -158,7 +158,7 @@ export const giscus = {
    * widget renders "giscus is not installed on this repository" to every
    * visitor, so the page shows a placeholder instead.
    */
-  enabled: false,
+  enabled: true,
   repo: "gxlactuss/gxlactuss.github.io",
   repoId: "R_kgDOT4lFhw",
   category: "General",
