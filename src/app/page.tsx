@@ -1,12 +1,13 @@
 import { ComingSoon } from "@/components/coming-soon";
 import { ContributionCalendar } from "@/components/contribution-calendar";
 import { Friends } from "@/components/friends";
+import { Guestbook } from "@/components/guestbook";
 import { ProfileHeader } from "@/components/profile-header";
 import { ProjectCard } from "@/components/project-card";
 import { ResearchList } from "@/components/research-list";
 import { ResumeCard } from "@/components/resume-card";
 import { Section } from "@/components/section";
-import { projects, shenanigans } from "@/lib/config";
+import { giscus, projects, shenanigans } from "@/lib/config";
 import { getContributionDays } from "@/lib/contributions";
 
 export default async function Home() {
@@ -54,6 +55,16 @@ export default async function Home() {
       <Section id="friends" title="My Friends">
         <Friends />
       </Section>
+
+      {giscus.enabled && (
+        <Section id="guestbook" title="Guestbook">
+          <p className="text-sm leading-relaxed text-fg-muted">
+            Say hi, leave a link, tell me I&apos;m wrong about something. Signing in uses your
+            GitHub account.
+          </p>
+          <Guestbook />
+        </Section>
+      )}
     </div>
   );
 }
