@@ -1,13 +1,19 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { giscus } from "@/lib/config";
+import { giscus, site } from "@/lib/config";
 
 const GISCUS_ORIGIN = "https://giscus.app";
 
-/** Presets chosen to sit on our own background rather than paint their own. */
+/**
+ * Custom themes rather than giscus presets, so the widget uses this site's
+ * orange instead of GitHub's green sign-in button and blue links.
+ *
+ * giscus fetches these from the public web, so the URL has to be absolute and
+ * the files have to be deployed — a relative path or localhost will not load.
+ */
 function themeFor(isDark: boolean) {
-  return isDark ? "transparent_dark" : "light";
+  return `${site.url}/giscus-${isDark ? "dark" : "light"}.css`;
 }
 
 /**
