@@ -6,11 +6,7 @@
 export const site = {
   name: "Mohit Samant",
   // Used for <title>, OG tags and canonical URLs.
-  //
-  // mohitsamant.me is registered but its DNS is not live yet, so the site is
-  // still served from github.io. To switch over once the domain resolves, see
-  // "Switching to the custom domain" in the README.
-  url: "https://gxlactuss.github.io",
+  url: "https://mohitsamant.me",
   // The two sentences a visitor reads first. Keep it concrete and in your voice.
   intro:
     "I build iOS apps and the backends behind them — mostly Swift and Python, mostly things I wanted to exist and couldn't find. Lately that's been study tools that do something the obvious version doesn't.",
