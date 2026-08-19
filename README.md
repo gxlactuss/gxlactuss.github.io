@@ -125,6 +125,52 @@ server. The consequences worth knowing:
 If you ever want the guestbook back, the site has to move to a host that runs a
 server — Vercel's free tier does, and the rest of the code is unchanged.
 
+## Switching to the custom domain
+
+`mohitsamant.me` is registered (Namecheap, expires 2027-08-19) but **not live
+yet** — the `.me` registry had no delegation for it at the time of writing, and
+no A records were pointing at GitHub.
+
+Setting the custom domain before DNS resolves takes the site **down**: Pages
+starts 301-ing `gxlactuss.github.io` to a domain that does not answer, so both
+URLs fail. Do these in order.
+
+**1. DNS at Namecheap** — Domain List → Manage → *Advanced DNS*. Delete the
+default parking/redirect records, then add:
+
+| Type | Host | Value |
+|---|---|---|
+| A | `@` | `185.199.108.153` |
+| A | `@` | `185.199.109.153` |
+| A | `@` | `185.199.110.153` |
+| A | `@` | `185.199.111.153` |
+| AAAA | `@` | `2606:50c0:8000::153` |
+| AAAA | `@` | `2606:50c0:8001::153` |
+| AAAA | `@` | `2606:50c0:8002::153` |
+| AAAA | `@` | `2606:50c0:8003::153` |
+| CNAME | `www` | `gxlactuss.github.io.` |
+
+**2. Wait until it actually resolves:**
+
+```bash
+dig +short A mohitsamant.me     # must list the four 185.199.x.x addresses
+```
+
+**3. Only then, switch the site over:**
+
+```bash
+printf 'mohitsamant.me\n' > public/CNAME     # ships inside the Pages artifact
+# set site.url in src/lib/config.ts to https://mohitsamant.me
+git add -A && git commit -m "Switch to mohitsamant.me" && git push
+```
+
+**4.** Repo → Settings → Pages → tick **Enforce HTTPS** once the certificate is
+issued (minutes, occasionally up to 24h).
+
+`public/CNAME` is the file that matters — a `CNAME` at the repo root never
+reaches the build output, because a Next static export only copies `public/`
+into `out/`.
+
 ## Guestbook
 
 Backed by this repo's **GitHub Discussions** through [giscus](https://giscus.app).
