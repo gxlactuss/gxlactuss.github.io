@@ -35,6 +35,7 @@ export const nav = [
   { label: "projects", href: "/#projects" },
   { label: "shenanigans", href: "/#shenanigans" },
   { label: "resume", href: "/#resume" },
+  { label: "guestbook", href: "/guestbook" },
 ] as const;
 
 export type Project = {
@@ -142,6 +143,30 @@ export const research: { published: Paper[]; preprints: Paper[] } = {
     },
   ],
 };
+
+/**
+ * Guestbook, backed by this repo's GitHub Discussions through giscus.
+ *
+ * The IDs are not secrets — giscus needs them client-side, and they only
+ * identify a public repo and a public discussion category.
+ *
+ * One-time setup: install the giscus app on the repo at
+ * https://github.com/apps/giscus (Discussions is already enabled).
+ */
+export const giscus = {
+  /**
+   * Flip to true once the giscus app is installed on the repo. Until then the
+   * widget renders "giscus is not installed on this repository" to every
+   * visitor, so the page shows a placeholder instead.
+   */
+  enabled: false,
+  repo: "gxlactuss/gxlactuss.github.io",
+  repoId: "R_kgDOT4lFhw",
+  category: "General",
+  categoryId: "DIC_kwDOT4lFh84DDuV6",
+  /** All entries land in one discussion thread with this title. */
+  term: "Guestbook",
+} as const;
 
 /**
  * Built from `site` so the handles live in exactly one place. Rendered under the
