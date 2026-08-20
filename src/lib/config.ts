@@ -98,6 +98,13 @@ export const shenanigans: Project[] = [
     tech: ["SwiftUI", "Swift"],
   },
   {
+    slug: "tic-tac-toe",
+    title: "Tic Tac Toe",
+    description:
+      "Universal SwiftUI tic tac toe for iPhone and iPad. Two players locally, or against a computer that takes the win when it has one and blocks when it has to, then falls back to centre, corner, side — beatable if you get there first. Keeps a running score, highlights the winning line, and labels every square for VoiceOver.",
+    tech: ["SwiftUI", "Swift"],
+  },
+  {
     slug: "flappy-swift",
     title: "Flappy Swift",
     description:
