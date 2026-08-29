@@ -80,6 +80,18 @@ Each shows an honest placeholder until the file exists, rather than a link that
    ffmpeg -ss 22 -i public/videos/asciify-ios.mp4 -frames:v 1 -q:v 4 \
      public/videos/asciify-ios.jpg
    ```
+
+   A recording made off the desktop rather than out of the simulator arrives
+   1920x1080 with the phone sitting on the wallpaper, so it needs cropping to
+   the screen first — `crop=w:h:x:y` ahead of the scale, as VocalNotes does.
+   Find the box by pulling one frame and zooming its edges (`scale=iw*3:ih*3`
+   with `flags=neighbor`) rather than by eye at full size; the difference
+   between clipping a few pixels of black bezel and leaving a sliver of
+   wallpaper in is only visible at that magnification, and only the second one
+   is a problem. Err inward — bezel is invisible against the card, wallpaper
+   isn't. Check the box against frames from across the recording before
+   encoding, in case the window was moved mid-take.
+
  List only the platforms
    you recorded — the rest get no tab, and one platform renders as a label
    rather than a control. The page lays itself out around the recording: a

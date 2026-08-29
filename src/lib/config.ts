@@ -140,6 +140,17 @@ export const projects: Project[] = [
     highlight:
       "Calibrates your handwriting speed from three timed trials, drops the outlier, then sizes every silence to match",
     work: { duration: "4 weeks", window: "Jul – Aug 2026" },
+    demos: {
+      // Cropped out of a 1080p desktop capture — the simulator window sat on
+      // the wallpaper, so this is the phone screen alone at
+      // crop=392:854:702:148. The window never moves, so one crop holds for the
+      // whole recording.
+      ios: {
+        src: "/videos/vocalnotes-ios.mp4",
+        poster: "/videos/vocalnotes-ios.jpg",
+        aspect: 588 / 1280,
+      },
+    },
     languages: [{ name: "Swift", share: 100 }],
     body: [
       "The problem here is physical, not technical. Copying a write-up off a screen means looking up and down between the page and the phone every few words, and that wrecks your handwriting and your neck long before it wrecks your notes. VocalNotes takes the screen out of the loop: it reads you a clause, goes quiet while you write it, and taps you when the next one is coming.",
