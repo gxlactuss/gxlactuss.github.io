@@ -32,7 +32,6 @@ export const profile = {
 
 export const nav = [
   { label: "projects", href: "/#projects" },
-  { label: "shenanigans", href: "/#shenanigans" },
   { label: "resume", href: "/#resume" },
   { label: "guestbook", href: "/#guestbook" },
 ] as const;
@@ -72,6 +71,8 @@ export type Project = {
   demo?: string;
   /** One-line hard number or claim. This is the line people remember. */
   highlight?: string;
+  /** App icon shown on the card and beside the title, e.g. "/logos/placed.png". */
+  logo?: string;
   /**
    * Demo videos for the project page, one per platform. Drop the files in
    * `public/videos/` and list only the platforms you actually recorded — a
@@ -85,37 +86,8 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    slug: "placed",
-    title: "Placed",
-    description:
-      "A placement-prep iOS app: AI mock interviews you answer out loud, a quiz bank with pass-to-unlock progression, and company-wise DSA lists pulled from ~38 companies. SwiftUI front end, FastAPI backend on Fly.io.",
-    tech: ["SwiftUI", "FastAPI", "Python", "SQLModel", "Groq", "Whisper"],
-    highlight:
-      "Full voice interview loop — record the answer, Whisper transcribes it, the model asks the follow-up",
-    body: [
-      "Replace this with the long version. What the app does, who it's for, and why you built it.",
-      "Then the interesting part: what was hard, what you tried that didn't work, and what you'd do differently.",
-    ],
-  },
-  {
-    slug: "vocalnotes",
-    title: "VocalNotes",
-    description:
-      "Reads a PDF aloud at the speed you can hand-write it. It speaks one clause, then goes silent for exactly as long as that clause takes to write, marking the boundaries with haptics so you never look up from the page. Everything but the voice runs on-device.",
-    tech: ["SwiftUI", "Swift 6", "PDFKit", "Vision", "SwiftData", "AVFoundation"],
-    highlight:
-      "Calibrates your handwriting speed from three timed trials, then sizes every silence to match",
-    body: [
-      "Replace this with the long version. The problem is physical — looking up and down between a screen and a notebook wrecks handwriting — so lead with that.",
-      "Then the pacing model: how the silence is sized, and why that's the hard part rather than the playback.",
-    ],
-  },
-];
-
-/** Half-finished experiments, small hacks, things that aren't portfolio-grade. */
-export const shenanigans: Project[] = [
-  {
     slug: "asciify",
+    logo: "/logos/asciify.png",
     title: "ASCIIFY",
     description:
       "Turns a photo into a grid of characters you can copy as text or save as an image — ten tones for shading, two for logos, with the tonal range stretched so a photograph doesn't collapse into midtone mush. The engine is CoreGraphics and nothing else, so the same source compiles into a macOS CLI and conversion quality gets checked without booting a simulator.",
@@ -132,30 +104,34 @@ export const shenanigans: Project[] = [
     },
   },
   {
-    slug: "minesweeper",
-    title: "Minesweeper",
+    slug: "vocalnotes",
+    logo: "/logos/vocalnotes.png",
+    title: "VocalNotes",
     description:
-      "SwiftUI Minesweeper with the rules the cheap clones skip — mines are laid after your first tap so the opening move is always safe, chording works, and it keeps the five fastest clears per difficulty.",
-    tech: ["SwiftUI", "Swift"],
+      "Reads a PDF aloud at the speed you can hand-write it. It speaks one clause, then goes silent for exactly as long as that clause takes to write, marking the boundaries with haptics so you never look up from the page. Everything but the voice runs on-device.",
+    tech: ["SwiftUI", "Swift 6", "PDFKit", "Vision", "SwiftData", "AVFoundation"],
+    highlight:
+      "Calibrates your handwriting speed from three timed trials, then sizes every silence to match",
+    body: [
+      "Replace this with the long version. The problem is physical — looking up and down between a screen and a notebook wrecks handwriting — so lead with that.",
+      "Then the pacing model: how the silence is sized, and why that's the hard part rather than the playback.",
+    ],
   },
   {
-    slug: "tic-tac-toe",
-    title: "Tic Tac Toe",
+    slug: "placed",
+    logo: "/logos/placed.png",
+    title: "Placed",
     description:
-      "Universal SwiftUI tic tac toe for iPhone and iPad. Two players locally, or against a computer that takes the win when it has one and blocks when it has to, then falls back to centre, corner, side — beatable if you get there first. Keeps a running score, highlights the winning line, and labels every square for VoiceOver.",
-    tech: ["SwiftUI", "Swift"],
-  },
-  {
-    slug: "flappy-swift",
-    title: "Flappy Swift",
-    description:
-      "Worked through Gio Scalzo's SpriteKit Flappy Bird to learn how a game loop, physics bodies and parallax scrolling fit together. His code, my education.",
-    tech: ["SpriteKit", "Swift"],
+      "A placement-prep iOS app: AI mock interviews you answer out loud, a quiz bank with pass-to-unlock progression, and company-wise DSA lists pulled from ~38 companies. SwiftUI front end, FastAPI backend on Fly.io.",
+    tech: ["SwiftUI", "FastAPI", "Python", "SQLModel", "Groq", "Whisper"],
+    highlight:
+      "Full voice interview loop — record the answer, Whisper transcribes it, the model asks the follow-up",
+    body: [
+      "Replace this with the long version. What the app does, who it's for, and why you built it.",
+      "Then the interesting part: what was hard, what you tried that didn't work, and what you'd do differently.",
+    ],
   },
 ];
-
-/** Every project, for lookups by slug on the detail pages. */
-export const allProjects: Project[] = [...projects, ...shenanigans];
 
 /**
  * Drop your PDF at `public/resume.pdf`. The Resume section detects it at build

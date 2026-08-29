@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Project } from "@/lib/config";
 
@@ -7,9 +8,20 @@ export function ProjectCard({ project }: { project: Project }) {
       {/* The whole card is the link. External repo/demo links would nest inside
           it, so they live on the detail page instead. */}
       <Link href={`/projects/${project.slug}`} className="block p-4">
-        <div className="flex items-baseline justify-between gap-3">
-          <h3 className="font-medium group-hover:text-accent">{project.title}</h3>
-          <span className="shrink-0 font-mono text-xs text-fg-muted transition-transform group-hover:translate-x-0.5 group-hover:text-accent">
+        <div className="flex items-center gap-3">
+          {project.logo && (
+            // Decorative: the title sits right beside it, and an alt here would
+            // just make a screen reader say the name twice.
+            <Image
+              src={project.logo}
+              alt=""
+              width={80}
+              height={80}
+              className="size-10 shrink-0 rounded-[22%] border border-border"
+            />
+          )}
+          <h3 className="min-w-0 font-medium group-hover:text-accent">{project.title}</h3>
+          <span className="ml-auto shrink-0 font-mono text-xs text-fg-muted transition-transform group-hover:translate-x-0.5 group-hover:text-accent">
             →
           </span>
         </div>

@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProjectDemo } from "@/components/project-demo";
-import { allProjects } from "@/lib/config";
+import { projects } from "@/lib/config";
 
 export function generateStaticParams() {
-  return allProjects.map((p) => ({ slug: p.slug }));
+  return projects.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -14,7 +15,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const project = allProjects.find((p) => p.slug === slug);
+  const project = projects.find((p) => p.slug === slug);
   if (!project) return {};
   return {
     title: project.title,
@@ -25,7 +26,7 @@ export async function generateMetadata({
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const project = allProjects.find((p) => p.slug === slug);
+  const project = projects.find((p) => p.slug === slug);
   if (!project) notFound();
 
   return (
@@ -34,7 +35,18 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         ← back
       </Link>
 
-      <h1 className="mt-6 text-2xl font-medium tracking-tight">{project.title}</h1>
+      <div className="mt-6 flex items-center gap-3">
+        {project.logo && (
+          <Image
+            src={project.logo}
+            alt=""
+            width={96}
+            height={96}
+            className="size-12 shrink-0 rounded-[22%] border border-border"
+          />
+        )}
+        <h1 className="text-2xl font-medium tracking-tight">{project.title}</h1>
+      </div>
 
       {project.highlight && (
         <p className="mt-3 border-l-2 border-accent pl-3 font-mono text-xs text-fg">
