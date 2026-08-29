@@ -164,6 +164,18 @@ export const projects: Project[] = [
     highlight:
       "Full voice interview loop — hold to answer, Whisper transcribes it, the model asks the follow-up",
     work: { duration: "4 weeks", window: "Jul – Aug 2026" },
+    demos: {
+      // Two simulator recordings joined end to end — onboarding through a full
+      // quiz, then the mock interview and the LeetCode lists. The five
+      // interview rounds run at 3x: they're the same hold-to-talk loop five
+      // times over, and three minutes of it is the one stretch of this demo
+      // nobody watches to the end.
+      ios: {
+        src: "/videos/placed-ios.mp4",
+        poster: "/videos/placed-ios.jpg",
+        aspect: 588 / 1280,
+      },
+    },
     languages: [
       { name: "Swift", share: 70.3 },
       { name: "Python", share: 22.8 },
