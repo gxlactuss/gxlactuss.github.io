@@ -27,7 +27,7 @@ export function ProjectCard({ project }: { project: Project }) {
           </span>
         </div>
 
-        <p className="mt-1.5 text-sm leading-relaxed text-fg-muted">
+        <p className="mt-1.5 text-[13px] leading-relaxed text-fg-muted">
           <Highlight text={project.description} terms={project.descriptionHighlights ?? []} />
         </p>
 
