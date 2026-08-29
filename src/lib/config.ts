@@ -131,12 +131,10 @@ export const projects: Project[] = [
     logo: "/logos/vocalnotes.png",
     title: "VocalNotes",
     description:
-      "A dictation app for students who have to copy long write-ups by hand. It breaks a PDF into clauses, speaks them one at a time, then holds the silence for exactly as long as that clause takes to write — marking every boundary with a haptic so you can keep your eyes on the notebook instead of the screen. Punctuation, spelling and dictionary lookups sit one tap away, the preview either follows the clause across the real page or strips everything but the text in Focus mode, and everything except the voice runs on-device.",
+      "A dictation app for students who copy long write-ups by hand. It breaks a PDF into clauses and holds the silence between them for exactly as long as that clause takes to write, so your eyes never have to leave the notebook.",
     descriptionHighlights: [
       "breaks a PDF into clauses",
       "exactly as long as that clause takes to write",
-      "Focus mode",
-      "on-device",
     ],
     tech: ["SwiftUI", "Swift 6", "PDFKit", "Vision", "NaturalLanguage", "SwiftData", "AVFoundation"],
     highlight:
@@ -156,11 +154,10 @@ export const projects: Project[] = [
     logo: "/logos/placed.png",
     title: "Placed",
     description:
-      "Placement prep for final-year CS students, built with a team — I own the entire front end, and a teammate built the backend and the database behind it. It ships 85 quizzes on a pass-to-unlock chain, company-wise LeetCode lists for 38 recruiters, and AI mock interviews you answer out loud and get followed up on. One SwiftUI target runs on iPhone, iPad and the Mac.",
+      "Placement prep for final-year CS students, built with a team — I own the entire front end, a teammate the backend. 85 quizzes on a pass-to-unlock chain, company-wise LeetCode lists for 38 recruiters, and AI mock interviews you answer out loud.",
     descriptionHighlights: [
       "built with a team",
       "the entire front end",
-      "85 quizzes",
       "AI mock interviews",
     ],
     tech: ["SwiftUI", "Metal", "FastAPI", "Python", "SQLModel", "Groq", "Whisper"],
@@ -187,12 +184,12 @@ export const projects: Project[] = [
     logo: "/logos/asciify.png",
     title: "ASCIIFY",
     description:
-      "A side project that ran the length of one afternoon: hand it any photo and it hands back a grid of characters — ten tones for shading, two for logos, with the tonal range stretched so a photograph doesn't collapse into midtone mush. Copy the result as text or save it straight to Photos as an image. The engine is CoreGraphics and nothing else, so the same source compiles into a macOS command-line tool and conversion quality gets checked without booting a simulator.",
+      "A side project that ran the length of one afternoon: hand it any photo and it hands back a grid of characters — ten tones for shading, two for logos. Copy it as text or save it straight to Photos as an image.",
     descriptionHighlights: [
       "one afternoon",
       "a grid of characters",
       "as text",
-      "straight to Photos as an image",
+      "as an image",
     ],
     tech: ["SwiftUI", "CoreGraphics", "ImageIO", "PhotosUI", "XCUITest"],
     highlight:
