@@ -6,7 +6,7 @@ import { ThemeToggle } from "./theme-toggle";
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-bg/80 backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-2xl items-center gap-4 px-5">
+      <div className="mx-auto flex h-14 max-w-4xl items-center gap-4 px-5">
         <Link
           href="/"
           className="flex shrink-0 items-center gap-2 font-medium tracking-tight hover:text-accent"

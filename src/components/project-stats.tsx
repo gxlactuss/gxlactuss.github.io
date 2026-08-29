@@ -14,11 +14,14 @@ export function ProjectStats({ project }: { project: Project }) {
   if (!work && !languages?.length) return null;
 
   return (
-    <div className="border-t border-border bg-bg-subtle/60 px-3 py-2.5">
+    <div className="border-t border-border bg-bg-subtle/60 px-2.5 py-2.5">
       {work && (
         <p className="font-mono text-[11px] text-fg-muted">
           Built in <span className="text-fg">{work.duration}</span>
-          {work.window && ` · ${work.window}`}
+          {/* The dates stay one unit: at this column width the line is a hair
+              from wrapping, and breaking it mid-range strands the year on a
+              line of its own. */}
+          {work.window && <span className="whitespace-nowrap"> · {work.window}</span>}
         </p>
       )}
 

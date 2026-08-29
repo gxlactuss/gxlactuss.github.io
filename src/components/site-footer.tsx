@@ -3,7 +3,7 @@ import { site, socials } from "@/lib/config";
 export function SiteFooter() {
   return (
     <footer className="mt-20 border-t border-border">
-      <div className="mx-auto flex max-w-2xl flex-wrap items-center justify-between gap-4 px-5 py-8 text-sm text-fg-muted">
+      <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-4 px-5 py-8 text-sm text-fg-muted">
         <span>
           © {new Date().getFullYear()} {site.name}
         </span>

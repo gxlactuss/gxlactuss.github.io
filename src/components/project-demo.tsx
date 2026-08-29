@@ -57,8 +57,8 @@ export function ProjectDemo({ project, children }: { project: Project; children:
     <div
       className={
         wide
-          ? "mt-8"
-          : "mt-8 grid gap-8 md:grid-cols-[minmax(0,260px)_minmax(0,1fr)] md:items-start"
+          ? "mt-6"
+          : "mt-6 grid gap-8 md:grid-cols-[minmax(0,240px)_minmax(0,1fr)] md:items-start"
       }
     >
       <div className={wide ? undefined : "md:sticky md:top-20"}>
