@@ -166,11 +166,11 @@ export const projects: Project[] = [
     logo: "/logos/placed.png",
     title: "Placed",
     description:
-      "Placement prep for final-year CS students, built with a team — I own the entire front end, a teammate the backend. 85 quizzes on a pass-to-unlock chain, company-wise LeetCode lists for 38 recruiters, and AI mock interviews you answer out loud.",
+      "Placement prep for final-year CS students: 85 quizzes on a pass-to-unlock chain, company-wise LeetCode lists for 38 recruiters, and AI mock interviews you answer out loud. SwiftUI front end, FastAPI backend, running on iPhone, iPad and the Mac.",
     descriptionHighlights: [
-      "built with a team",
-      "the entire front end",
+      "85 quizzes",
       "AI mock interviews",
+      "iPhone, iPad and the Mac",
     ],
     tech: ["SwiftUI", "Metal", "FastAPI", "Python", "SQLModel", "Groq", "Whisper"],
     highlight:
@@ -195,7 +195,7 @@ export const projects: Project[] = [
       { name: "Other", share: 0.3 },
     ],
     body: [
-      "Placed is aimed at the last year of a CS degree, the point where the syllabus stops being the thing standing between you and a job. The split is clean: I built the whole front end — the design system, every screen, the data layer and the eight stores behind it — and a teammate built the FastAPI backend and the schema it talks to.",
+      "Placed is aimed at the last year of a CS degree, the point where the syllabus stops being the thing standing between you and a job. It is one SwiftUI target with no third-party dependencies — a design system, every screen and the eight stores behind them — against a FastAPI backend, and the same binary runs on iPhone, iPad and the Mac.",
       "Quizzes chain per topic rather than per category, so nobody clears seven Operating Systems quizzes to reach DBMS, and a validator rejects duplicate prompts and any answer key a student could ride without reading a question. Solved state is keyed by the LeetCode slug, so ticking Two Sum marks it solved in every company that asks for it. The mock interview had to be voice or it was pointless: hold to answer, Whisper transcribes server-side, and the model comes back with a follow-up rather than the next scripted question.",
     ],
   },
