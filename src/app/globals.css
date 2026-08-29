@@ -95,28 +95,66 @@
     3 2;
 }
 
+/* On `html` as well as `body`: the two differ wherever the document is shorter
+   than the viewport, and a strip of default arrow under the footer is exactly
+   the inconsistency this is meant to remove. */
+html,
 body {
   cursor: var(--cursor-arrow), auto;
 }
 
-/* Anything clickable gets the accent fill — the cursor itself is the hover cue. */
-a,
+/* Anything clickable gets the accent fill — the cursor itself is the hover cue.
+   The list is written out rather than caught with `[tabindex]`, which would also
+   sweep up things that are focusable without being actionable — the contribution
+   cells are focusable so their tooltip is reachable by keyboard, and pointing an
+   "click me" cursor at a square that does nothing is its own inconsistency. */
+a[href],
 button,
 summary,
 label,
 select,
+option,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+input[type="checkbox"],
+input[type="radio"],
+input[type="range"],
+input[type="file"],
+input[type="color"],
 [role="button"],
-[role="tab"] {
+[role="link"],
+[role="tab"],
+[role="menuitem"],
+[role="option"],
+[role="switch"],
+[role="checkbox"],
+[role="radio"] {
   cursor: var(--cursor-arrow-accent), pointer;
 }
 
 /* Text entry and selection keep their native cursors, which carry real meaning. */
-input:not([type="button"]):not([type="submit"]):not([type="checkbox"]):not([type="radio"]),
+input:not([type]),
+input[type="text"],
+input[type="search"],
+input[type="email"],
+input[type="url"],
+input[type="tel"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
 textarea {
   cursor: text;
 }
 
-:disabled {
+/* Meaningful exceptions, and they outrank the rules above. */
+:disabled,
+[disabled],
+[aria-disabled="true"] {
   cursor: not-allowed;
 }
 
