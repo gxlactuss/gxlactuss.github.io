@@ -9,7 +9,7 @@ export function Friends() {
           <a
             href={friend.href}
             rel="noopener"
-            className="group flex w-16 flex-col items-center gap-2"
+            className="group flex w-20 flex-col items-center gap-2"
           >
             <span className="relative block rounded-full p-0.5 ring-1 ring-border transition-all group-hover:ring-2 group-hover:ring-accent">
               <Image

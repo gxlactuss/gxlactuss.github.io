@@ -312,4 +312,19 @@ export const friends = [
     href: "https://arneshbanerjee.dev/",
     avatar: "https://avatars.githubusercontent.com/u/177954836?v=4",
   },
+  {
+    name: "chishxd",
+    href: "https://chishxd.xyz/",
+    avatar: "https://avatars.githubusercontent.com/u/182657360?v=4",
+  },
+  {
+    name: "quantinium",
+    href: "https://quantinium.dev/",
+    avatar: "https://avatars.githubusercontent.com/u/72118517?v=4",
+  },
+  {
+    name: "lyra",
+    href: "https://lyradossier.vercel.app/",
+    avatar: "https://avatars.githubusercontent.com/u/309473272?v=4",
+  },
 ] as const;
