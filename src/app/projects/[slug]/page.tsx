@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Highlight } from "@/components/highlight";
 import { ProjectDemo } from "@/components/project-demo";
 import { projects } from "@/lib/config";
 
@@ -59,7 +60,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           a narrow screen. ProjectDemo owns that layout because it depends on
           which platform's recording is showing. */}
       <ProjectDemo project={project}>
-        <p className="leading-relaxed text-fg-muted">{project.description}</p>
+        <p className="leading-relaxed text-fg-muted">
+          <Highlight text={project.description} terms={project.descriptionHighlights ?? []} />
+        </p>
 
         {project.body?.map((paragraph) => (
           <p key={paragraph} className="mt-4 leading-relaxed text-fg-muted">

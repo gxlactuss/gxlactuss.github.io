@@ -89,7 +89,57 @@ Each shows an honest placeholder until the file exists, rather than a link that
    `aspect` (width ÷ height) when a recording breaks the mould, e.g. an iPad
    demo shot in portrait.
 4. **Project write-ups** — `body` on each project is an array of paragraphs
-   shown on its `/projects/<slug>` page. They currently hold placeholder text.
+   shown on its `/projects/<slug>` page, under the one-paragraph `description`
+   the card also uses.
+
+## Accenting words in prose
+
+`description` on a project and `intro` on `site` are plain strings, and the
+phrases painted in the accent live beside them as `descriptionHighlights` /
+`introHighlights`. Keeping them separate means the copy stays one editable
+string rather than a tree of spans; the terms are matched case-insensitively
+and longest-first, so a phrase beats a word inside it.
+
+A term that doesn't appear verbatim in the string simply doesn't render — check
+the punctuation and the em dashes if one goes missing. Four accented phrases per
+paragraph is about the ceiling: past that the orange stops meaning "this is the
+part that matters".
+
+## The strip under the demo
+
+`ProjectStats` draws the bar along the bottom of the demo player from two
+optional fields:
+
+```ts
+work: { duration: "4 weeks", window: "Jul – Aug 2026" },
+languages: [
+  { name: "Swift", share: 70.3 },
+  { name: "Python", share: 22.8 },
+],
+```
+
+Both are free text on purpose. `duration` is the headline — "one afternoon" is
+a truer answer for a day's project than any number of days would be — and
+`window` is the dates it was measured across. The honest source for both is the
+project's own git history:
+
+```sh
+git log --reverse --format=%ad --date=short | head -1   # first commit
+git log -1 --format=%ad --date=short                    # last commit
+```
+
+`languages` is GitHub's split, and the easiest way to get it right is to copy
+the percentages straight off the repo's Languages panel. Shares should add up to
+about 100; they drive `flex-grow` rather than a width, so the segments fill the
+track exactly however the numbers round, and a sliver as thin as 0.3% still
+gets 3px. Colours come from `languageColors` in `config.ts`, keyed by name and
+taken from GitHub's linguist so the bar reads the way the one on a repo page
+does — a name that isn't listed falls back to grey. The legend under the track
+isn't decoration: it carries the split to a screen reader, which is why the
+track itself is `aria-hidden`.
+
+Both fields are optional, and the bar renders under the "video coming"
+placeholder too, so it isn't dead until a recording lands.
 
 ## Theme
 
