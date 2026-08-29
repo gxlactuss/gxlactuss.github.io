@@ -63,7 +63,7 @@ Each shows an honest placeholder until the file exists, rather than a link that
    That took the ASCIIFY demo from 77 MB to 2.4 MB, at a higher resolution than
    the 17 MB the built-in `avconvert` managed — its presets are fixed-bitrate,
    so reach for ffmpeg instead. `scale=-2:1280` caps the long edge (the column
-   is only 260 CSS px, so this is already generous and leaves room for
+   is only 240 CSS px, so this is already generous and leaves room for
    fullscreen), `fps=30` halves the frame rate these recordings arrive at —
    iOS captures around 50 fps variable, and a UI demo reads fine at 30 —
    `+faststart` moves the index to the front so playback starts before the file

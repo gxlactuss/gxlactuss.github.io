@@ -11,7 +11,7 @@ export default async function BlogIndex() {
   const posts = await getPosts();
 
   return (
-    <div className="py-16">
+    <div className="max-w-2xl py-16">
       <h1 className="text-2xl font-medium tracking-tight">Writing</h1>
 
       {posts.length === 0 ? (

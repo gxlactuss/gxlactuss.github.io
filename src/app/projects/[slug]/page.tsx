@@ -31,7 +31,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   if (!project) notFound();
 
   return (
-    <article className="py-16">
+    <article className="py-10">
       <Link href="/#projects" className="font-mono text-xs text-fg-muted hover:text-accent">
         ← back
       </Link>

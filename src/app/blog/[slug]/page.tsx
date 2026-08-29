@@ -33,7 +33,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   if (!post || (post.draft && process.env.NODE_ENV !== "development")) notFound();
 
   return (
-    <article className="py-16">
+    <article className="max-w-2xl py-16">
       <Link href="/blog" className="font-mono text-xs text-fg-muted hover:text-accent">
         ← writing
       </Link>

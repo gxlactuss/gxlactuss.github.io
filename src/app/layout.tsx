@@ -31,7 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className={`${sans.variable} ${mono.variable} font-sans`}>
         <SiteHeader />
-        <main className="mx-auto max-w-2xl px-5">{children}</main>
+        <main className="mx-auto max-w-4xl px-5">{children}</main>
         <SiteFooter />
       </body>
     </html>

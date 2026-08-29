@@ -139,7 +139,7 @@ export const projects: Project[] = [
     tech: ["SwiftUI", "Swift 6", "PDFKit", "Vision", "NaturalLanguage", "SwiftData", "AVFoundation"],
     highlight:
       "Calibrates your handwriting speed from three timed trials, drops the outlier, then sizes every silence to match",
-    work: { duration: "4 weeks", window: "Jul – Aug 2026" },
+    work: { duration: "4 weeks", window: "Jul–Aug 2026" },
     demos: {
       // Cropped out of a 1080p desktop capture — the simulator window sat on
       // the wallpaper, so this is the phone screen alone at
@@ -157,11 +157,8 @@ export const projects: Project[] = [
     },
     languages: [{ name: "Swift", share: 100 }],
     body: [
-      "The problem here is physical, not technical. Copying a write-up off a screen means looking up and down between the page and the phone every few words, and that wrecks your handwriting and your neck long before it wrecks your notes. VocalNotes takes the screen out of the loop: it reads you a clause, goes quiet while you write it, and taps you when the next one is coming.",
-      "Sizing that silence is the whole product — playback is the easy half. Settings holds a short diagnostic that reads three sentences aloud, has you write each one from memory and stops on a tap. It subtracts the reach-for-the-phone latency, throws away the outlier of the three and averages what's left into a characters-per-second profile, and reports itself inconclusive rather than inventing a number when a run doesn't hold up. Every gap after that is costed from the clause itself — its length, its numbers and symbols, whether it opens a fresh paragraph — against that profile, with a pace trim to widen or tighten the lot per document when a particular book needs more room.",
-      "The reader has two faces because they answer different questions. Page shows the real PDF with the current clause highlighted and the camera following it down the page, which is what you want when you've lost your place. Focus throws the page away and sets the text large in the middle of the screen, current clause bright and the rest dimmed like song lyrics, which is what you want when you've lost the words. While dictation is running the whole preview becomes the transport — tap for more time, swipe to repeat or skip, long-press to pause — because a control you can't look at has to be findable by thumb, and every one of them answers with a haptic.",
-      "The study aids all came out of actually using it. Punctuation is a toggle with two honest settings: essential names only the marks you can't hear, since the writing gap already is the full stop, while all names everything for a quotation you have to match exactly. Spell hands you a picker of the words on the current clause with the ones no dictionary knows already flagged; Define passes the same answer to the system dictionary, on-device and already aware of whatever dictionaries you've installed; Skim filters a page down to its headings for a survey pass; and a rest-break timer counts dictating time rather than app-open time, then offers the break at a sentence boundary so you don't lose a clause to it.",
-      "It's one SwiftUI target in Swift 6 language mode with strict concurrency, shipping to iPhone, iPad and the Mac through Catalyst rather than a second AppKit codebase — the value is in the pacing arithmetic, and keeping two readers in step is exactly where the subtle bugs would live. PDF handling, OCR, segmentation, pacing and persistence are Apple frameworks throughout and never touch the network. Only the voice is a cloud call, and its audio is cached to disk, so a passage costs quota once and replays offline, with the system synthesizer as an automatic fallback when the network isn't there.",
+      "The problem is physical, not technical: copying off a screen means looking up and down every few words, and that wrecks your handwriting and your neck long before it wrecks your notes. So the screen leaves the loop — it reads you a clause, goes quiet while you write it, and taps you when the next one is coming. Sizing that silence is the whole product; playback is the easy half.",
+      "A diagnostic in Settings reads three sentences aloud, has you write each from memory and stops on a tap, then drops the outlier, subtracts the reach-for-the-phone latency and averages the rest into a characters-per-second profile. Every gap after that is costed from the clause itself against that profile. Page follows the real PDF with the current clause highlighted, Focus throws the page away and sets the text large, punctuation and spelling and dictionary lookups sit one tap away, and everything but the voice runs on-device.",
     ],
   },
   {
@@ -178,7 +175,7 @@ export const projects: Project[] = [
     tech: ["SwiftUI", "Metal", "FastAPI", "Python", "SQLModel", "Groq", "Whisper"],
     highlight:
       "Full voice interview loop — hold to answer, Whisper transcribes it, the model asks the follow-up",
-    work: { duration: "4 weeks", window: "Jul – Aug 2026" },
+    work: { duration: "4 weeks", window: "Jul–Aug 2026" },
     demos: {
       // Two simulator recordings joined end to end — onboarding through a full
       // quiz, then the mock interview and the LeetCode lists. The five
@@ -198,12 +195,8 @@ export const projects: Project[] = [
       { name: "Other", share: 0.3 },
     ],
     body: [
-      "Placed is aimed at the last year of a CS degree, the point where the syllabus stops being the thing standing between you and a job. It's a team project with a clean split: I built the whole front end — the design system, every screen, the data layer and the eight stores behind it — and a teammate built the FastAPI backend and the schema it talks to.",
-      "The quiz bank is 85 quizzes, one file each, arranged category → topic → quiz. That middle level exists because of the lock rather than the length: quiz N opens once N−1 is passed, and a chain only means something between quizzes about the same subject, so every topic gets its own instead of making someone clear seven Operating Systems quizzes to reach DBMS. A validator gates the bank before it ships — it checks each quiz's category and difficulty against the actual Swift enums, rejects duplicate prompts and colliding orders, and refuses an answer key a student could ride without reading a question.",
-      "The DSA side carries company-wise LeetCode lists for 38 recruiters, parsed off the main actor on first open and cached after, with the companies that actually came to campus tagged apart from the rest. Solved state is keyed by the LeetCode slug rather than by a row's position, so ticking Two Sum marks it solved in every list that asks for it, and a deduplicated catalogue across all 38 is what the global progress counts against.",
-      "The mock interview had to be voice or it was pointless. You hold to answer, the app records a 16 kHz mono take with a live level meter driving the visualiser, Whisper turns it into text server-side, and the model comes back with a follow-up rather than the next scripted question. The visualiser behind it is the app's one Metal shader: a domain-warped 3D simplex noise field drawn as three stacked sheets of the same liquid sampled a moment apart, folding harder the louder you get.",
-      "Everything around that exists to make coming back cheap. XP is paid against a ledger of awards already settled, so retaking a cleared quiz earns nothing and un-ticking a problem to re-tick it earns nothing twice; tiers unlock alternate app icons; the streak stores the raw set of practised days rather than a counter, so it can't be left stale by a clock change or a missed write. Add saved questions, a resume import that OCRs the PDF, a focus mode, and four themes — two dark, two light — that can follow the clock. Sign-in is email OTP plus Google and GitHub, brokered through the backend so no client secrets ever ship inside the app.",
-      "It's one target with no third-party dependencies, running on iPhone, iPad and the Mac. The iPad adaptation is a single file that caps every screen at the width it was drawn for and lets the ground show either side rather than stretching, and that's also what makes the Mac build work for free through Catalyst — same binary, same column, more ground.",
+      "Placed is aimed at the last year of a CS degree, the point where the syllabus stops being the thing standing between you and a job. The split is clean: I built the whole front end — the design system, every screen, the data layer and the eight stores behind it — and a teammate built the FastAPI backend and the schema it talks to.",
+      "Quizzes chain per topic rather than per category, so nobody clears seven Operating Systems quizzes to reach DBMS, and a validator rejects duplicate prompts and any answer key a student could ride without reading a question. Solved state is keyed by the LeetCode slug, so ticking Two Sum marks it solved in every company that asks for it. The mock interview had to be voice or it was pointless: hold to answer, Whisper transcribes server-side, and the model comes back with a follow-up rather than the next scripted question.",
     ],
   },
   {
@@ -232,9 +225,8 @@ export const projects: Project[] = [
       },
     },
     body: [
-      "The conversion is five steps, and each one is there because the picture came out wrong without it. The photo is decoded at a bounded size with its EXIF orientation applied; a uniform border is trimmed so the subject gets the whole grid instead of sharing it with empty backdrop; the image is resampled to one pixel per character cell, halving the vertical resolution because a cell is about half as wide as it is tall and skipping that stretches everything; Rec. 709 luminance is measured and the middle 96% of the tonal range stretched across it; and a character is looked up per cell from the selected ramp.",
-      "Export is two different problems. Copying puts two flavours on the clipboard at once — plain text wrapped in a triple-backtick fence, so chat apps render it monospaced instead of shredding the alignment, and RTF with a pinned monospace font and row height for anything rich-text. Saving renders the art light-on-dark and writes it into Photos. Text destinations wrap past roughly 100 columns, so the width slider marks that boundary and anything past it is for the image export only.",
-      "The engine lives in its own module and imports no UIKit on purpose, so the exact same code compiles into a macOS CLI. That is the whole testing story: a ramp or a threshold can be judged by piping a photo through the command line, rather than by booting a simulator and tapping through a picker to look at one result at a time.",
+      "Five steps, each one there because the picture came out wrong without it: decode at a bounded size with the EXIF orientation applied, trim the uniform border so the subject gets the whole grid, resample to one pixel per character cell — halving the vertical resolution, since a cell is about half as wide as it is tall — measure Rec. 709 luminance and stretch the middle 96% of the tonal range, then look up a character per cell.",
+      "Copying puts two flavours on the clipboard at once: plain text in a triple-backtick fence, so chat apps render it monospaced instead of shredding the alignment, and RTF with a pinned monospace font for rich-text targets. Text wraps past roughly 100 columns, so the width slider marks that boundary and anything past it is for the image export. The engine imports no UIKit on purpose, so the same code compiles into a macOS CLI and a ramp change can be judged from the command line.",
     ],
   },
 ];
