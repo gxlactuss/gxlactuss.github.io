@@ -145,6 +145,10 @@ export const projects: Project[] = [
       // the wallpaper, so this is the phone screen alone at
       // crop=392:854:702:148. The window never moves, so one crop holds for the
       // whole recording.
+      //
+      // The only demo here that keeps its audio, because on this app the voice
+      // IS the feature — a silent VocalNotes demo shows the UI and hides the
+      // product. The first clause is spoken around 0:24.
       ios: {
         src: "/videos/vocalnotes-ios.mp4",
         poster: "/videos/vocalnotes-ios.jpg",

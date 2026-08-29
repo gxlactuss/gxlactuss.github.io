@@ -67,8 +67,9 @@ Each shows an honest placeholder until the file exists, rather than a link that
    fullscreen), `fps=30` halves the frame rate these recordings arrive at —
    iOS captures around 50 fps variable, and a UI demo reads fine at 30 —
    `+faststart` moves the index to the front so playback starts before the file
-   finishes downloading, and `-an` drops the audio track a screen recording
-   doesn't have. Raise `-crf` to shrink further, lower it for more detail. Keep
+   finishes downloading, and `-an` drops the audio track — the right default,
+   but see "Keep the audio when the sound is the point" below before reaching
+   for it. Raise `-crf` to shrink further, lower it for more detail. Keep
    the container `.mp4`: the component declares `video/mp4`, and a `.mov`
    doesn't play reliably outside Safari.
 
@@ -91,6 +92,28 @@ Each shows an honest placeholder until the file exists, rather than a link that
    is a problem. Err inward — bezel is invisible against the card, wallpaper
    isn't. Check the box against frames from across the recording before
    encoding, in case the window was moved mid-take.
+
+   **Keep the audio when the sound is the point.** `-an` is the right default
+   — a UI demo with a silent track is smaller and nobody misses it — but
+   VocalNotes is a dictation app, and a silent demo of it shows the interface
+   while hiding the product. That one keeps its track:
+
+   ```sh
+   # what the source actually is, before deciding anything
+   ffmpeg -i capture.mov -af volumedetect -f null -                # peak, mean
+   ffmpeg -i capture.mov -af loudnorm=print_format=json -f null -  # LUFS
+   ```
+
+   Desktop captures come off quiet — this one measured -34 LUFS against a
+   -16 LUFS web target. Correct it with a flat `volume=NdB`, never with
+   `loudnorm`'s dynamic mode: that compresses, and on this app the silences
+   between clauses are the product, so pumping them up to meet a loudness
+   target destroys the thing the demo exists to show. Check the silent
+   stretches still read about -91 dB afterwards, which is digital silence — if
+   they read anything higher the capture took the microphone rather than the
+   system output, and it should not go up at all without listening to it
+   first. Leave headroom under 0 dBFS; AAC can overshoot its input peak, so a
+   gain that measures safe going in can still come back out hotter.
 
  List only the platforms
    you recorded — the rest get no tab, and one platform renders as a label
