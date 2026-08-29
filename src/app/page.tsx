@@ -48,8 +48,7 @@ export default async function Home() {
       {giscus.enabled && (
         <Section id="guestbook" title="Guestbook">
           <p className="text-sm leading-relaxed text-fg-muted">
-            Say hi, leave a link, tell me I&apos;m wrong about something. Signing in uses your
-            GitHub account.
+            Say hi. Signing in uses your GitHub account.
           </p>
           <Guestbook />
         </Section>

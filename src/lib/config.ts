@@ -244,9 +244,17 @@ export const resume = {
 
 export type Paper = {
   title: string;
+  /** In listed order, first author first. */
+  authors?: string[];
   /** Venue, or where it's hosted. Optional. */
   venue?: string;
   year?: string;
+  /**
+   * A write-up page on this site, served at `/research/<slug>`. Takes
+   * precedence over `href` — an internal page is always there, where a PDF
+   * link is only as good as the file behind it.
+   */
+  slug?: string;
   /**
    * Either an external URL (arXiv, a journal, etc.) or a path to a PDF you drop
    * in `public/papers/`. A local path is checked on disk at build time, so the
@@ -255,12 +263,14 @@ export type Paper = {
   href?: string;
 };
 
-export const research: { published: Paper[]; preprints: Paper[] } = {
-  published: [],
+export const research: { preprints: Paper[] } = {
   preprints: [
     {
-      title: "Network Intrusion Detection System (NIDS) prediction model",
-      href: "/papers/nids-prediction-model.pdf",
+      title:
+        "A Multi-Tiered Stacking Ensemble for Network Intrusion Detection and Alert Correlation",
+      authors: ["Mohit Samant", "Prof. Datta H. Deshmukh"],
+      year: "2026",
+      slug: "nids-stacking-ensemble",
     },
   ],
 };

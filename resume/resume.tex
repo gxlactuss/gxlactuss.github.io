@@ -1,0 +1,176 @@
+%-------------------------------------------------------------------------------
+% Mohit Samant — Resume
+%
+% Layout follows Jake Gutierrez's single-column CS template
+% (github.com/jakegut/resume, MIT licensed), which is the right pick here for
+% one reason: applicant tracking systems read a single column with plain section
+% rules reliably, and routinely scramble the two-column and sidebar templates
+% that look better on screen. \pdfgentounicode=1 below is part of that — it
+% makes the emitted PDF's text layer extractable rather than a bag of glyphs.
+%
+% COMPILE: Overleaf -> Menu -> Compiler -> pdfLaTeX. No custom .cls or .sty, no
+% fontawesome, nothing to upload alongside it; this file is the whole document.
+%
+% This is the copy published at mohitsamant.me, so it carries no phone number
+% by design. See the note in the heading block before sending it to an employer.
+%-------------------------------------------------------------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{iftex}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Margins
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Section headings: small caps, rule underneath, tight spacing above and below.
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Make the PDF's text layer machine-readable, so a parser gets words rather
+% than glyph codes -- this is what decides whether the resume survives being
+% fed through an ATS. Both primitives are pdfTeX-only, so they are guarded:
+% under XeLaTeX or LuaLaTeX the file still compiles, it just skips this.
+\ifPDFTeX
+  \input{glyphtounicode}
+  \pdfgentounicode=1
+\fi
+
+%-------------------------------------------------------------------------------
+% Commands
+%-------------------------------------------------------------------------------
+
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------------------------------------------
+\begin{document}
+
+%----------  HEADING  ----------
+\begin{center}
+    {\Huge \scshape Mohit Samant} \\ \vspace{3pt}
+    \small
+    % This copy is published on the site, so it carries no phone number. For a
+    % copy you send to an employer, add one back:
+    %   Mumbai, India $|$ +91 XXXXX XXXXX $|$ \href{mailto:...
+    Mumbai, India $|$
+    \href{mailto:mohitsamant1487@gmail.com}{\underline{mohitsamant1487@gmail.com}} \\ \vspace{2pt}
+    \href{https://mohitsamant.me}{\underline{mohitsamant.me}} $|$
+    \href{https://github.com/gxlactuss}{\underline{github.com/gxlactuss}} $|$
+    \href{https://www.linkedin.com/in/mohit-samant-7a76302ba/}{\underline{linkedin.com/in/mohit-samant}}
+\end{center}
+
+%----------  EDUCATION  ----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {K. J. Somaiya Institute of Technology}{Mumbai, India}
+      {B.Tech in Computer Engineering \textemdash{} CGPA: 9.71 / 10}{2025 \textendash{} 2029}
+  \resumeSubHeadingListEnd
+
+%----------  PROJECTS  ----------
+\section{Projects}
+    \resumeSubHeadingListStart
+
+      \resumeProjectHeading
+        {\textbf{VocalNotes} $|$ \emph{Swift 6, SwiftUI, PDFKit, Vision, SwiftData, AVFoundation}}{Jul \textendash{} Aug 2026}
+        \resumeItemListStart
+          \resumeItem{Developed a PDF dictation application that segments documents into clauses and paces playback against the user's measured handwriting speed.}
+          \resumeItem{Implemented a calibration routine deriving writing speed in characters per second from three timed trials, discarding outliers and correcting for input latency.}
+          \resumeItem{Delivered a single SwiftUI target to iPhone, iPad and macOS under Swift 6 strict concurrency, with on-device OCR and text processing and a cached cloud speech layer with offline fallback.}
+        \resumeItemListEnd
+
+      \resumeProjectHeading
+        {\textbf{Placed} $|$ \emph{SwiftUI, Metal, FastAPI, Python, SQLModel, Whisper, Docker}}{Jul \textendash{} Aug 2026}
+        \resumeItemListStart
+          \resumeItem{Developed a placement-preparation platform providing 85 quizzes on pass-to-unlock progression and company-wise DSA sets covering 38 recruiters.}
+          \resumeItem{Built a voice-based mock interview module using 16\,kHz capture, server-side Whisper transcription and model-generated follow-up questions.}
+          \resumeItem{Implemented the FastAPI and SQLModel backend with JWT authentication and server-side OAuth brokering, containerised and deployed on Fly.io.}
+        \resumeItemListEnd
+
+      \resumeProjectHeading
+        {\textbf{ASCIIFY} $|$ \emph{Swift, CoreGraphics, ImageIO, PhotosUI, XCUITest}}{Aug 2026}
+        \resumeItemListStart
+          \resumeItem{Developed an image-to-ASCII conversion tool with a UIKit-independent engine, allowing the same source to compile as a macOS command-line tool for automated quality testing.}
+          \resumeItem{Implemented the conversion pipeline: EXIF-aware decoding, border trimming, cell-aware resampling and Rec.\ 709 luminance mapping with tonal-range normalisation.}
+          \resumeItem{Added dual-format clipboard and PNG export, with UI test coverage across the picker and export paths.}
+        \resumeItemListEnd
+
+    \resumeSubHeadingListEnd
+
+%----------  TECHNICAL SKILLS  ----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Languages}{: Swift, Python, C, SQL, LaTeX} \\
+     \textbf{Apple Platforms}{: SwiftUI, Swift Concurrency, SwiftData, PDFKit, Vision, AVFoundation, CoreGraphics, Metal, Mac Catalyst, XCTest / XCUITest} \\
+     \textbf{Backend}{: FastAPI, SQLModel, SQLite, REST APIs, JWT \& OAuth, Docker, Fly.io} \\
+     \textbf{Machine Learning}{: scikit-learn, pandas, NumPy, Matplotlib; supervised learning \textemdash{} logistic regression, decision trees, random forests, gradient boosting, SVMs; feature engineering, k-fold cross-validation, hyperparameter tuning, class imbalance} \\
+     \textbf{Model Evaluation}{: precision / recall, F1, ROC-AUC, confusion matrices, overfitting and data-leakage diagnosis} \\
+     \textbf{Tools}{: Git, GitHub Actions, Xcode, XcodeGen, ffmpeg}
+    }}
+ \end{itemize}
+
+%----------  ACHIEVEMENTS  ----------
+\section{Achievements}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{LeetCode Contest Rating}{: 1733} \\
+     \textbf{LeetCode Problems Solved}{: 340+} \\
+     \textbf{MAH BBA CET}{: 99.73 percentile}
+    }}
+ \end{itemize}
+
+\end{document}

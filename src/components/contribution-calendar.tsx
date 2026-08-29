@@ -62,72 +62,78 @@ export function ContributionCalendar({ days }: { days: ContributionDay[] }) {
   ).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" })}`;
 
   return (
-    // Fixed to the grid's own width and centred, so the caption row, the cells
-    // and the total all share one set of edges instead of three.
-    <div className="mx-auto w-[336px] max-w-full">
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-        <span className="font-mono text-xs text-fg-muted">{range}</span>
-        <div className="flex items-center gap-1.5 font-mono text-[11px] text-fg-muted">
-          <span>Less</span>
-          {LEVELS.map((l) => (
-            <Swatch key={l} level={l} className="size-2.5" />
-          ))}
-          <span>More</span>
-        </div>
-      </div>
-
-      <div>
-        <div className="grid grid-cols-7 gap-1.5" aria-hidden="true">
-          {WEEKDAYS.map((d, i) => (
-            <span key={i} className="text-center font-mono text-[11px] text-fg-muted">
-              {d}
-            </span>
-          ))}
+    <div>
+      {/* Fixed to the grid's own width and centred, so the weekday
+          headings, the caption row and the cells share one set of edges
+          instead of three. */}
+      <div className="mx-auto w-[336px] max-w-full">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+          <span className="font-mono text-xs text-fg-muted">{range}</span>
+          <div className="flex items-center gap-1.5 font-mono text-[11px] text-fg-muted">
+            <span>Less</span>
+            {LEVELS.map((l) => (
+              <Swatch key={l} level={l} className="size-2.5" />
+            ))}
+            <span>More</span>
+          </div>
         </div>
 
-        <ul className="mt-1.5 grid grid-cols-7 gap-1.5">
-          {Array.from({ length: leadingBlanks }, (_, i) => (
-            <li key={`blank-${i}`} aria-hidden="true" />
-          ))}
-          {days.map((day) => (
-            // tabIndex makes the tooltip reachable by keyboard as well as
-            // hover; group-focus-within drives the same reveal.
-            <li
-              key={day.date}
-              tabIndex={0}
-              aria-label={`${countLabel(day.count)} on ${longDate(day.date)}`}
-              className="group relative rounded-[4px] outline-none focus-visible:ring-2 focus-visible:ring-accent"
-            >
-              <Swatch
-                level={day.level}
-                className="aspect-square w-full transition-transform group-hover:scale-110"
-              />
-
-              {/* Rendered up front and revealed with CSS, so the whole widget
-                  still ships zero client-side JavaScript. */}
-              <span
-                role="tooltip"
-                className="pointer-events-none absolute bottom-full left-1/2 z-30 mb-2 hidden -translate-x-1/2 whitespace-nowrap rounded-md border border-border bg-bg-subtle px-2 py-1.5 text-center shadow-lg group-hover:block group-focus-within:block"
-              >
-                <span className="block text-xs font-medium text-fg">
-                  {countLabel(day.count)}
-                </span>
-                <span className="block font-mono text-[11px] text-fg-muted">
-                  {longDate(day.date)}
-                </span>
+        <div>
+          <div className="grid grid-cols-7 gap-1.5" aria-hidden="true">
+            {WEEKDAYS.map((d, i) => (
+              <span key={i} className="text-center font-mono text-[11px] text-fg-muted">
+                {d}
               </span>
-            </li>
-          ))}
-        </ul>
+            ))}
+          </div>
+
+          <ul className="mt-1.5 grid grid-cols-7 gap-1.5">
+            {Array.from({ length: leadingBlanks }, (_, i) => (
+              <li key={`blank-${i}`} aria-hidden="true" />
+            ))}
+            {days.map((day) => (
+              // tabIndex makes the tooltip reachable by keyboard as well as
+              // hover; group-focus-within drives the same reveal.
+              <li
+                key={day.date}
+                tabIndex={0}
+                aria-label={`${countLabel(day.count)} on ${longDate(day.date)}`}
+                className="group relative rounded-[4px] outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              >
+                <Swatch
+                  level={day.level}
+                  className="aspect-square w-full transition-transform group-hover:scale-110"
+                />
+
+                {/* Rendered up front and revealed with CSS, so the whole widget
+                    still ships zero client-side JavaScript. */}
+                <span
+                  role="tooltip"
+                  className="pointer-events-none absolute bottom-full left-1/2 z-30 mb-2 hidden -translate-x-1/2 whitespace-nowrap rounded-md border border-border bg-bg-subtle px-2 py-1.5 text-center shadow-lg group-hover:block group-focus-within:block"
+                >
+                  <span className="block text-xs font-medium text-fg">
+                    {countLabel(day.count)}
+                  </span>
+                  <span className="block font-mono text-[11px] text-fg-muted">
+                    {longDate(day.date)}
+                  </span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
+      {/* The total sits outside that box. Pinned to 336px it wrapped
+          mid-sentence and broke the handle across two lines; out here it
+          has the section's full width and only wraps on a narrow phone. */}
       <p className="mt-4 text-center text-sm text-fg-muted">
         <strong className="font-medium text-fg">{total}</strong> contributions in the last{" "}
         {days.length} days ·{" "}
         <a
           href={`https://github.com/${site.github}`}
           rel="me noopener"
-          className="underline hover:text-accent"
+          className="whitespace-nowrap underline hover:text-accent"
         >
           github.com/{site.github}
         </a>
