@@ -1,12 +1,13 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { ProjectStats } from "@/components/project-stats";
 import { platforms, type Platform, type Project } from "@/lib/config";
 
 /** Placeholder until video files are dropped in `public/videos/`. */
 function EmptySlot({ title }: { title: string }) {
   return (
-    <div className="grid aspect-[9/16] place-items-center rounded-lg border border-dashed border-border bg-bg-subtle/40 p-6 text-center">
+    <div className="m-2 grid aspect-[9/16] place-items-center rounded-md border border-dashed border-border bg-bg-subtle/40 p-6 text-center">
       <div>
         <p className="font-mono text-xs uppercase tracking-widest text-accent">Video coming</p>
         <p className="mt-2 text-sm text-fg-muted">
@@ -101,29 +102,37 @@ export function ProjectDemo({ project, children }: { project: Project; children:
           )
         )}
 
-        {active && demo ? (
-          <div
-            id="demo-panel"
-            role={available.length > 1 ? "tabpanel" : undefined}
-            aria-labelledby={available.length > 1 ? `demo-tab-${active.id}` : undefined}
-          >
-            <video
-              // Remounts on switch: swapping the <source> under a live <video>
-              // doesn't reload it, so without this the tabs do nothing.
-              key={active.id}
-              controls
-              playsInline
-              preload="metadata"
-              poster={demo.poster}
-              style={{ aspectRatio: aspect }}
-              className="w-full rounded-lg border border-border bg-bg-subtle"
+        {/* Video and stats share one shell so the strip reads as the bottom of
+            the player rather than a card that happens to sit under it. The
+            placeholder takes the same shell, or the stats would float once a
+            project has no recording yet. */}
+        <div className="overflow-hidden rounded-lg border border-border">
+          {active && demo ? (
+            <div
+              id="demo-panel"
+              role={available.length > 1 ? "tabpanel" : undefined}
+              aria-labelledby={available.length > 1 ? `demo-tab-${active.id}` : undefined}
             >
-              <source src={demo.src} type="video/mp4" />
-            </video>
-          </div>
-        ) : (
-          <EmptySlot title={project.title} />
-        )}
+              <video
+                // Remounts on switch: swapping the <source> under a live <video>
+                // doesn't reload it, so without this the tabs do nothing.
+                key={active.id}
+                controls
+                playsInline
+                preload="metadata"
+                poster={demo.poster}
+                style={{ aspectRatio: aspect }}
+                className="block w-full bg-bg-subtle"
+              >
+                <source src={demo.src} type="video/mp4" />
+              </video>
+            </div>
+          ) : (
+            <EmptySlot title={project.title} />
+          )}
+
+          <ProjectStats project={project} />
+        </div>
       </div>
 
       <div className={wide ? "mt-8" : undefined}>{children}</div>

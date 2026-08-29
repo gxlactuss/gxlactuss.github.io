@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Highlight } from "@/components/highlight";
 import type { Project } from "@/lib/config";
 
 export function ProjectCard({ project }: { project: Project }) {
@@ -26,7 +27,9 @@ export function ProjectCard({ project }: { project: Project }) {
           </span>
         </div>
 
-        <p className="mt-1.5 text-sm leading-relaxed text-fg-muted">{project.description}</p>
+        <p className="mt-1.5 text-sm leading-relaxed text-fg-muted">
+          <Highlight text={project.description} terms={project.descriptionHighlights ?? []} />
+        </p>
 
         {project.highlight && (
           <p className="mt-2 border-l-2 border-accent pl-3 font-mono text-xs text-fg">
