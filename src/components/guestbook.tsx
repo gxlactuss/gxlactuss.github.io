@@ -49,7 +49,9 @@ export function Guestbook() {
       mapping: "specific",
       term: giscus.term,
       strict: "0",
-      "reactions-enabled": "1",
+      // No reaction bar: this is a guestbook, and a row of emoji buttons under
+      // every entry invites a tap where the point is to leave words.
+      "reactions-enabled": "0",
       "emit-metadata": "0",
       "input-position": "top",
       theme: themeFor(isDark),

@@ -302,12 +302,15 @@ export const giscus = {
 /**
  * Built from `site` so the handles live in exactly one place. Rendered under the
  * intro and again in the footer; `icon` keys into the set in social-links.tsx.
+ *
+ * Email is deliberately not here. An address is worth reading, and a row of
+ * identical pills is the one place on the page it would not be read — it says
+ * "Reach me at …" under the intro instead.
  */
 export const socials = [
   { label: "GitHub", icon: "github", href: `https://github.com/${site.github}` },
   { label: "LinkedIn", icon: "linkedin", href: `https://www.linkedin.com/in/${site.linkedin}/` },
   { label: "X", icon: "x", href: `https://x.com/${site.x}` },
-  { label: "Email", icon: "email", href: `mailto:${site.email}` },
 ] as const;
 
 /** Circular avatars at the bottom of the page. */

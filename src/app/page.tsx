@@ -11,7 +11,7 @@ import { giscus, projects } from "@/lib/config";
 import { getContributionDays } from "@/lib/contributions";
 
 export default async function Home() {
-  const contributionDays = await getContributionDays(30);
+  const contributionDays = await getContributionDays(365);
 
   return (
     <div className="py-16">
@@ -29,16 +29,16 @@ export default async function Home() {
         <ResumeCard />
       </Section>
 
+      <Section id="research" title="Research">
+        <ResearchList />
+      </Section>
+
       <Section id="github" title="GitHub">
         <ContributionCalendar days={contributionDays} />
       </Section>
 
       <Section id="open-source" title="Open Source">
         <ComingSoon note="Contributions I've made to other people's projects will show up here." />
-      </Section>
-
-      <Section id="research" title="Research">
-        <ResearchList />
       </Section>
 
       <Section id="friends" title="My Friends">

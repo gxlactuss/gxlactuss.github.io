@@ -8,3 +8,46 @@
 
   /*! Extensions from @primer/css/alerts/flash.scss */--color-social-reaction-bg-hover:var(--color-scale-gray-1);--color-social-reaction-bg-reacted-hover:var(--color-scale-blue-1)}main .pagination-loader-container{background-image:url(https://github.com/images/modules/pulls/progressive-disclosure-line.svg)}main .gsc-loading-image{background-image:url(https://github.githubassets.com/images/mona-loading-default.gif)}
 main{--color-btn-primary-bg:#cf5a1e;--color-btn-primary-hover-bg:#b84d17;--color-btn-primary-selected-bg:#b84d17;--color-btn-primary-disabled-bg:#cf5a1e80;--color-btn-primary-text:#ffffff;--color-btn-primary-border:transparent;--color-btn-primary-hover-border:transparent;--color-accent-fg:#b84d17;--color-accent-emphasis:#cf5a1e;--color-accent-muted:#cf5a1e55;--color-accent-subtle:#cf5a1e1a;--color-canvas-default:#0000;--color-canvas-subtle:#0000;--color-canvas-inset:#0000;--color-fg-default:#241f1b;--color-fg-muted:#6b6259;--color-border-default:#e2dbd4;--color-border-muted:#efe9e3;}
+
+/* ---------------------------------------------------------------------------
+   Site cursor, inside the frame.
+
+   giscus renders in a cross-origin iframe, so the page's own cursor rules stop
+   at its edge and the guestbook was the one region of the site running the
+   system arrow. giscus loads this stylesheet inside that frame, which is the
+   only hook there is — so the cursor is restated here. Keep in step with the
+   block in src/app/globals.css.
+   --------------------------------------------------------------------------- */
+html,
+body,
+main {
+  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='24'%20height='24'%20viewBox='0%200%2024%2024'%3E%3Cpath%20d='M4.5%203L4.5%2017L8.8%2013.6L14.6%2012.2Z'%20fill='%23111111'%20stroke='%23111111'%20stroke-width='3.6'%20stroke-linejoin='round'/%3E%3Cpath%20d='M4.5%203L4.5%2017L8.8%2013.6L14.6%2012.2Z'%20fill='%23ffffff'%20stroke='%23ffffff'%20stroke-width='1.2'%20stroke-linejoin='round'/%3E%3C/svg%3E") 3 2, auto;
+}
+
+a[href],
+button,
+summary,
+label,
+select,
+input[type="button"],
+input[type="submit"],
+input[type="checkbox"],
+input[type="radio"],
+[role="button"],
+[role="tab"],
+[role="menuitem"] {
+  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='24'%20height='24'%20viewBox='0%200%2024%2024'%3E%3Cpath%20d='M4.5%203L4.5%2017L8.8%2013.6L14.6%2012.2Z'%20fill='%23111111'%20stroke='%23111111'%20stroke-width='3.6'%20stroke-linejoin='round'/%3E%3Cpath%20d='M4.5%203L4.5%2017L8.8%2013.6L14.6%2012.2Z'%20fill='%23ff8a3d'%20stroke='%23ff8a3d'%20stroke-width='1.2'%20stroke-linejoin='round'/%3E%3C/svg%3E") 3 2, pointer;
+}
+
+input[type="text"],
+input[type="search"],
+textarea,
+.gsc-comment-box-textarea {
+  cursor: text;
+}
+
+:disabled,
+[disabled],
+[aria-disabled="true"] {
+  cursor: not-allowed;
+}
