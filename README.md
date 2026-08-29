@@ -16,23 +16,29 @@ npm run typecheck  # tsc --noEmit
 |---|---|
 | Name, intro, socials, nav | [src/lib/config.ts](src/lib/config.ts) |
 | Profile block (age, college, degree) | `profile` in [src/lib/config.ts](src/lib/config.ts) |
-| Projects, shenanigans, friends | [src/lib/config.ts](src/lib/config.ts) |
+| Projects, friends | [src/lib/config.ts](src/lib/config.ts) |
 | Blog posts | [content/blog/](content/blog/) — one `.mdx` file per post |
 | Colors and typography | [src/app/globals.css](src/app/globals.css) |
-| Profile photo, resume, videos | [public/](public/) |
+| Profile photo, resume, logos, videos | [public/](public/) |
 | Deploy workflow | [.github/workflows/deploy.yml](.github/workflows/deploy.yml) |
 
 Everything on the home page is driven by `config.ts`. To add a project, append
 to the `projects` array — no components to touch.
 
-## The three things waiting on a file
+## The four things waiting on a file
 
 Each shows an honest placeholder until the file exists, rather than a link that
 404s:
 
 1. **Resume** — drop a PDF at `public/resume.pdf`. The section detects it at
    build time and swaps the placeholder for View / Download buttons.
-2. **Project videos** — each project takes up to three demos, one per platform.
+2. **Project logos** — drop a square PNG at `public/logos/<slug>.png` and set
+   `logo` on that project in `config.ts`. It renders at 40px on the card and
+   48px beside the title, rounded to an iOS-ish squircle with a hairline
+   border, so a full-bleed icon and a rounded one still read as a set. Crop a
+   logo that carries a wordmark down to its mark first — the type turns to mush
+   at that size.
+3. **Project videos** — each project takes up to three demos, one per platform.
    Drop the files in `public/videos/` (the convention is
    `<slug>-<platform>.mp4`) and set `demos` on that project in `config.ts`:
 
@@ -82,7 +88,7 @@ Each shows an honest placeholder until the file exists, rather than a link that
    default shape lives in `platforms` in `config.ts`; override it per video with
    `aspect` (width ÷ height) when a recording breaks the mould, e.g. an iPad
    demo shot in portrait.
-3. **Project write-ups** — `body` on each project is an array of paragraphs
+4. **Project write-ups** — `body` on each project is an array of paragraphs
    shown on its `/projects/<slug>` page. They currently hold placeholder text.
 
 ## Theme
