@@ -115,6 +115,23 @@ export const projects: Project[] = [
 /** Half-finished experiments, small hacks, things that aren't portfolio-grade. */
 export const shenanigans: Project[] = [
   {
+    slug: "asciify",
+    title: "ASCIIFY",
+    description:
+      "Turns a photo into a grid of characters you can copy as text or save as an image — ten tones for shading, two for logos, with the tonal range stretched so a photograph doesn't collapse into midtone mush. The engine is CoreGraphics and nothing else, so the same source compiles into a macOS CLI and conversion quality gets checked without booting a simulator.",
+    tech: ["SwiftUI", "CoreGraphics", "ImageIO", "PhotosUI", "XCUITest"],
+    highlight:
+      "Trims the uniform border first, so a logo shot on a white sweep spends all 100 columns on the logo rather than on the sweep",
+    demos: {
+      // A phone screen recording, narrower than the 9/16 default.
+      ios: {
+        src: "/videos/asciify-ios.mp4",
+        poster: "/videos/asciify-ios.jpg",
+        aspect: 588 / 1280,
+      },
+    },
+  },
+  {
     slug: "minesweeper",
     title: "Minesweeper",
     description:
