@@ -32,9 +32,56 @@ Each shows an honest placeholder until the file exists, rather than a link that
 
 1. **Resume** — drop a PDF at `public/resume.pdf`. The section detects it at
    build time and swaps the placeholder for View / Download buttons.
-2. **Project videos** — drop a file at `public/videos/<name>.mp4` and set
-   `video: "/videos/<name>.mp4"` on that project in `config.ts`. Optionally add
-   `poster` for the still frame shown before playback.
+2. **Project videos** — each project takes up to three demos, one per platform.
+   Drop the files in `public/videos/` (the convention is
+   `<slug>-<platform>.mp4`) and set `demos` on that project in `config.ts`:
+
+   ```ts
+   demos: {
+     ios: { src: "/videos/placed-ios.mp4", poster: "/videos/placed-ios.jpg" },
+     ipados: { src: "/videos/placed-ipados.mp4" },
+     macos: { src: "/videos/placed-macos.mp4" },
+   },
+   ```
+
+   Screen recordings come off a device at 10–15 Mbps, which is 50–80 MB for
+   under a minute — far too heavy for a page, and `public/` is committed, so it
+   lands in git history for good. Re-encode before dropping one in:
+
+   ```sh
+   ffmpeg -i "ASCIIFY Showcase.mov" -vf "scale=-2:1280,fps=30" \
+     -c:v libx264 -crf 26 -preset slow -pix_fmt yuv420p \
+     -movflags +faststart -an public/videos/asciify-ios.mp4
+   ```
+
+   That took the ASCIIFY demo from 77 MB to 2.4 MB, at a higher resolution than
+   the 17 MB the built-in `avconvert` managed — its presets are fixed-bitrate,
+   so reach for ffmpeg instead. `scale=-2:1280` caps the long edge (the column
+   is only 260 CSS px, so this is already generous and leaves room for
+   fullscreen), `fps=30` halves the frame rate these recordings arrive at —
+   iOS captures around 50 fps variable, and a UI demo reads fine at 30 —
+   `+faststart` moves the index to the front so playback starts before the file
+   finishes downloading, and `-an` drops the audio track a screen recording
+   doesn't have. Raise `-crf` to shrink further, lower it for more detail. Keep
+   the container `.mp4`: the component declares `video/mp4`, and a `.mov`
+   doesn't play reliably outside Safari.
+
+   `poster` is the optional still shown before playback. The video's own first
+   frame is usually a launch screen, so pull a frame that shows the app actually
+   doing something:
+
+   ```sh
+   ffmpeg -ss 22 -i public/videos/asciify-ios.mp4 -frames:v 1 -q:v 4 \
+     public/videos/asciify-ios.jpg
+   ```
+ List only the platforms
+   you recorded — the rest get no tab, and one platform renders as a label
+   rather than a control. The page lays itself out around the recording: a
+   portrait phone video sits in a sticky column beside the write-up, an iPad or
+   Mac video takes the full width with the copy underneath. Each platform's
+   default shape lives in `platforms` in `config.ts`; override it per video with
+   `aspect` (width ÷ height) when a recording breaks the mould, e.g. an iPad
+   demo shot in portrait.
 3. **Project write-ups** — `body` on each project is an array of paragraphs
    shown on its `/projects/<slug>` page. They currently hold placeholder text.
 

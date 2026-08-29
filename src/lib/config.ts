@@ -37,6 +37,30 @@ export const nav = [
   { label: "guestbook", href: "/#guestbook" },
 ] as const;
 
+/**
+ * The platforms a demo can be recorded on, in tab order. `aspect` is width ÷
+ * height and is only the *default* for that platform — it reserves the right
+ * box before the file loads so the page never jumps, and anything ≥ 1 is laid
+ * out as a wide recording (video above the copy) instead of a phone-shaped one
+ * (video beside it). Override it per video when a recording breaks the mould.
+ */
+export const platforms = [
+  { id: "ios", label: "iOS", aspect: 9 / 16 },
+  { id: "ipados", label: "iPadOS", aspect: 4 / 3 },
+  { id: "macos", label: "macOS", aspect: 16 / 10 },
+] as const;
+
+export type Platform = (typeof platforms)[number]["id"];
+
+export type Demo = {
+  /** Path under `public/videos/`, e.g. "/videos/placed-ios.mp4". */
+  src: string;
+  /** Still frame shown before playback, e.g. "/videos/placed-ios.jpg". */
+  poster?: string;
+  /** Width ÷ height, when the recording isn't the platform default above. */
+  aspect?: number;
+};
+
 export type Project = {
   /** URL segment: /projects/<slug>. Lowercase, hyphens only. */
   slug: string;
@@ -49,12 +73,12 @@ export type Project = {
   /** One-line hard number or claim. This is the line people remember. */
   highlight?: string;
   /**
-   * Demo video for the project page. Drop the file in `public/videos/` and set
-   * this to e.g. "/videos/placed.mp4". Until then the page shows a placeholder.
+   * Demo videos for the project page, one per platform. Drop the files in
+   * `public/videos/` and list only the platforms you actually recorded — a
+   * platform you leave out gets no tab, and no videos at all leaves the
+   * placeholder in place.
    */
-  video?: string;
-  /** Optional poster frame shown before the video plays, e.g. "/videos/placed.jpg". */
-  poster?: string;
+  demos?: Partial<Record<Platform, Demo>>;
   /** Long-form copy for the project page. One string per paragraph. */
   body?: string[];
 };
