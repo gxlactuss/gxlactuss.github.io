@@ -329,6 +329,23 @@ a {
 }
 
 /*
+  Contribution grid. The whole widget wipes in left to right, oldest week first,
+  which is the direction it reads in anyway.
+
+  Done with a mask rather than by animating the 365 cells: one animation on one
+  element instead of 365 scroll timelines, and — because the cells each carry an
+  absolutely-positioned tooltip — no per-cell transform to turn every square
+  into its own stacking context.
+
+  The mask layer is deliberately 9x the element's height and centred: masking is
+  a clip, and a layer only as tall as the grid would cut the tooltips off above
+  the top row for good, since the mask stays applied after the sweep ends.
+*/
+.gh-sweep {
+  mask-image: none;
+}
+
+/*
   Scroll progress. A hairline of accent across the bottom of the sticky header.
   Base state is empty so a browser without scroll timelines shows nothing at all
   rather than a permanent full-width rule.
@@ -341,6 +358,15 @@ a {
   from {
     opacity: 0;
     translate: 0 12px;
+  }
+}
+
+@keyframes gh-sweep-in {
+  from {
+    mask-position: 120% center;
+  }
+  to {
+    mask-position: 0% center;
   }
 }
 
@@ -362,6 +388,21 @@ a {
       animation: reveal-in linear both;
       animation-timeline: view();
       animation-range: entry 0% entry 180px;
+    }
+
+    .gh-sweep {
+      mask-image: linear-gradient(90deg, #000 50%, transparent 60%);
+      mask-size: 200% 900%;
+      mask-repeat: no-repeat;
+      /* Belt and braces: if the timeline ever fails to attach, the animation
+         drops out and mask-position falls back to its initial `0% 0%`, which
+         anchors that 9x-tall layer at the top edge and clips the tooltips off
+         after all. Centring it statically makes the un-animated state the
+         fully-revealed one. */
+      mask-position: 0% center;
+      animation: gh-sweep-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 260px;
     }
   }
 }
