@@ -51,8 +51,32 @@ function Table({ head, rows }: { head: string[]; rows: string[][] }) {
   );
 }
 
+/**
+ * The id a section heading answers to. This page is hand-written JSX rather
+ * than MDX, so rehype-slug never sees it and the ids have to be derived here —
+ * by the same rule, so a link into this page looks like a link into a post.
+ */
+function slugify(text: React.ReactNode) {
+  return String(text)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
 function Heading({ children }: { children: React.ReactNode }) {
-  return <h2 className="mt-10 text-lg font-medium tracking-tight">{children}</h2>;
+  const id = slugify(children);
+  return (
+    <h2 id={id} className="group mt-10 text-lg font-medium tracking-tight">
+      {children}
+      <a
+        href={`#${id}`}
+        aria-label="Link to this section"
+        className="ml-2 font-mono text-fg-muted no-underline opacity-0 transition-opacity hover:text-accent focus-visible:opacity-100 group-hover:opacity-100"
+      >
+        #
+      </a>
+    </h2>
+  );
 }
 
 export default function PaperPage() {

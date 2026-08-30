@@ -6,6 +6,7 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
+import { mdxComponents } from "@/components/mdx-components";
 import { formatDate, getPost, getPosts } from "@/lib/posts";
 
 export async function generateStaticParams() {
@@ -48,6 +49,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
       <div className="prose mt-10">
         <MDXRemote
+          components={mdxComponents}
           source={post.content}
           options={{
             mdxOptions: {
