@@ -1,6 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { flushSync } from "react-dom";
+
+/**
+ * `startViewTransition` isn't in the DOM lib every TypeScript release ships, and
+ * only these two members are used here.
+ */
+type ViewTransitionDocument = Document & {
+  startViewTransition?: (update: () => void) => { finished: Promise<void> };
+};
 
 /**
  * Runs before first paint to apply the stored theme, so there's no flash of the
@@ -21,12 +30,50 @@ export function ThemeToggle() {
     setTheme(document.documentElement.classList.contains("dark") ? "dark" : "light");
   }, []);
 
-  function toggle() {
+  function toggle(event: React.MouseEvent<HTMLButtonElement>) {
     const next = theme === "dark" ? "light" : "dark";
-    setTheme(next);
-    document.documentElement.classList.toggle("dark", next === "dark");
-    document.documentElement.style.colorScheme = next;
+    const root = document.documentElement;
+
+    // The swap itself. flushSync so the icon changes in the same commit as the
+    // class does: outside a transition that's just React being React, but
+    // inside one an unflushed setState paints *after* the new snapshot is
+    // taken, and the icon is left a frame behind the palette.
+    function apply() {
+      flushSync(() => setTheme(next));
+      root.classList.toggle("dark", next === "dark");
+      root.style.colorScheme = next;
+    }
+
     localStorage.setItem("theme", next);
+
+    const doc = document as ViewTransitionDocument;
+    if (!doc.startViewTransition || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      apply();
+      return;
+    }
+
+    // A circle centred on the button, with enough radius to reach the furthest
+    // corner of the viewport — size it to anything less and the wipe finishes
+    // with an unpainted wedge in the far corner. Measured now, because a
+    // synthetic event's currentTarget is gone by the time the callback runs.
+    const box = event.currentTarget.getBoundingClientRect();
+    const x = box.left + box.width / 2;
+    const y = box.top + box.height / 2;
+    const radius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y),
+    );
+
+    root.style.setProperty("--wipe-x", `${x}px`);
+    root.style.setProperty("--wipe-y", `${y}px`);
+    root.style.setProperty("--wipe-r", `${radius}px`);
+    // Scopes the wipe rules in globals.css to this transition, so a navigation
+    // that happens to overlap still crossfades normally.
+    root.dataset.themeWipe = "";
+
+    doc.startViewTransition(apply).finished.finally(() => {
+      delete root.dataset.themeWipe;
+    });
   }
 
   return (
