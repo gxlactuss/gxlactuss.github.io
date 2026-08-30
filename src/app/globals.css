@@ -227,6 +227,70 @@ a {
   }
 }
 
+/*
+  ===========================================================================
+  Motion
+  ===========================================================================
+  Driven by the browser rather than an animation library: the View Transitions
+  API, which the browser runs off the main thread. Nothing here ships a byte of
+  JavaScript to the client.
+*/
+
+/* The transition overlay sits above the page and swallows clicks for as long as
+   it runs, which on a 380ms morph is long enough to lose a real tap. Named
+   participants still skip hit-testing, but everything else stays live. */
+::view-transition {
+  pointer-events: none;
+}
+
+/* The page under the morphing elements. Slightly quicker than the UA's 250ms
+   default is tempting, but the crossfade has to outlast the morph or the new
+   page lands before the logo does. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 260ms;
+}
+
+/*
+  A project's logo and its title are the same object on the card and on the
+  project page, so they travel between the two instead of crossfading in place.
+  The components mark the pair with `share="morph"`, which is what puts the
+  `morph` class on these pseudo-elements.
+
+  The blur is doing real work: a view transition interpolates between two
+  bitmaps, and scaling a 40px logo up to 48px — or 15px type up to 24px — makes
+  that obvious. Three pixels of blur at the midpoint hides it.
+*/
+::view-transition-group(.morph) {
+  animation-duration: 380ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-image-pair(.morph) {
+  animation: morph-blur 380ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes morph-blur {
+  30% {
+    filter: blur(3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /*
+    The blanket rule further up matches elements, not pseudo-elements, so the
+    view-transition tree needs saying again. Zero duration is the browser's own
+    no-transition behaviour: the page still swaps, it just cuts.
+  */
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-image-pair(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
+
 /* Article body. Hand-rolled rather than @tailwindcss/typography — this is a
    short list of rules and it keeps the palette tokens in one place. */
 .prose {

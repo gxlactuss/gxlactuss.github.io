@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ViewTransition } from "react";
 import { Highlight } from "@/components/highlight";
 import type { Project } from "@/lib/config";
 
@@ -10,18 +11,28 @@ export function ProjectCard({ project }: { project: Project }) {
           it, so they live on the detail page instead. */}
       <Link href={`/projects/${project.slug}`} className="block p-4">
         <div className="flex items-center gap-3">
+          {/* The logo and the title carry `name`s that the project page repeats,
+              so on navigation the browser moves these two out of the card and
+              into the page header instead of crossfading a new pair in. React
+              renders no wrapper for a <ViewTransition>, so the flex row is
+              unaffected. `default="none"` keeps them still during any
+              transition their partner isn't part of. */}
           {project.logo && (
-            // Decorative: the title sits right beside it, and an alt here would
-            // just make a screen reader say the name twice.
-            <Image
-              src={project.logo}
-              alt=""
-              width={80}
-              height={80}
-              className="size-10 shrink-0 rounded-[22%] border border-border"
-            />
+            <ViewTransition name={`project-logo-${project.slug}`} share="morph" default="none">
+              {/* Decorative: the title sits right beside it, and an alt here
+                  would just make a screen reader say the name twice. */}
+              <Image
+                src={project.logo}
+                alt=""
+                width={80}
+                height={80}
+                className="size-10 shrink-0 rounded-[22%] border border-border"
+              />
+            </ViewTransition>
           )}
-          <h3 className="min-w-0 font-medium group-hover:text-accent">{project.title}</h3>
+          <ViewTransition name={`project-title-${project.slug}`} share="morph" default="none">
+            <h3 className="min-w-0 font-medium group-hover:text-accent">{project.title}</h3>
+          </ViewTransition>
           <span className="ml-auto shrink-0 font-mono text-xs text-fg-muted transition-transform group-hover:translate-x-0.5 group-hover:text-accent">
             →
           </span>

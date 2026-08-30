@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ViewTransition } from "react";
 import { Highlight } from "@/components/highlight";
 import { ProjectDemo } from "@/components/project-demo";
 import { projects } from "@/lib/config";
@@ -36,17 +37,24 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         ← back
       </Link>
 
+      {/* The other half of the morph — these names have to match the ones on
+          the card in project-card.tsx exactly, or the pair silently degrades to
+          a crossfade. */}
       <div className="mt-6 flex items-center gap-3">
         {project.logo && (
-          <Image
-            src={project.logo}
-            alt=""
-            width={96}
-            height={96}
-            className="size-12 shrink-0 rounded-[22%] border border-border"
-          />
+          <ViewTransition name={`project-logo-${project.slug}`} share="morph" default="none">
+            <Image
+              src={project.logo}
+              alt=""
+              width={96}
+              height={96}
+              className="size-12 shrink-0 rounded-[22%] border border-border"
+            />
+          </ViewTransition>
         )}
-        <h1 className="text-2xl font-medium tracking-tight">{project.title}</h1>
+        <ViewTransition name={`project-title-${project.slug}`} share="morph" default="none">
+          <h1 className="text-2xl font-medium tracking-tight">{project.title}</h1>
+        </ViewTransition>
       </div>
 
       {project.highlight && (
