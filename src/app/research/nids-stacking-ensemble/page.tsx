@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { TableOfContents } from "@/components/toc";
 import { research } from "@/lib/config";
 
 const paper = research.preprints[0];
@@ -82,6 +83,8 @@ function Heading({ children }: { children: React.ReactNode }) {
 export default function PaperPage() {
   return (
     <article className="max-w-3xl py-10">
+      <TableOfContents />
+
       <Link href="/#research" className="font-mono text-xs text-fg-muted hover:text-accent">
         ← research
       </Link>
