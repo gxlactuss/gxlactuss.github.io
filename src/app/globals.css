@@ -231,9 +231,14 @@ a {
   ===========================================================================
   Motion
   ===========================================================================
-  Driven by the browser rather than an animation library: the View Transitions
-  API, for navigation and for the theme swap. Nothing here ships a byte of
-  JavaScript to the client.
+  All of it is driven by the browser rather than an animation library: the View
+  Transitions API for navigation and the theme swap, scroll-driven timelines for
+  the reveals. Nothing here ships a byte of JavaScript to the client.
+
+  Every effect is a progressive enhancement. `@supports` gates the scroll
+  timelines (Firefox still has them behind a flag), so the base rule is always
+  the *finished* state — a browser that can't drive the animation shows the
+  content plainly rather than showing it stuck at opacity 0.
 */
 
 /* The transition overlay sits above the page and swallows clicks for as long as
@@ -310,6 +315,64 @@ a {
   }
 }
 
+/*
+  Section reveal. A short rise and fade as each section comes up the page.
+
+  The range is a fixed 180px rather than a percentage of the element: a named
+  range like `entry 60%` is measured against the element's own height, so a tall
+  section would take most of a screen to finish while a short one snapped in.
+  180px of scrolling is the same gesture either way.
+*/
+.reveal {
+  opacity: 1;
+  translate: none;
+}
+
+/*
+  Scroll progress. A hairline of accent across the bottom of the sticky header.
+  Base state is empty so a browser without scroll timelines shows nothing at all
+  rather than a permanent full-width rule.
+*/
+.scroll-progress {
+  transform: scaleX(0);
+}
+
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    translate: 0 12px;
+  }
+}
+
+@keyframes scroll-progress-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  /* The reveal is autonomous movement in a way the progress bar isn't, so it's
+     the one that's opted out of entirely below the fold of someone's motion
+     preference. */
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 180px;
+    }
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    animation: scroll-progress-grow linear both;
+    animation-timeline: scroll(root block);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   /*
     The blanket rule further up matches elements, not pseudo-elements, so the
@@ -322,6 +385,17 @@ a {
   ::view-transition-image-pair(*) {
     animation-duration: 0s !important;
     animation-delay: 0s !important;
+  }
+
+  /*
+    The progress bar is kept. It is scroll-*linked*, not autonomous: it only
+    moves in response to a scroll the reader is already performing, which is not
+    the kind of motion the preference is asking us to stop. It does need the
+    exemption spelled out, though — the blanket 0.01ms above would otherwise
+    pin it at full width.
+  */
+  .scroll-progress {
+    animation-duration: auto !important;
   }
 }
 
