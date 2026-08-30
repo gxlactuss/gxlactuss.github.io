@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ViewTransition } from "react";
 import { formatDate, getPosts } from "@/lib/posts";
 
 export const metadata: Metadata = {
@@ -22,7 +23,10 @@ export default async function BlogIndex() {
             <li key={post.slug}>
               <Link href={`/blog/${post.slug}`} className="group block">
                 <div className="flex items-baseline justify-between gap-4">
-                  <h2 className="font-medium group-hover:text-accent">{post.title}</h2>
+                  {/* Morphs into the <h1> on the post itself. */}
+                  <ViewTransition name={`post-title-${post.slug}`} share="morph" default="none">
+                    <h2 className="font-medium group-hover:text-accent">{post.title}</h2>
+                  </ViewTransition>
                   <time
                     dateTime={post.date}
                     className="shrink-0 font-mono text-xs text-fg-muted tabular-nums"
