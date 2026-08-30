@@ -1,3 +1,7 @@
+"use client";
+
+import * as m from "motion/react-m";
+import { useMotionValue, useReducedMotion, useSpring } from "motion/react";
 import { socials } from "@/lib/config";
 
 const icons: Record<string, React.ReactNode> = {
@@ -15,23 +19,74 @@ const icons: Record<string, React.ReactNode> = {
   ),
 };
 
+/**
+ * How far the pill is allowed to lean, as a fraction of the pointer's distance
+ * from its centre. Past roughly a third it stops reading as the button leaning
+ * toward you and starts reading as the button running away.
+ */
+const PULL = 0.3;
+
+/** Spring shape: quick to answer, and it settles without wobbling. */
+const SPRING = { stiffness: 260, damping: 22, mass: 0.4 } as const;
+
+function MagneticLink({ social }: { social: (typeof socials)[number] }) {
+  // A raw value the pointer writes to, and a spring that follows it. Animating
+  // the spring rather than the pointer position is the entire effect: the pill
+  // trails the cursor slightly and overshoots a touch on the way back to rest,
+  // which a CSS transition — eased, fixed-duration, restarting from wherever it
+  // was interrupted — cannot reproduce.
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, SPRING);
+  const springY = useSpring(y, SPRING);
+
+  // MotionConfig's `reducedMotion` only governs Motion's own animations, and
+  // these values are set by hand, so the preference is checked here too.
+  const reduced = useReducedMotion();
+
+  function onPointerMove(event: React.PointerEvent<HTMLAnchorElement>) {
+    // Coarse pointers have no hover — on a phone this would only fire as part
+    // of a tap, and shifting the target out from under a finger mid-tap is a
+    // way to make a link hard to press.
+    if (reduced || event.pointerType !== "mouse") return;
+    const box = event.currentTarget.getBoundingClientRect();
+    x.set((event.clientX - (box.left + box.width / 2)) * PULL);
+    y.set((event.clientY - (box.top + box.height / 2)) * PULL);
+  }
+
+  function release() {
+    x.set(0);
+    y.set(0);
+  }
+
+  return (
+    <li>
+      <m.a
+        href={social.href}
+        // rel="me" lets other sites verify these profiles are the same person.
+        rel="me noopener"
+        style={{ x: springX, y: springY }}
+        onPointerMove={onPointerMove}
+        onPointerLeave={release}
+        // A link can be left by tabbing away or by the page scrolling under a
+        // held pointer, neither of which fires pointerleave.
+        onBlur={release}
+        className="flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-sm text-fg-muted transition-colors hover:border-accent hover:text-accent"
+      >
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="size-3.5">
+          {icons[social.icon]}
+        </svg>
+        {social.label}
+      </m.a>
+    </li>
+  );
+}
+
 export function SocialLinks({ className = "" }: { className?: string }) {
   return (
     <ul className={`flex flex-wrap items-center gap-2 ${className}`}>
-      {socials.map((s) => (
-        <li key={s.label}>
-          <a
-            href={s.href}
-            // rel="me" lets other sites verify these profiles are the same person.
-            rel="me noopener"
-            className="flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-sm text-fg-muted transition-colors hover:border-accent hover:text-accent"
-          >
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="size-3.5">
-              {icons[s.icon]}
-            </svg>
-            {s.label}
-          </a>
-        </li>
+      {socials.map((social) => (
+        <MagneticLink key={social.label} social={social} />
       ))}
     </ul>
   );
