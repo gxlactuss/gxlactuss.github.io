@@ -1,12 +1,36 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import * as m from "motion/react-m";
+import { useReducedMotion } from "motion/react";
 import { ViewTransition } from "react";
 import { Highlight } from "@/components/highlight";
 import type { Project } from "@/lib/config";
 
 export function ProjectCard({ project }: { project: Project }) {
+  // MotionConfig's `reducedMotion="user"` suppresses the *animation* but still
+  // applies its end state, which for a hover lift means the card snaps up three
+  // pixels with no motion at all — the jump without the point of it. The
+  // gesture has to come off entirely, so it is dropped at the source.
+  const reduced = useReducedMotion();
+
   return (
-    <article className="group rounded-lg border border-border bg-bg-subtle/40 transition-colors hover:border-accent/60">
+    // A spring rather than a CSS transition, because a card is a thing you
+    // sweep the pointer across: an eased 150ms transition restarts from
+    // wherever it was interrupted and stutters when you cross three of these in
+    // a row, while a spring carries its velocity through and settles once.
+    //
+    // Deliberately no entrance animation to go with it. The section around this
+    // already fades in on scroll, and a mount animation here would fight the
+    // return trip — coming back from a project page, the logo is mid-morph into
+    // a card that would be busy animating itself out of `opacity: 0`.
+    <m.article
+      whileHover={reduced ? undefined : { y: -3 }}
+      whileTap={reduced ? undefined : { scale: 0.99 }}
+      transition={{ type: "spring", stiffness: 380, damping: 26, mass: 0.5 }}
+      className="group rounded-lg border border-border bg-bg-subtle/40 transition-colors hover:border-accent/60"
+    >
       {/* The whole card is the link. External repo/demo links would nest inside
           it, so they live on the detail page instead. */}
       <Link href={`/projects/${project.slug}`} className="block p-4">
@@ -59,6 +83,6 @@ export function ProjectCard({ project }: { project: Project }) {
           ))}
         </ul>
       </Link>
-    </article>
+    </m.article>
   );
 }
