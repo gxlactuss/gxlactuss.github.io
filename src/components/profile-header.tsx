@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { AsciiPortrait } from "@/components/ascii-portrait";
 import { HeroComets } from "@/components/hero-comets";
 import { Highlight } from "@/components/highlight";
 import { SocialLinks } from "@/components/social-links";
@@ -21,14 +21,7 @@ export function ProfileHeader() {
       <HeroComets />
 
       <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-6">
-        <Image
-          src={profile.photo}
-          alt={site.name}
-          width={112}
-          height={140}
-          priority
-          className="w-24 shrink-0 rounded-lg border border-border object-cover sm:w-28"
-        />
+        <AsciiPortrait className="w-24 sm:w-28" />
 
         <div className="min-w-0">
           <h1 className="text-2xl font-medium tracking-tight">{site.name}</h1>
