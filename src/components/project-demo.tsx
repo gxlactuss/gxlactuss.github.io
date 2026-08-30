@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ProjectStats } from "@/components/project-stats";
 import { platforms, type Platform, type Project } from "@/lib/config";
 
@@ -35,6 +35,9 @@ export function ProjectDemo({ project, children }: { project: Project; children:
   const available = platforms.filter((p) => project.demos?.[p.id]);
   const [selected, setSelected] = useState<Platform | undefined>(available[0]?.id);
   const tabs = useRef<Partial<Record<Platform, HTMLButtonElement | null>>>({});
+  const tablist = useRef<HTMLDivElement>(null);
+  /** Where the sliding pill sits, in px within the tablist. Null until measured. */
+  const [pill, setPill] = useState<{ x: number; w: number } | null>(null);
 
   // Derived rather than trusted: `selected` can name a platform this project
   // doesn't have if the state survives a navigation between two project pages.
@@ -42,6 +45,25 @@ export function ProjectDemo({ project, children }: { project: Project; children:
   const demo = active && project.demos?.[active.id];
   const aspect = demo?.aspect ?? active?.aspect ?? 9 / 16;
   const wide = aspect >= 1;
+
+  // Measured after paint rather than in a layout effect: this component is
+  // prerendered at build time and useLayoutEffect warns when it runs there. The
+  // cost is that the pill lands one frame late, which is why it fades in.
+  useEffect(() => {
+    const node = active ? tabs.current[active.id] : null;
+    const list = tablist.current;
+    if (!node || !list) {
+      setPill(null);
+      return;
+    }
+    const measure = () => setPill({ x: node.offsetLeft, w: node.offsetWidth });
+    measure();
+    // The labels are a webfont, so their widths change once it loads, and the
+    // row rewraps with the column. Re-measure rather than trust the first read.
+    const observer = new ResizeObserver(measure);
+    observer.observe(list);
+    return () => observer.disconnect();
+  }, [active?.id, available.length]);
 
   function onKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
     const step = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
@@ -66,11 +88,36 @@ export function ProjectDemo({ project, children }: { project: Project; children:
             when you click it reads as broken. */}
         {available.length > 1 ? (
           <div
+            ref={tablist}
             role="tablist"
             aria-label="Demo platform"
             onKeyDown={onKeyDown}
-            className="mb-3 inline-flex rounded-md border border-border bg-bg-subtle/40 p-0.5 font-mono text-[11px]"
+            className="relative mb-3 inline-flex rounded-md border border-border bg-bg-subtle/40 p-0.5 font-mono text-[11px]"
           >
+            {/*
+              The selected tab's background, as one element that moves rather
+              than a colour that appears on one button and vanishes from
+              another. Hidden until measured so it never flashes at the origin.
+
+              Measured rather than split into even percentages because the
+              labels are different lengths — "iPadOS" is half again the width of
+              "iOS", so an even split would leave the pill wider than one label
+              and narrower than another.
+
+              Transform and width rather than `left`, to keep the slide off the
+              layout path. Reduced motion needs nothing here: the blanket rule
+              in globals.css already collapses the duration, so the pill jumps
+              to the new tab instead of travelling to it.
+            */}
+            <span
+              aria-hidden="true"
+              className="absolute bottom-0.5 left-0 top-0.5 rounded bg-accent/15 transition-[transform,width,opacity] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
+              style={{
+                width: pill?.w ?? 0,
+                transform: `translateX(${pill?.x ?? 0}px)`,
+                opacity: pill ? 1 : 0,
+              }}
+            />
             {available.map((platform) => {
               const current = platform.id === active?.id;
               return (
@@ -85,10 +132,10 @@ export function ProjectDemo({ project, children }: { project: Project; children:
                   aria-controls="demo-panel"
                   tabIndex={current ? 0 : -1}
                   onClick={() => setSelected(platform.id)}
-                  className={`rounded px-2.5 py-1 transition-colors ${
-                    current
-                      ? "bg-accent/15 text-accent"
-                      : "text-fg-muted hover:text-fg"
+                  // `relative` so the label paints above the pill, which is
+                  // absolutely positioned and would otherwise cover it.
+                  className={`relative rounded px-2.5 py-1 transition-colors ${
+                    current ? "text-accent" : "text-fg-muted hover:text-fg"
                   }`}
                 >
                   {platform.label}
