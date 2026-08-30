@@ -316,6 +316,34 @@ a {
 }
 
 /*
+  The pointer-lit border on a project card. Two mask layers composited with
+  `exclude` — one clipped to the content box, one to the border box — leave only
+  the 1px ring between them, so the gradient paints the border and nothing else.
+
+  Longhands rather than the `mask` shorthand, and that is the whole trick: the
+  shorthand resets `mask-composite` to `add`, which puts the gradient back over
+  the entire card as one large blob sitting on top of the copy.
+
+  The radius is set by the element so it tracks the card's own corner, and the
+  position comes from two custom properties the card writes on pointer move.
+*/
+.glow-ring {
+  padding: 1px;
+  /* 220px rather than something tighter because the pointer usually sits in
+     the middle of a card, ~55px from the nearest edge. At a 150px radius that
+     lands around half opacity, which reads clearly on the dark palette and
+     almost not at all on the light one. */
+  background: radial-gradient(
+    220px circle at var(--glow-x, 50%) var(--glow-y, 50%),
+    var(--accent),
+    transparent 70%
+  );
+  mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+  mask-clip: content-box, border-box;
+  mask-composite: exclude;
+}
+
+/*
   Section reveal. A short rise and fade as each section comes up the page.
 
   The range is a fixed 180px rather than a percentage of the element: a named
