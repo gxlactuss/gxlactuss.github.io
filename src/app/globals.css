@@ -232,7 +232,7 @@ a {
   Motion
   ===========================================================================
   Driven by the browser rather than an animation library: the View Transitions
-  API, which the browser runs off the main thread. Nothing here ships a byte of
+  API, for navigation and for the theme swap. Nothing here ships a byte of
   JavaScript to the client.
 */
 
@@ -273,6 +273,40 @@ a {
 @keyframes morph-blur {
   30% {
     filter: blur(3px);
+  }
+}
+
+/*
+  Theme swap. The new palette is clipped in as a circle growing from the toggle
+  button, so the change reads as spreading out from the thing you pressed rather
+  than as the page blinking.
+
+  Scoped to the attribute ThemeToggle sets for the duration of the swap, so
+  these rules never touch a navigation. The three custom properties are measured
+  in JS and set on <html>; the ::view-transition tree inherits from the root
+  element, which is the only reason they're readable in here.
+
+  `mix-blend-mode: normal` is required, not cosmetic — the UA blends the two
+  root snapshots by default, and a circle wipe over a blended pair shows the old
+  palette ghosting through the new one.
+*/
+:root[data-theme-wipe]::view-transition-old(root),
+:root[data-theme-wipe]::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+:root[data-theme-wipe]::view-transition-new(root) {
+  animation: theme-wipe 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+}
+
+@keyframes theme-wipe {
+  from {
+    clip-path: circle(0 at var(--wipe-x) var(--wipe-y));
+  }
+  to {
+    clip-path: circle(var(--wipe-r) at var(--wipe-x) var(--wipe-y));
   }
 }
 
