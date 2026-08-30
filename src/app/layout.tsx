@@ -25,7 +25,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    // `data-scroll-behavior="smooth"` is not decoration: globals.css sets
+    // `scroll-behavior: smooth` on <html> for the in-page anchor links, and as
+    // of Next 16 the router no longer suspends that during a route change
+    // unless this attribute says to. Without it, navigating smooth-scrolls to
+    // the top of the new page over ~200ms — which the view transition then
+    // snapshots mid-flight, so the morph lands against a page that is still
+    // sliding. With it, anchors stay smooth and navigation jumps instantly.
+    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <head>
         <ThemeScript />
       </head>
