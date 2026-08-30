@@ -115,7 +115,14 @@ export function ContributionCalendar({ days }: { days: ContributionDay[] }) {
         gives it room inside the clip box and the matching negative margin takes
         the space back out of the layout.
       */}
-      <div className="-mt-10 overflow-x-auto pb-1 pt-10">
+      {/*
+        `gh-sweep` has to sit on this element rather than on the grid inside it.
+        A `view()` timeline binds to the nearest scroll container, and this one
+        is a scroll container on both axes — so measured from in here, the grid
+        never enters or leaves anything and the sweep sits frozen mid-way. Out
+        here the timeline resolves against the viewport, which is what it means.
+      */}
+      <div className="gh-sweep -mt-10 overflow-x-auto pb-1 pt-10">
         <div className="w-max">
           <div className="relative mb-1 h-3.5" style={{ marginLeft: GUTTER }}>
             {months.map((m) => (
