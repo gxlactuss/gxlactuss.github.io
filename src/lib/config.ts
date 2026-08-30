@@ -33,6 +33,12 @@ export const profile = {
   graduation: "2025–2029",
   /** Rendered as its own badge, not buried in the facts list. Null hides it. */
   cgpa: "9.71" as string | null,
+  /**
+   * Lead with the ASCII rendering of the photo, which is the site demonstrating
+   * Asciify on itself. Set false to lead with the photograph and keep the ASCII
+   * one hover away — same feature either way, only the default flips.
+   */
+  asciiFirst: true,
 } as const;
 
 export const nav = [
