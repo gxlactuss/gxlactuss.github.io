@@ -103,12 +103,6 @@ export type Project = {
   /** App icon shown on the card and beside the title, e.g. "/logos/placed.png". */
   logo?: string;
   /**
-   * How long the thing took. `duration` is the headline and `window` the dates
-   * it was measured across — both are free text, because "one afternoon" is a
-   * truer answer than any number of days would be.
-   */
-  work?: { duration: string; window?: string };
-  /**
    * The language split shown under the demo, GitHub style. Shares are
    * percentages and should add up to about 100; colours come from
    * `languageColors` above, keyed by name.
@@ -139,7 +133,6 @@ export const projects: Project[] = [
     tech: ["SwiftUI", "Swift 6", "PDFKit", "Vision", "NaturalLanguage", "SwiftData", "AVFoundation"],
     highlight:
       "Calibrates your handwriting speed from three timed trials, drops the outlier, then sizes every silence to match",
-    work: { duration: "4 weeks", window: "Jul–Aug 2026" },
     demos: {
       // Cropped out of a 1080p desktop capture — the simulator window sat on
       // the wallpaper, so this is the phone screen alone at
@@ -175,7 +168,6 @@ export const projects: Project[] = [
     tech: ["SwiftUI", "Metal", "FastAPI", "Python", "SQLModel", "Groq", "Whisper"],
     highlight:
       "Full voice interview loop — hold to answer, Whisper transcribes it, the model asks the follow-up",
-    work: { duration: "4 weeks", window: "Jul–Aug 2026" },
     demos: {
       // Two simulator recordings joined end to end — onboarding through a full
       // quiz, then the mock interview and the LeetCode lists. The five
@@ -214,7 +206,6 @@ export const projects: Project[] = [
     tech: ["SwiftUI", "CoreGraphics", "ImageIO", "PhotosUI", "XCUITest"],
     highlight:
       "Trims the uniform border first, so a logo shot on a white sweep spends all 100 columns on the logo rather than on the sweep",
-    work: { duration: "One afternoon", window: "Aug 2026" },
     languages: [{ name: "Swift", share: 100 }],
     demos: {
       // A phone screen recording, narrower than the 9/16 default.
