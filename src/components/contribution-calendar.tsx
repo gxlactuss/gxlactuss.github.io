@@ -44,15 +44,6 @@ function longDate(date: string) {
   return `${ordinal(d.getUTCDate())} ${month} ${d.getUTCFullYear()}`;
 }
 
-/** "Aug 2025" */
-function monthYear(date: string) {
-  return utc(date).toLocaleDateString("en-US", {
-    month: "short",
-    year: "numeric",
-    timeZone: "UTC",
-  });
-}
-
 function countLabel(count: number) {
   return `${count === 0 ? "No" : count} contribution${count === 1 ? "" : "s"}`;
 }
@@ -73,7 +64,6 @@ export function ContributionCalendar({ days }: { days: ContributionDay[] }) {
 
   const total = days.reduce((sum, d) => sum + d.count, 0);
   const first = days[0];
-  const last = days[days.length - 1];
   const span = days.length >= 360 ? "year" : `${days.length} days`;
 
   // Blank cells so the first day lands on its real weekday row.
@@ -96,10 +86,7 @@ export function ContributionCalendar({ days }: { days: ContributionDay[] }) {
 
   return (
     <div>
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-        <span className="font-mono text-xs text-fg-muted">
-          {monthYear(first.date)} – {monthYear(last.date)}
-        </span>
+      <div className="mb-3 flex flex-wrap items-center justify-end gap-x-4 gap-y-2">
         <div className="flex items-center gap-1.5 font-mono text-[11px] text-fg-muted">
           <span>Less</span>
           {LEVELS.map((level) => (
