@@ -1,8 +1,7 @@
 import { languageColor, type Project } from "@/lib/config";
 
 /**
- * The strip along the bottom of the demo player: how long the project took, and
- * what it's written in.
+ * The strip along the bottom of the demo player: what the project is written in.
  *
  * The language split is drawn GitHub's way — one continuous track segmented by
  * share, then a legend underneath. The legend is not optional: a bar with no
@@ -10,21 +9,11 @@ import { languageColor, type Project } from "@/lib/config";
  * reader, which is why the track itself is hidden from one.
  */
 export function ProjectStats({ project }: { project: Project }) {
-  const { work, languages } = project;
-  if (!work && !languages?.length) return null;
+  const { languages } = project;
+  if (!languages?.length) return null;
 
   return (
     <div className="border-t border-border bg-bg-subtle/60 px-2.5 py-2.5">
-      {work && (
-        <p className="font-mono text-[11px] text-fg-muted">
-          Built in <span className="text-fg">{work.duration}</span>
-          {/* The dates stay one unit: at this column width the line is a hair
-              from wrapping, and breaking it mid-range strands the year on a
-              line of its own. */}
-          {work.window && <span className="whitespace-nowrap"> · {work.window}</span>}
-        </p>
-      )}
-
       {languages && languages.length > 0 && (
         <>
           {/* Shares drive flex-grow against a zero basis rather than a width, so
@@ -33,9 +22,7 @@ export function ProjectStats({ project }: { project: Project }) {
               collapsing it to nothing. */}
           <div
             aria-hidden
-            className={`flex h-1.5 gap-px overflow-hidden rounded-full bg-border ${
-              work ? "mt-2.5" : ""
-            }`}
+            className="flex h-1.5 gap-px overflow-hidden rounded-full bg-border"
           >
             {languages.map((language) => (
               <span
