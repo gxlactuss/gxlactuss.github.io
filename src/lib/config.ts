@@ -125,14 +125,14 @@ export const projects: Project[] = [
     logo: "/logos/vocalnotes.png",
     title: "VocalNotes",
     description:
-      "A dictation app for students who copy long write-ups by hand. It breaks a PDF into clauses and holds the silence between them for exactly as long as that clause takes to write, so your eyes never have to leave the notebook.",
+      "A dictation app for students who copy long write-ups by hand. It reads a document aloud one clause at a time and waits while you write, pacing itself to your own handwriting speed so your eyes never have to leave the notebook. Follow along on the full page or in a stripped-back focus view, with spelling, punctuation and dictionary lookups a tap away.",
     descriptionHighlights: [
-      "breaks a PDF into clauses",
-      "exactly as long as that clause takes to write",
+      "one clause at a time",
+      "your own handwriting speed",
+      "focus view",
     ],
     tech: ["SwiftUI", "Swift 6", "PDFKit", "Vision", "NaturalLanguage", "SwiftData", "AVFoundation"],
-    highlight:
-      "Calibrates your handwriting speed from three timed trials, drops the outlier, then sizes every silence to match",
+    highlight: "Learns how fast you write, then sizes every pause to match",
     demos: {
       // Cropped out of a 1080p desktop capture — the simulator window sat on
       // the wallpaper, so this is the phone screen alone at
@@ -159,15 +159,14 @@ export const projects: Project[] = [
     logo: "/logos/placed.png",
     title: "Placed",
     description:
-      "Placement prep for final-year CS students: 85 quizzes on a pass-to-unlock chain, company-wise LeetCode lists for 38 recruiters, and AI mock interviews you answer out loud. SwiftUI front end, FastAPI backend, running on iPhone, iPad and the Mac.",
+      "Placement prep for final-year computer science students. It covers what an interview actually asks for: 85 topic quizzes that unlock in a chain as you pass them, coding practice lists sorted by the 38 companies that set them, and mock interviews you answer out loud and get a follow-up question back from. One app across iPhone, iPad and the Mac.",
     descriptionHighlights: [
-      "85 quizzes",
-      "AI mock interviews",
+      "85 topic quizzes",
+      "answer out loud",
       "iPhone, iPad and the Mac",
     ],
     tech: ["SwiftUI", "Metal", "FastAPI", "Python", "SQLModel", "Groq", "Whisper"],
-    highlight:
-      "Full voice interview loop — hold to answer, Whisper transcribes it, the model asks the follow-up",
+    highlight: "Answer the mock interview out loud and it asks a follow-up, the way a real one would",
     demos: {
       // Two simulator recordings joined end to end — onboarding through a full
       // quiz, then the mock interview and the LeetCode lists. The five
@@ -196,16 +195,14 @@ export const projects: Project[] = [
     logo: "/logos/asciify.png",
     title: "ASCIIFY",
     description:
-      "A side project that ran the length of one afternoon: hand it any photo and it hands back a grid of characters — ten tones for shading, two for logos. Copy it as text or save it straight to Photos as an image.",
+      "Turns any photo into a picture made of text characters. Two styles — one shaded for photographs, one two-tone for logos — and a slider for how wide the result should be. Copy it as text or save it straight to Photos as an image.",
     descriptionHighlights: [
-      "one afternoon",
-      "a grid of characters",
+      "a picture made of text characters",
       "as text",
       "as an image",
     ],
     tech: ["SwiftUI", "CoreGraphics", "ImageIO", "PhotosUI", "XCUITest"],
-    highlight:
-      "Trims the uniform border first, so a logo shot on a white sweep spends all 100 columns on the logo rather than on the sweep",
+    highlight: "Finds the subject and gives it the whole frame, so logos come out as sharp as photographs",
     languages: [{ name: "Swift", share: 100 }],
     demos: {
       // A phone screen recording, narrower than the 9/16 default.
