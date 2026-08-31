@@ -59,7 +59,14 @@ export type Platform = (typeof platforms)[number]["id"];
 export type Demo = {
   /** Path under `public/videos/`, e.g. "/videos/placed-ios.mp4". */
   src: string;
-  /** Still frame shown before playback, e.g. "/videos/placed-ios.jpg". */
+  /**
+   * The frame shown before playback, e.g. "/videos/placed-ios.jpg".
+   *
+   * These are generated, not grabbed from the recording — the app's icon on the
+   * site's own dark ground, at the video's exact dimensions. A still pulled out
+   * of the middle of a demo lands on whatever screen the app happened to be on,
+   * which reads as a mistake rather than a title card.
+   */
   poster?: string;
   /** Width ÷ height, when the recording isn't the platform default above. */
   aspect?: number;
