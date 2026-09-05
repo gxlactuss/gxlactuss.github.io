@@ -8,15 +8,14 @@ export const site = {
   // Used for <title>, OG tags and canonical URLs.
   url: "https://mohitsamant.me",
   // The two sentences a visitor reads first. Keep it concrete and in your voice.
+  //
+  // Also printed into the link-preview banner at src/app/opengraph-image.jpg,
+  // which is a flat image and cannot read this — change one and the other goes
+  // stale without anything failing. Regenerate the banner when this changes.
   intro:
-    "I build fully native iOS apps, Flutter frontends and ML models. Almost every one of them started as an inconvenience in my own life — something I wanted to exist, couldn't find, and ended up writing myself.",
+    "I build fully native iOS apps and ML models. Almost every one of them started as an inconvenience in my own life.",
   /** Words in `intro` painted in the accent. Matched whole-word, case-insensitive. */
-  introHighlights: [
-    "fully native iOS apps",
-    "Flutter frontends",
-    "ML models",
-    "an inconvenience in my own life",
-  ],
+  introHighlights: ["fully native iOS apps", "ML models", "an inconvenience in my own life"],
   location: "India",
   email: "mohitsamant1487@gmail.com",
   github: "gxlactuss",
