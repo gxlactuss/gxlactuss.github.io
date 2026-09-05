@@ -7,11 +7,20 @@ export const site = {
   name: "Mohit Samant",
   // Used for <title>, OG tags and canonical URLs.
   url: "https://mohitsamant.me",
+  /**
+   * The line search results and link previews get. Separate from `intro`
+   * because the two are read in different places: this one arrives with no
+   * context and has to say who and what up front, while `intro` sits directly
+   * under a heading that already gives the name.
+   *
+   * Everything after the name is also printed into the link-preview banner at
+   * src/app/opengraph-image.jpg, which is a flat image and cannot read this —
+   * change one and the other goes stale without anything failing. Regenerate
+   * the banner when this changes.
+   */
+  description:
+    "Mohit Samant - iOS app developer & CSE student at KJSIT, I make iOS apps and ML models",
   // The two sentences a visitor reads first. Keep it concrete and in your voice.
-  //
-  // Also printed into the link-preview banner at src/app/opengraph-image.jpg,
-  // which is a flat image and cannot read this — change one and the other goes
-  // stale without anything failing. Regenerate the banner when this changes.
   intro:
     "I build fully native iOS apps and ML models. Almost every one of them started as an inconvenience in my own life.",
   /** Words in `intro` painted in the accent. Matched whole-word, case-insensitive. */

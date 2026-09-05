@@ -12,15 +12,15 @@ const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: { default: site.name, template: `%s · ${site.name}` },
-  description: site.intro,
+  description: site.description,
   openGraph: {
     title: site.name,
-    description: site.intro,
+    description: site.description,
     url: site.url,
     siteName: site.name,
     type: "website",
   },
-  twitter: { card: "summary_large_image", title: site.name, description: site.intro },
+  twitter: { card: "summary_large_image", title: site.name, description: site.description },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
