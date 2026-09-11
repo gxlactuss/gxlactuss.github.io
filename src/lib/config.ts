@@ -60,6 +60,7 @@ export const platforms = [
   { id: "ios", label: "iOS", aspect: 9 / 16 },
   { id: "ipados", label: "iPadOS", aspect: 4 / 3 },
   { id: "macos", label: "macOS", aspect: 16 / 10 },
+  { id: "chrome", label: "Chrome", aspect: 16 / 9 },
 ] as const;
 
 export type Platform = (typeof platforms)[number]["id"];
@@ -95,6 +96,9 @@ export const languageColors: Record<string, string> = {
   Dart: "#00b4ab",
   Shell: "#89e051",
   C: "#555555",
+  JavaScript: "#f1e05a",
+  CSS: "#663399",
+  HTML: "#e34c26",
   Other: "#8b8b8b",
 };
 
@@ -203,6 +207,62 @@ export const projects: Project[] = [
     body: [
       "Placed is aimed at the last year of a CS degree, the point where the syllabus stops being the thing standing between you and a job. It is one SwiftUI target with no third-party dependencies — a design system, every screen and the eight stores behind them — against a FastAPI backend, and the same binary runs on iPhone, iPad and the Mac.",
       "Quizzes chain per topic rather than per category, so nobody clears seven Operating Systems quizzes to reach DBMS, and a validator rejects duplicate prompts and any answer key a student could ride without reading a question. Solved state is keyed by the LeetCode slug, so ticking Two Sum marks it solved in every company that asks for it. The mock interview had to be voice or it was pointless: hold to answer, Whisper transcribes server-side, and the model comes back with a follow-up rather than the next scripted question.",
+    ],
+  },
+  {
+    slug: "matchday",
+    logo: "/logos/matchday.png",
+    title: "Matchday",
+    description:
+      "Match predictions for football across ten European leagues. Pick a league, then a club, choose who is playing at home, and it shows the chances of a home win, a draw and an away win as a single bar. It works for any two of 390 clubs, even from different leagues, and flags the fixtures where its view differs from the bookmakers'.",
+    descriptionHighlights: [
+      "ten European leagues",
+      "any two of 390 clubs",
+      "differs from the bookmakers'",
+    ],
+    tech: ["SwiftUI", "Python", "pandas", "scikit-learn", "LightGBM", "SciPy", "XCUITest"],
+    highlight: "Never sees the bookmakers' odds, so when it disagrees with them, it means it",
+    languages: [
+      { name: "Python", share: 83.7 },
+      { name: "Swift", share: 14.2 },
+      { name: "Other", share: 2.1 },
+    ],
+    body: [
+      "The model never sees bookmaker odds. They sit in a separate table and are joined only at evaluation time, as the benchmark — a model trained on odds just relearns the odds and can never usefully disagree with the market. It covers ten divisions and 98,205 matches back to 1993/94, and the five leagues with no free expected-goals data run a separate Elo-only model rather than the production one on imputed values, with every prediction saying which model produced it.",
+      "The app models nothing. Every number on screen is computed in Python and fetched from a server that holds the fitted model warm — a prediction takes 0.8 ms, but starting Python and importing pandas, SciPy and scikit-learn takes 1.3 s, so the model lives in a running process rather than being started per question. Clubs are chosen league first, three to a row with crests, in the server's editorial order rather than alphabetically, and a cross-league fixture carries the assumption it rests on next to the numbers it applies to.",
+    ],
+  },
+  {
+    slug: "formify",
+    logo: "/logos/formify.png",
+    title: "Formify",
+    description:
+      "Turns a Google Doc full of multiple-choice questions into a ready-to-share Google Forms quiz. It reads the questions, answers and marks straight from the doc, lets you review and fix them in a side panel, then builds the form with grading and feedback already set. A plain list of questions becomes a rating-scale feedback form instead.",
+    descriptionHighlights: [
+      "Google Forms quiz",
+      "review and fix them in a side panel",
+      "grading and feedback already set",
+    ],
+    tech: ["JavaScript", "Chrome Extensions", "Google Docs API", "Google Forms API", "OAuth 2.0", "node:test"],
+    highlight: "From a doc of questions to a graded, shareable quiz in one click",
+    demos: {
+      // An OBS capture of the whole desktop: the doc on the left, the side panel
+      // on the right, through to the finished form. Recorded silent, so the
+      // audio track is dropped rather than shipped as 70 seconds of nothing.
+      chrome: {
+        src: "/videos/formify-chrome.mp4",
+        poster: "/videos/formify-chrome.jpg",
+      },
+    },
+    languages: [
+      { name: "JavaScript", share: 80.8 },
+      { name: "CSS", share: 14.0 },
+      { name: "HTML", share: 5.1 },
+      { name: "Other", share: 0.1 },
+    ],
+    body: [
+      "A Chrome side panel that reads a Google Doc through the Docs API, parses it into questions, and builds the quiz through the Forms API. The parser takes the formats people actually write — numbered and lettered lists, Q1 and (a) and [a], options several to a line — and finds the correct answer from an Answer line, a trailing tick, bold or a highlight, but only when not every option carries that style, since a doc styled throughout says nothing about which option is right.",
+      "Nothing is created until it has been reviewed: lines that fail to parse surface as errors, answers can be ticked, points and feedback set, and questions reordered. A doc with no answer options is read as a module exit form and every question becomes a 1–5 rating. Requests retry on an expired token and back off on rate limits and server errors, and the parser is pure, covered by node:test, with an end-to-end run in real Chrome.",
     ],
   },
   {
