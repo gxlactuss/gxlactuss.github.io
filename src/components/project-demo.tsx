@@ -4,16 +4,23 @@ import { useEffect, useRef, useState } from "react";
 import { ProjectStats } from "@/components/project-stats";
 import { platforms, type Platform, type Project } from "@/lib/config";
 
-/** Placeholder until video files are dropped in `public/videos/`. */
-function EmptySlot({ title }: { title: string }) {
+/**
+ * Stands in for a project with no recording yet.
+ *
+ * This renders on the live site, so it speaks to a visitor. It used to carry
+ * setup instructions — which folder to drop the file in, which field to set —
+ * and that was fine while every project had a video, but it meant the first
+ * project without one would have told the public how to edit config.ts.
+ */
+function EmptySlot({ logo }: { logo?: string }) {
   return (
     <div className="m-2 grid aspect-[9/16] place-items-center rounded-md border border-dashed border-border bg-bg-subtle/40 p-6 text-center">
-      <div>
-        <p className="font-mono text-xs uppercase tracking-widest text-accent">Video coming</p>
-        <p className="mt-2 text-sm text-fg-muted">
-          Add files to <code className="font-mono text-xs">public/videos/</code> and set{" "}
-          <code className="font-mono text-xs">demos</code> on {title} in config.ts.
-        </p>
+      <div className="grid justify-items-center gap-4">
+        {logo && (
+          // eslint-disable-next-line @next/next/no-img-element -- decorative, already sized
+          <img src={logo} alt="" width={64} height={64} className="size-16 rounded-[22%] border border-border" />
+        )}
+        <p className="font-mono text-xs uppercase tracking-widest text-fg-muted">Demo coming soon</p>
       </div>
     </div>
   );
@@ -175,7 +182,7 @@ export function ProjectDemo({ project, children }: { project: Project; children:
               </video>
             </div>
           ) : (
-            <EmptySlot title={project.title} />
+            <EmptySlot logo={project.logo} />
           )}
 
           <ProjectStats project={project} />
