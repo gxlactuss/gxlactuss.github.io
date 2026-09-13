@@ -221,7 +221,7 @@ export const projects: Project[] = [
       "differs from the bookmakers'",
     ],
     tech: ["SwiftUI", "Python", "pandas", "scikit-learn", "LightGBM", "SciPy", "XCUITest"],
-    highlight: "Never sees the bookmakers' odds, so when it disagrees with them, it means it",
+    highlight: "Predicts the win percentage of any European football game",
     demos: {
       // A simulator recording, scaled to the same 588x1280 as the other phone
       // demos. Recorded silent, so there is no audio track.
