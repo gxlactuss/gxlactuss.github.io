@@ -115,6 +115,8 @@ export type Project = {
   hidden?: boolean;
   title: string;
   description: string;
+  /** The one short line on the home page card. Falls back to `description`. */
+  summary?: string;
   /** Phrases in `description` painted in the accent, same as `introHighlights`. */
   descriptionHighlights?: string[];
   /** Keep these short — they render as small pills. */
@@ -191,6 +193,7 @@ export const projects: Project[] = [
     slug: "placed",
     logo: "/logos/placed.png",
     title: "Placed",
+    summary: "Placement prep with a mock interviewer that talks back.",
     description:
       "Placed is placement season, shrunk to fit in your pocket. Grind 925 quiz questions until the aptitude round gets boring, work through the LeetCode problems 38 companies actually ask, get your resume scored out of 100, then sit a mock interview where you answer out loud and it pushes back. Got an Amazon round on Friday? It'll grill you on the Leadership Principles first. Runs on iPhone, iPad and Mac.",
     descriptionHighlights: [
@@ -261,6 +264,7 @@ export const projects: Project[] = [
     slug: "formify",
     logo: "/logos/formify.png",
     title: "Formify",
+    summary: "Turns a Google Doc of questions into a graded Google Forms quiz.",
     description:
       "Formify is for anyone who has ever typed forty multiple-choice questions into Google Forms one dropdown at a time. Write the quiz in a Google Doc the way you normally would, open the side panel, and it pulls out every question, option, answer and mark, lets you fix whatever it wasn't sure about, then hands you a graded Google Forms quiz with the feedback already filled in. No answer options at all? It figures you want a feedback form and turns every question into a 1 to 5 rating.",
     descriptionHighlights: [
@@ -299,6 +303,7 @@ export const projects: Project[] = [
     slug: "asciify",
     logo: "/logos/asciify.png",
     title: "ASCIIFY",
+    summary: "Turns your photos into art made of text.",
     description:
       "ASCIIFY turns your photos into art made entirely of keyboard characters, the way every hacker in a 90s movie would have wanted. Pick a photo, drag a slider to decide how many characters wide it gets, choose soft shading or hard-edged two-tone, then paste it into the group chat or save it to Photos as an image. Your cat, rendered in @ and #.",
     descriptionHighlights: [

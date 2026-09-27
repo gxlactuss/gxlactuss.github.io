@@ -22,7 +22,7 @@ export default async function Home() {
         <ProfileHeader />
 
         <Section id="projects" title="Projects">
-          <div className="grid gap-3">
+          <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
             {projects.filter((p) => !p.hidden).map((p) => (
               <ProjectCard key={p.slug} project={p} />
             ))}
