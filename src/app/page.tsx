@@ -6,7 +6,6 @@ import { MotionFeatures } from "@/components/motion-features";
 import { ProfileHeader } from "@/components/profile-header";
 import { ProjectCard } from "@/components/project-card";
 import { ResearchList } from "@/components/research-list";
-import { ResumeCard } from "@/components/resume-card";
 import { Section } from "@/components/section";
 import { giscus, projects } from "@/lib/config";
 import { getContributionDays } from "@/lib/contributions";
@@ -24,15 +23,16 @@ export default async function Home() {
 
         <Section id="projects" title="Projects">
           <div className="grid gap-3">
-            {projects.map((p) => (
+            {projects.filter((p) => !p.hidden).map((p) => (
               <ProjectCard key={p.slug} project={p} />
             ))}
           </div>
         </Section>
 
-        <Section id="resume" title="Resume">
-          <ResumeCard />
-        </Section>
+        {/* Resume section is hidden for now. To restore it: move
+            resume/resume.pdf back to public/, put the "resume" nav link back in
+            config.ts, and re-add <Section id="resume" title="Resume"><ResumeCard />
+            </Section> here with its import. */}
 
         <Section id="research" title="Research">
           <ResearchList />
