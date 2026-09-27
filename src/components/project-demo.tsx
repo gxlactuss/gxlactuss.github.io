@@ -2,7 +2,28 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ProjectStats } from "@/components/project-stats";
-import { platforms, type Platform, type Project } from "@/lib/config";
+import { platforms, type Demo, type Project } from "@/lib/config";
+
+/** One tab over the video column. `demo` is missing while its file is still to come. */
+type Tab = { id: string; label: string; demo?: Demo; aspect: number };
+
+/**
+ * The tabs a project gets. Normally one per recorded platform; a project with a
+ * `showcase` is split into Showcase and App demo instead, and either half can
+ * be a placeholder until its video exists.
+ */
+function tabsFor(project: Project): Tab[] {
+  const recorded: Tab[] = platforms
+    .filter((p) => project.demos?.[p.id])
+    .map((p) => ({ id: p.id, label: p.label, demo: project.demos?.[p.id], aspect: p.aspect }));
+  if (project.showcase === undefined) return recorded;
+
+  const showcase: Tab = { id: "showcase", label: "Showcase", demo: project.showcase ?? undefined, aspect: 16 / 9 };
+  const app: Tab[] = recorded.length
+    ? recorded.map((t) => ({ ...t, label: recorded.length > 1 ? `App demo · ${t.label}` : "App demo" }))
+    : [{ id: "app", label: "App demo", aspect: 9 / 16 }];
+  return [showcase, ...app];
+}
 
 /**
  * Stands in for a project with no recording yet.
@@ -12,9 +33,11 @@ import { platforms, type Platform, type Project } from "@/lib/config";
  * and that was fine while every project had a video, but it meant the first
  * project without one would have told the public how to edit config.ts.
  */
-function EmptySlot({ logo }: { logo?: string }) {
+function EmptySlot({ logo, aspect = 9 / 16 }: { logo?: string; aspect?: number }) {
   return (
-    <div className="m-2 grid aspect-[9/16] place-items-center rounded-md border border-dashed border-border bg-bg-subtle/40 p-6 text-center">
+    <div
+      style={{ aspectRatio: aspect }}
+      className="m-2 grid place-items-center rounded-md border border-dashed border-border bg-bg-subtle/40 p-6 text-center">
       <div className="grid justify-items-center gap-4">
         {logo && (
           // eslint-disable-next-line @next/next/no-img-element -- decorative, already sized
@@ -30,7 +53,7 @@ function EmptySlot({ logo }: { logo?: string }) {
  * The demo video and the write-up, laid out against each other.
  *
  * The copy comes in as `children` so it stays a Server Component — this file is
- * a client boundary only because the platform tabs need state.
+ * a client boundary only because the tabs need state.
  *
  * The layout follows the recording rather than the other way round: a phone
  * video sits in a narrow sticky column beside the text, while an iPad or Mac
@@ -39,17 +62,21 @@ function EmptySlot({ logo }: { logo?: string }) {
  * switches shape at all.
  */
 export function ProjectDemo({ project, children }: { project: Project; children: React.ReactNode }) {
-  const available = platforms.filter((p) => project.demos?.[p.id]);
-  const [selected, setSelected] = useState<Platform | undefined>(available[0]?.id);
-  const tabs = useRef<Partial<Record<Platform, HTMLButtonElement | null>>>({});
+  const available = tabsFor(project);
+  // Open on the first tab with a video behind it, so a page never greets a
+  // visitor with "coming soon" while a real recording sits one tab over.
+  const [selected, setSelected] = useState<string | undefined>(
+    (available.find((t) => t.demo) ?? available[0])?.id,
+  );
+  const tabs = useRef<Record<string, HTMLButtonElement | null>>({});
   const tablist = useRef<HTMLDivElement>(null);
   /** Where the sliding pill sits, in px within the tablist. Null until measured. */
   const [pill, setPill] = useState<{ x: number; w: number } | null>(null);
 
-  // Derived rather than trusted: `selected` can name a platform this project
+  // Derived rather than trusted: `selected` can name a tab this project
   // doesn't have if the state survives a navigation between two project pages.
   const active = available.find((p) => p.id === selected) ?? available[0];
-  const demo = active && project.demos?.[active.id];
+  const demo = active?.demo;
   const aspect = demo?.aspect ?? active?.aspect ?? 9 / 16;
   const wide = aspect >= 1;
 
@@ -97,7 +124,7 @@ export function ProjectDemo({ project, children }: { project: Project; children:
           <div
             ref={tablist}
             role="tablist"
-            aria-label="Demo platform"
+            aria-label="Demo video"
             onKeyDown={onKeyDown}
             className="relative mb-3 inline-flex rounded-md border border-border bg-bg-subtle/40 p-0.5 font-mono text-[11px]"
           >
@@ -125,27 +152,27 @@ export function ProjectDemo({ project, children }: { project: Project; children:
                 opacity: pill ? 1 : 0,
               }}
             />
-            {available.map((platform) => {
-              const current = platform.id === active?.id;
+            {available.map((tab) => {
+              const current = tab.id === active?.id;
               return (
                 <button
-                  key={platform.id}
+                  key={tab.id}
                   ref={(node) => {
-                    tabs.current[platform.id] = node;
+                    tabs.current[tab.id] = node;
                   }}
                   role="tab"
-                  id={`demo-tab-${platform.id}`}
+                  id={`demo-tab-${tab.id}`}
                   aria-selected={current}
                   aria-controls="demo-panel"
                   tabIndex={current ? 0 : -1}
-                  onClick={() => setSelected(platform.id)}
+                  onClick={() => setSelected(tab.id)}
                   // `relative` so the label paints above the pill, which is
                   // absolutely positioned and would otherwise cover it.
                   className={`relative rounded px-2.5 py-1 transition-colors ${
                     current ? "text-accent" : "text-fg-muted hover:text-fg"
                   }`}
                 >
-                  {platform.label}
+                  {tab.label}
                 </button>
               );
             })}
@@ -161,12 +188,12 @@ export function ProjectDemo({ project, children }: { project: Project; children:
             placeholder takes the same shell, or the stats would float once a
             project has no recording yet. */}
         <div className="overflow-hidden rounded-lg border border-border">
-          {active && demo ? (
-            <div
-              id="demo-panel"
-              role={available.length > 1 ? "tabpanel" : undefined}
-              aria-labelledby={available.length > 1 ? `demo-tab-${active.id}` : undefined}
-            >
+          <div
+            id="demo-panel"
+            role={available.length > 1 ? "tabpanel" : undefined}
+            aria-labelledby={available.length > 1 && active ? `demo-tab-${active.id}` : undefined}
+          >
+            {active && demo ? (
               <video
                 // Remounts on switch: swapping the <source> under a live <video>
                 // doesn't reload it, so without this the tabs do nothing.
@@ -180,10 +207,10 @@ export function ProjectDemo({ project, children }: { project: Project; children:
               >
                 <source src={demo.src} type="video/mp4" />
               </video>
-            </div>
-          ) : (
-            <EmptySlot logo={project.logo} />
-          )}
+            ) : (
+              <EmptySlot logo={project.logo} aspect={aspect} />
+            )}
+          </div>
 
           <ProjectStats project={project} />
         </div>

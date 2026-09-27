@@ -8,7 +8,7 @@ import { ProjectDemo } from "@/components/project-demo";
 import { projects } from "@/lib/config";
 
 export function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.slug }));
+  return projects.filter((p) => !p.hidden).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -17,7 +17,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const project = projects.find((p) => p.slug === slug);
+  const project = projects.find((p) => p.slug === slug && !p.hidden);
   if (!project) return {};
   return {
     title: project.title,
@@ -28,7 +28,7 @@ export async function generateMetadata({
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const project = projects.find((p) => p.slug === slug);
+  const project = projects.find((p) => p.slug === slug && !p.hidden);
   if (!project) notFound();
 
   return (
@@ -77,6 +77,27 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             {paragraph}
           </p>
         ))}
+
+        {project.architecture && (
+          <figure className="mt-6">
+            {/* The diagram is drawn on white, so it keeps a white card in dark
+                mode too rather than being inverted into something unreadable.
+                Links to the full-size file because the labels are small at
+                column width. */}
+            <a href={project.architecture.src} target="_blank" rel="noopener" className="block">
+              <Image
+                src={project.architecture.src}
+                alt={project.architecture.alt}
+                width={project.architecture.width}
+                height={project.architecture.height}
+                className="w-full rounded-lg border border-border bg-white p-2"
+              />
+            </a>
+            <figcaption className="mt-2 font-mono text-[11px] text-fg-muted">
+              system architecture · click for full size
+            </figcaption>
+          </figure>
+        )}
 
         <ul className="mt-6 flex flex-wrap gap-1.5">
           {project.tech.map((t) => (
