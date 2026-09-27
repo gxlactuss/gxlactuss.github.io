@@ -45,7 +45,6 @@ export const profile = {
 
 export const nav = [
   { label: "projects", href: "/#projects" },
-  { label: "resume", href: "/#resume" },
   { label: "guestbook", href: "/#guestbook" },
 ] as const;
 
@@ -109,6 +108,11 @@ export function languageColor(name: string) {
 export type Project = {
   /** URL segment: /projects/<slug>. Lowercase, hyphens only. */
   slug: string;
+  /**
+   * Leaves the project off the home page and skips building its page, without
+   * deleting anything. Flip it back to bring the project back as it was.
+   */
+  hidden?: boolean;
   title: string;
   description: string;
   /** Phrases in `description` painted in the accent, same as `introHighlights`. */
@@ -134,6 +138,15 @@ export type Project = {
    * placeholder in place.
    */
   demos?: Partial<Record<Platform, Demo>>;
+  /**
+   * The produced launch video, as opposed to a plain recording of the app.
+   * Setting this (even to null) splits the video column into two tabs,
+   * Showcase and App demo; null keeps the Showcase tab with a "coming soon"
+   * slot until the file exists, and an App demo with no `demos` does the same.
+   */
+  showcase?: Demo | null;
+  /** System architecture diagram, shown after `body`. Light background expected. */
+  architecture?: { src: string; alt: string; width: number; height: number };
   /** Long-form copy for the project page. One string per paragraph. */
   body?: string[];
 };
@@ -141,6 +154,7 @@ export type Project = {
 export const projects: Project[] = [
   {
     slug: "vocalnotes",
+    hidden: true,
     logo: "/logos/vocalnotes.png",
     title: "VocalNotes",
     description:
@@ -178,25 +192,21 @@ export const projects: Project[] = [
     logo: "/logos/placed.png",
     title: "Placed",
     description:
-      "Placement prep for final-year computer science students. It covers what an interview actually asks for: 85 topic quizzes that unlock in a chain as you pass them, coding practice lists sorted by the 38 companies that set them, and mock interviews you answer out loud and get a follow-up question back from. One app across iPhone, iPad and the Mac.",
+      "Placed is placement season, shrunk to fit in your pocket. Grind 925 quiz questions until the aptitude round gets boring, work through the LeetCode problems 38 companies actually ask, get your resume scored out of 100, then sit a mock interview where you answer out loud and it pushes back. Got an Amazon round on Friday? It'll grill you on the Leadership Principles first. Runs on iPhone, iPad and Mac.",
     descriptionHighlights: [
-      "85 topic quizzes",
+      "925 quiz questions",
+      "38 companies",
       "answer out loud",
-      "iPhone, iPad and the Mac",
+      "iPhone, iPad and Mac",
     ],
     tech: ["SwiftUI", "Metal", "FastAPI", "Python", "SQLModel", "Groq", "Whisper"],
     highlight: "Answer the mock interview out loud and it asks a follow-up, the way a real one would",
-    demos: {
-      // Two simulator recordings joined end to end — onboarding through a full
-      // quiz, then the mock interview and the LeetCode lists. The five
-      // interview rounds run at 3x: they're the same hold-to-talk loop five
-      // times over, and three minutes of it is the one stretch of this demo
-      // nobody watches to the end.
-      ios: {
-        src: "/videos/placed-ios.mp4",
-        poster: "/videos/placed-ios.jpg",
-        aspect: 588 / 1280,
-      },
+    // The launch video, cut with /brag and re-encoded from the 45 MB master.
+    // The plain app recording goes under `demos` once it's recorded.
+    showcase: {
+      src: "/videos/placed-showcase.mp4",
+      poster: "/videos/placed-showcase.jpg",
+      aspect: 16 / 9,
     },
     languages: [
       { name: "Swift", share: 70.3 },
@@ -205,12 +215,18 @@ export const projects: Project[] = [
       { name: "Other", share: 0.3 },
     ],
     body: [
-      "Placed is aimed at the last year of a CS degree, the point where the syllabus stops being the thing standing between you and a job. It is one SwiftUI target with no third-party dependencies — a design system, every screen and the eight stores behind them — against a FastAPI backend, and the same binary runs on iPhone, iPad and the Mac.",
-      "Quizzes chain per topic rather than per category, so nobody clears seven Operating Systems quizzes to reach DBMS, and a validator rejects duplicate prompts and any answer key a student could ride without reading a question. Solved state is keyed by the LeetCode slug, so ticking Two Sum marks it solved in every company that asks for it. The mock interview had to be voice or it was pointless: hold to answer, Whisper transcribes server-side, and the model comes back with a follow-up rather than the next scripted question.",
+      "The app is pure SwiftUI with zero third-party packages, down to its own design system and a liquid-wave effect written as a Metal shader, talking to a FastAPI backend on Fly.io in Mumbai. The mock interview is the hard part. Every round opens with a few calibration questions, then climbs or drops a five-level difficulty ladder based on how accurate and how fluent you were. You hold to talk, Groq Whisper transcribes, and the questions come from gpt-oss-120b with Gemini waiting as a fallback, so one provider having a bad day doesn't end your interview halfway. The resume reviewer is deliberately paranoid: the file is read on your phone, your email, number and links are stripped before anything leaves it, the ATS checks are plain code rather than a model guessing, and any bullet it rewrites has to quote you exactly, with numbers left as [placeholders] so it can't invent achievements you never had.",
     ],
+    architecture: {
+      src: "/architecture/placed.png",
+      alt: "Placed system architecture: the SwiftUI app talks over HTTPS to a FastAPI backend with auth, content and AI modules, backed by SQLite, calling Groq, Gemini, Whisper, Resend and Google/GitHub OAuth.",
+      width: 2400,
+      height: 2077,
+    },
   },
   {
     slug: "matchday",
+    hidden: true,
     logo: "/logos/matchday.png",
     title: "Matchday",
     description:
@@ -246,11 +262,11 @@ export const projects: Project[] = [
     logo: "/logos/formify.png",
     title: "Formify",
     description:
-      "Turns a Google Doc full of multiple-choice questions into a ready-to-share Google Forms quiz. It reads the questions, answers and marks straight from the doc, lets you review and fix them in a side panel, then builds the form with grading and feedback already set. A plain list of questions becomes a rating-scale feedback form instead.",
+      "Formify is for anyone who has ever typed forty multiple-choice questions into Google Forms one dropdown at a time. Write the quiz in a Google Doc the way you normally would, open the side panel, and it pulls out every question, option, answer and mark, lets you fix whatever it wasn't sure about, then hands you a graded Google Forms quiz with the feedback already filled in. No answer options at all? It figures you want a feedback form and turns every question into a 1 to 5 rating.",
     descriptionHighlights: [
-      "Google Forms quiz",
-      "review and fix them in a side panel",
-      "grading and feedback already set",
+      "the way you normally would",
+      "graded Google Forms quiz",
+      "1 to 5 rating",
     ],
     tech: ["JavaScript", "Chrome Extensions", "Google Docs API", "Google Forms API", "OAuth 2.0", "node:test"],
     highlight: "From a doc of questions to a graded, shareable quiz in one click",
@@ -263,6 +279,12 @@ export const projects: Project[] = [
         poster: "/videos/formify-chrome.jpg",
       },
     },
+    // The launch video, cut with /brag.
+    showcase: {
+      src: "/videos/formify-showcase.mp4",
+      poster: "/videos/formify-showcase.jpg",
+      aspect: 16 / 9,
+    },
     languages: [
       { name: "JavaScript", share: 80.8 },
       { name: "CSS", share: 14.0 },
@@ -270,8 +292,7 @@ export const projects: Project[] = [
       { name: "Other", share: 0.1 },
     ],
     body: [
-      "A Chrome side panel that reads a Google Doc through the Docs API, parses it into questions, and builds the quiz through the Forms API. The parser takes the formats people actually write — numbered and lettered lists, Q1 and (a) and [a], options several to a line — and finds the correct answer from an Answer line, a trailing tick, bold or a highlight, but only when not every option carries that style, since a doc styled throughout says nothing about which option is right.",
-      "Nothing is created until it has been reviewed: lines that fail to parse surface as errors, answers can be ticked, points and feedback set, and questions reordered. A doc with no answer options is read as a module exit form and every question becomes a 1–5 rating. Requests retry on an expired token and back off on rate limits and server errors, and the parser is pure, covered by node:test, with an end-to-end run in real Chrome.",
+      "It's a Manifest V3 Chrome extension in plain JavaScript with zero dependencies, reading the doc through the Docs API and building the form with batched Forms API requests. The parser is where the time went, because nobody formats a quiz the same way twice: questions turn up as 1., Q1, Question 1: or a numbered list, options as A), (a), [a] or four crammed onto one line, and the right answer might be an Answer: line, a trailing ✓, bold text or a highlight. Bold and highlight only count when not every option has them, since a doc that's bold from top to bottom says nothing about which option is right. Headings become form sections, Explanation: lines become feedback, and (2 marks) after a question grades it for exactly that. Sign-in rides on Chrome's own identity API, requests quietly refresh an expired token and back off when Google rate-limits, and the parser is pure functions covered by node:test, with an end-to-end test that drives real Chrome.",
     ],
   },
   {
@@ -279,11 +300,11 @@ export const projects: Project[] = [
     logo: "/logos/asciify.png",
     title: "ASCIIFY",
     description:
-      "Turns any photo into a picture made of text characters. Two styles — one shaded for photographs, one two-tone for logos — and a slider for how wide the result should be. Copy it as text or save it straight to Photos as an image.",
+      "ASCIIFY turns your photos into art made entirely of keyboard characters, the way every hacker in a 90s movie would have wanted. Pick a photo, drag a slider to decide how many characters wide it gets, choose soft shading or hard-edged two-tone, then paste it into the group chat or save it to Photos as an image. Your cat, rendered in @ and #.",
     descriptionHighlights: [
-      "a picture made of text characters",
-      "as text",
-      "as an image",
+      "made entirely of keyboard characters",
+      "paste it into the group chat",
+      "save it to Photos",
     ],
     tech: ["SwiftUI", "CoreGraphics", "ImageIO", "PhotosUI", "XCUITest"],
     highlight: "Finds the subject and gives it the whole frame, so logos come out as sharp as photographs",
@@ -296,10 +317,21 @@ export const projects: Project[] = [
         aspect: 588 / 1280,
       },
     },
+    // The launch video, cut with /brag and re-encoded from the 10 MB master.
+    showcase: {
+      src: "/videos/asciify-showcase.mp4",
+      poster: "/videos/asciify-showcase.jpg",
+      aspect: 16 / 9,
+    },
     body: [
-      "Five steps, each one there because the picture came out wrong without it: decode at a bounded size with the EXIF orientation applied, trim the uniform border so the subject gets the whole grid, resample to one pixel per character cell — halving the vertical resolution, since a cell is about half as wide as it is tall — measure Rec. 709 luminance and stretch the middle 96% of the tonal range, then look up a character per cell.",
-      "Copying puts two flavours on the clipboard at once: plain text in a triple-backtick fence, so chat apps render it monospaced instead of shredding the alignment, and RTF with a pinned monospace font for rich-text targets. Text wraps past roughly 100 columns, so the width slider marks that boundary and anything past it is for the image export. The engine imports no UIKit on purpose, so the same code compiles into a macOS CLI and a ramp change can be judged from the command line.",
+      "No libraries, just CoreGraphics and a conversion engine of about 460 lines. The photo is decoded with its orientation fixed, then the app hunts for a plain border and crops it away, because a logo floating in white space would otherwise get a third of the grid and turn to mush. A character is roughly twice as tall as it is wide, so the image gets squashed vertically to match, contrast is stretched across the middle 96% of tones, and each cell picks from .:-=+*#%@ by how much ink it needs. Copying was sneakier than expected: chat apps wreck the alignment, so the clipboard gets a code-fenced copy that renders monospaced plus RTF with a pinned font for everything else. The engine never touches UIKit, so the same code also builds a Mac command-line tool for tuning the output without booting a simulator.",
     ],
+    architecture: {
+      src: "/architecture/asciify.png",
+      alt: "ASCIIFY architecture: the SwiftUI app passes a picked photo to AsciiCore, which decodes it and runs five steps (crop, grid size, sample, normalize, map) before the art goes back to the clipboard as text and RTF or to Photos as a PNG.",
+      width: 1886,
+      height: 944,
+    },
   },
 ];
 
