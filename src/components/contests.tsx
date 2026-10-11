@@ -16,7 +16,7 @@ function shortTitle(title: string) {
 }
 
 export function Contests({ stats }: { stats: LeetCodeStats }) {
-  const recent = stats.contests.slice(-5).reverse();
+  const recent = stats.contests.slice(-3).reverse();
 
   return (
     <>
