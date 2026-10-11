@@ -5,9 +5,9 @@ export const site = {
   description: "Mohit Samant - iOS app developer & CSE student at KJSIT, I make iOS apps and ML models",
   role: "iOS developer · CSE student at KJSIT",
   intro:
-    "I build fully native apps for iPhone and Mac, and ML models on the side. Almost every one of them started as an inconvenience in my own life.",
+    "I build native apps for iPhone and Mac, and ML models on the side. Most of them started as something that bugged me in my own life. I also fix bugs in open source iOS apps like Firefox and OneBusAway.",
   /** Phrases in `intro` shown in full ink against the muted rest. */
-  introHighlights: ["fully native apps", "ML models"],
+  introHighlights: ["native apps", "ML models", "open source"],
   location: "India",
   timeZone: "Asia/Kolkata",
   email: "mohitsamant1487@gmail.com",
@@ -46,6 +46,8 @@ export type Project = {
   platforms: string;
   repo?: string;
   video?: { src: string; poster: string };
+  /** App screenshots, shown behind a toggle in the expanded view. */
+  screenshots?: string[];
   /** Short feature names that scroll past on the card. */
   features?: string[];
 };
@@ -55,11 +57,8 @@ export const projects: Project[] = [
     slug: "quasar",
     title: "Quasar",
     status: "building",
-    summary: "A menu bar app that turns the notch into a command center.",
-    body: [
-      "Quasar started as a screenshot tool and kept growing. Capture a screen, an area, a window or a whole scrolling page, then mark it up and pin it.",
-      "Press ⌃Space and a search bar grows out of the notch: commands, settings, clipboard history, snippets and a calculator in one place. Rest the pointer on the notch and the widgets you picked drop down.",
-    ],
+    summary: "",
+    body: [],
     tech: ["Swift", "SwiftUI", "AppKit", "ScreenCaptureKit"],
     logo: "/logos/quasar.png",
     platforms: "macOS 15+",
@@ -90,6 +89,26 @@ export const projects: Project[] = [
     platforms: "iPhone · iPad · Mac",
     repo: "https://github.com/gxlactuss/PPIP",
     video: { src: "/videos/placed-showcase.mp4", poster: "/videos/placed-showcase.jpg" },
+    screenshots: [
+      "/screenshots/placed/01-home.jpg",
+      "/screenshots/placed/02-home-target.jpg",
+      "/screenshots/placed/03-session.jpg",
+      "/screenshots/placed/04-picker.jpg",
+      "/screenshots/placed/05-style.jpg",
+      "/screenshots/placed/06-common.jpg",
+      "/screenshots/placed/07-common-detail.jpg",
+      "/screenshots/placed/08-transcript.jpg",
+      "/screenshots/placed/09-transcript-rubric.jpg",
+      "/screenshots/placed/10-transcript-chart.jpg",
+      "/screenshots/placed/11-transcript-answers.jpg",
+      "/screenshots/placed/12-resume.jpg",
+      "/screenshots/placed/13-resume-2.jpg",
+      "/screenshots/placed/14-resume-3.jpg",
+      "/screenshots/placed/15-amazon.jpg",
+      "/screenshots/placed/16-amazon-insight.jpg",
+      "/screenshots/placed/18-meta.jpg",
+      "/screenshots/placed/19-companies.jpg",
+    ],
   },
 ];
 

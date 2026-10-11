@@ -1,7 +1,7 @@
 "use client";
 
 import { animate, m, useMotionValue, useMotionValueEvent, useReducedMotion, type Variants } from "motion/react";
-import { useEffect, useRef, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import type { Project } from "@/lib/config";
 import { Marquee } from "./marquee";
@@ -185,9 +185,16 @@ export function ProjectSheet({ project, onClose }: { project: Project; onClose: 
                     {paragraph}
                   </m.p>
                 ))}
-                <m.div variants={bodyItem} className="mt-5 flex flex-wrap gap-1.5">
-                  <TechChips tech={project.tech} />
-                </m.div>
+                {!project.features && (
+                  <m.div variants={bodyItem} className="mt-5 flex flex-wrap gap-1.5">
+                    <TechChips tech={project.tech} />
+                  </m.div>
+                )}
+                {project.screenshots && (
+                  <m.div variants={bodyItem} className="mt-5">
+                    <Screenshots title={project.title} images={project.screenshots} />
+                  </m.div>
+                )}
                 {project.repo && (
                   <m.div variants={bodyItem} className="mt-5">
                     <m.a
@@ -216,5 +223,44 @@ export function ProjectSheet({ project, onClose }: { project: Project; onClose: 
       </div>
     </>,
     document.body,
+  );
+}
+
+/** A button that opens a sideways-scrolling strip of the app's screens. Each one opens full size. */
+function Screenshots({ title, images }: { title: string; images: string[] }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+        className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-line px-3.5 text-sm text-ink-2 transition-colors hover:border-line-strong hover:text-ink"
+      >
+        {open ? "Hide screenshots" : `See screenshots (${images.length})`}
+      </button>
+      {open && (
+        <m.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 260, damping: 26 }}
+          className="-mx-5 mt-4 flex snap-x snap-mandatory scroll-px-5 gap-3 overflow-x-auto overscroll-x-contain px-5 pb-2 sm:-mx-6 sm:scroll-px-6 sm:px-6"
+        >
+          {images.map((src, i) => (
+            <a key={src} href={src} target="_blank" rel="noopener" className="shrink-0 snap-start">
+              <img
+                src={src}
+                alt={`${title} screenshot ${i + 1}`}
+                width={780}
+                height={1696}
+                loading="lazy"
+                className="h-96 w-auto rounded-xl bg-surface-2 ring-1 ring-line"
+              />
+            </a>
+          ))}
+        </m.div>
+      )}
+    </>
   );
 }

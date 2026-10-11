@@ -3,7 +3,6 @@
 import { AnimatePresence, m, useMotionValue, useReducedMotion, useSpring, type Variants } from "motion/react";
 import { Fragment, useEffect, useState } from "react";
 import { CountUp } from "@/components/count-up";
-import { HeroGlow } from "@/components/hero-glow";
 import { revealItem } from "@/components/section";
 import { site, socials } from "@/lib/config";
 
@@ -42,7 +41,6 @@ export function Hero({ stats }: { stats: { contributions: number; merged: number
 
   return (
     <header id="top" className="relative isolate pt-20 pb-8 sm:pt-28">
-      <HeroGlow />
       <m.div initial="hidden" animate="show" variants={sequence}>
         <m.div variants={revealItem} className="relative mb-6 size-16">
           <img

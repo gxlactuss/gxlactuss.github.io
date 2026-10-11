@@ -84,7 +84,7 @@ export function ProjectCard({ project, onOpen }: { project: Project; onOpen: () 
       tabIndex={0}
       aria-haspopup="dialog"
       aria-labelledby={`project-${slug}-card-title`}
-      aria-describedby={`project-${slug}-card-summary`}
+      aria-describedby={project.summary ? `project-${slug}-card-summary` : undefined}
       onClick={onOpen}
       onKeyDown={(e) => {
         if (e.target !== e.currentTarget || (e.key !== "Enter" && e.key !== " ")) return;
@@ -142,9 +142,11 @@ export function ProjectCard({ project, onOpen }: { project: Project; onOpen: () 
           <StatusChip status={project.status} />
         </div>
 
-        <p id={`project-${slug}-card-summary`} className="mt-4 text-ink-2">
-          {project.summary}
-        </p>
+        {project.summary && (
+          <p id={`project-${slug}-card-summary`} className="mt-4 text-ink-2">
+            {project.summary}
+          </p>
+        )}
 
         {project.video && (
           <m.div
@@ -172,9 +174,12 @@ export function ProjectCard({ project, onOpen }: { project: Project; onOpen: () 
           </div>
         )}
 
-        <div className="mt-4 flex flex-wrap items-center gap-1.5">
-          <TechChips tech={project.tech} />
-        </div>
+        {/* A project with a moving row of features skips the static row of tech. */}
+        {!project.features && (
+          <div className="mt-4 flex flex-wrap items-center gap-1.5">
+            <TechChips tech={project.tech} />
+          </div>
+        )}
       </div>
     </m.div>
   );

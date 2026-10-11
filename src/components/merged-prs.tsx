@@ -101,6 +101,12 @@ export function MergedPrs({ prs }: { prs: Contribution[] }) {
                   {pr.repo} · {monthYear(pr.createdAt)}
                 </span>
               </span>
+              {pr.additions !== undefined && pr.deletions !== undefined && (
+                <span className="shrink-0 font-mono text-[11px] tabular-nums">
+                  <span className="text-[var(--grid-3)]">+{pr.additions.toLocaleString("en-US")}</span>{" "}
+                  <span className="text-[#cf222e] dark:text-[#f85149]">−{pr.deletions.toLocaleString("en-US")}</span>
+                </span>
+              )}
               <m.svg
                 variants={arrow}
                 viewBox="0 0 24 24"
