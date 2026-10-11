@@ -16,7 +16,7 @@ function shortTitle(title: string) {
 }
 
 export function Contests({ stats }: { stats: LeetCodeStats }) {
-  const best = [...stats.contests].sort((a, b) => a.rank - b.rank).slice(0, 3);
+  const recent = stats.contests.slice(-5).reverse();
 
   return (
     <>
@@ -32,11 +32,11 @@ export function Contests({ stats }: { stats: LeetCodeStats }) {
 
       {stats.contests.length > 1 && <RatingChart stats={stats} />}
 
-      {best.length > 0 && (
+      {recent.length > 0 && (
         <m.div variants={revealItem} className="mt-8">
-          <p className="mb-2 font-mono text-xs text-faint">Best finishes</p>
+          <p className="mb-2 font-mono text-xs text-faint">Recent contests</p>
           <ul>
-            {best.map((c) => (
+            {recent.map((c) => (
               <li key={c.title} className="flex min-h-11 items-center gap-3 border-b border-line py-2 last:border-b-0">
                 <span className="w-16 shrink-0 font-mono text-sm text-accent tabular-nums">
                   #{c.rank.toLocaleString("en-US")}
