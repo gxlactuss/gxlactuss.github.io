@@ -1,74 +1,82 @@
 @import "tailwindcss";
 
-/*
-  Palette. Light values live on bare :root so a page with no theme class still
-  renders correctly; dark values are applied by the .dark class that ThemeScript
-  sets before first paint.
-*/
-/*
-  Black + neon orange. Dark is the intended look; the greys are warmed very
-  slightly toward the accent's hue so the palette reads as one family.
+/* Dark mode follows the .dark class that the theme script sets before first paint. */
+@custom-variant dark (&:where(.dark, .dark *));
 
-  Light mode deliberately does NOT use the neon orange: at oklch lightness 0.78
-  it fails contrast badly on white. It drops to a deeper burnt orange instead,
-  which is the same hue and actually readable.
+/*
+  Warm near-black with one soft orange accent. Light values live on bare :root
+  so the page still renders if the theme script never runs; .dark overrides.
+  The accent drops to a deeper burnt orange in light mode, where the soft one
+  fails contrast on paper.
 */
 :root {
-  --bg: oklch(0.985 0.003 60);
-  --bg-subtle: oklch(0.96 0.005 60);
-  --border: oklch(0.9 0.008 60);
-  --fg: oklch(0.19 0.008 60);
-  --fg-muted: oklch(0.5 0.012 60);
-  --accent: oklch(0.58 0.18 45);
-  --accent-strong: oklch(0.52 0.19 42);
-  --dot: oklch(0.85 0.012 60);
+  --bg: #f5f2ea;
+  --surface: #faf8f3;
+  --surface-2: #ede8dd;
+  --line: #e2dccf;
+  --line-strong: #cdc5b5;
+  --ink: #1c1a16;
+  --ink-2: #33302a;
+  --muted: #6d675d;
+  --faint: #7a7368;
+  --accent: #b3581f;
+  --accent-soft: rgba(179, 88, 31, 0.1);
+  --live: #2f8a55;
+  --grid-0: #e6e0d4;
+  --grid-1: #f0c9a4;
+  --grid-2: #e09a5f;
+  --grid-3: #c4692c;
+  --grid-4: #8f4517;
+  --shadow: 0 1px 2px rgba(28, 26, 22, 0.05), 0 8px 24px -10px rgba(28, 26, 22, 0.16);
+  --shadow-lg: 0 2px 4px rgba(28, 26, 22, 0.06), 0 24px 48px -16px rgba(28, 26, 22, 0.32);
+  --grain-opacity: 0.07;
+  color-scheme: light;
 }
 
 .dark {
-  /* Near-black rather than pure #000: a true black makes the orange vibrate
-     and hairline borders disappear entirely. */
-  --bg: oklch(0.145 0.004 60);
-  --bg-subtle: oklch(0.19 0.006 60);
-  --border: oklch(0.27 0.01 60);
-  --fg: oklch(0.95 0.004 60);
-  --fg-muted: oklch(0.66 0.012 60);
-  --accent: oklch(0.78 0.19 55);
-  --accent-strong: oklch(0.84 0.2 60);
-  --dot: oklch(0.34 0.014 60);
+  --bg: #0d0c0b;
+  --surface: #151412;
+  --surface-2: #1c1a17;
+  --line: #2a2724;
+  --line-strong: #3b3832;
+  --ink: #ece7dc;
+  --ink-2: #d3cdc1;
+  --muted: #9b9488;
+  --faint: #857e73;
+  --accent: #f0a868;
+  --accent-soft: rgba(240, 168, 104, 0.12);
+  --live: #62c38a;
+  --grid-0: #1c1a17;
+  --grid-1: #4a3324;
+  --grid-2: #87532f;
+  --grid-3: #c27a43;
+  --grid-4: #f0a868;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -10px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 2px 4px rgba(0, 0, 0, 0.35), 0 24px 48px -16px rgba(0, 0, 0, 0.75);
+  --grain-opacity: 0.045;
+  color-scheme: dark;
 }
 
-/*
-  Contribution scale, ramped through the accent hue rather than GitHub's green
-  so the widget belongs to this site. Level 0 is the page's own surface, so
-  empty days sit in the page rather than on it.
-  (To go back to GitHub green, replace these ten values — nothing else reads them.)
-*/
-:root {
-  --gh-0: var(--bg-subtle);
-  --gh-1: oklch(0.88 0.07 60);
-  --gh-2: oklch(0.79 0.13 55);
-  --gh-3: oklch(0.68 0.17 48);
-  --gh-4: oklch(0.57 0.19 42);
-}
-
-.dark {
-  --gh-0: var(--bg-subtle);
-  --gh-1: oklch(0.33 0.07 50);
-  --gh-2: oklch(0.48 0.13 52);
-  --gh-3: oklch(0.63 0.17 55);
-  --gh-4: oklch(0.79 0.2 58);
-}
-
+/* Exposes the tokens as utilities: bg-bg, bg-surface, text-ink, border-line, text-accent... */
 @theme inline {
   --color-bg: var(--bg);
-  --color-bg-subtle: var(--bg-subtle);
-  --color-border: var(--border);
-  --color-fg: var(--fg);
-  --color-fg-muted: var(--fg-muted);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
   --color-accent: var(--accent);
-  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-live: var(--live);
+  --shadow-card: var(--shadow);
+  --shadow-float: var(--shadow-lg);
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-display: var(--font-instrument-serif), "Iowan Old Style", Georgia, serif;
+  --ease-out-soft: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 /*
@@ -160,140 +168,49 @@ textarea {
 
 html {
   scroll-behavior: smooth;
-  /* Anchor targets clear the sticky header. */
-  scroll-padding-top: 5rem;
-}
-
-/* The ground colour lives on <html> so body::before can paint the dot grid
-   above it — a background on <body> would cover the pseudo-element. */
-html {
-  background: var(--bg);
+  scroll-padding-top: 2rem;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
-  color: var(--fg);
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-}
-
-/*
-  Dot grid. Fixed rather than scrolling: the page is a single long column, and a
-  grid that slides past under the text turns into visual noise. Masked to fade
-  out down the viewport so it's texture near the top and clean space by the
-  footer, and it never competes with body copy.
-*/
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-image: radial-gradient(circle at center, var(--dot) 1px, transparent 1.5px);
-  background-size: 26px 26px;
-  -webkit-mask-image: radial-gradient(ellipse 110% 75% at 50% 0%, #000 25%, transparent 80%);
-  mask-image: radial-gradient(ellipse 110% 75% at 50% 0%, #000 25%, transparent 80%);
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 ::selection {
-  background: color-mix(in oklch, var(--accent) 28%, transparent);
+  background: var(--accent-soft);
+  color: var(--ink);
 }
 
-a {
-  text-underline-offset: 3px;
-}
-
-/*
-  Important words. A <mark> so it carries meaning to assistive tech, but the
-  browser's yellow block background is dropped — the colour alone is the signal.
-*/
-.hl {
-  background: transparent;
-  color: var(--accent);
-  font-weight: 500;
-}
-
-.dark .hl {
-  color: var(--accent-strong);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/*
-  ===========================================================================
-  Motion
-  ===========================================================================
-  All of it is driven by the browser rather than an animation library: the View
-  Transitions API for navigation and the theme swap, scroll-driven timelines for
-  the reveals. Nothing here ships a byte of JavaScript to the client.
-
-  Every effect is a progressive enhancement. `@supports` gates the scroll
-  timelines (Firefox still has them behind a flag), so the base rule is always
-  the *finished* state — a browser that can't drive the animation shows the
-  content plainly rather than showing it stuck at opacity 0.
-*/
-
-/* The transition overlay sits above the page and swallows clicks for as long as
-   it runs, which on a 380ms morph is long enough to lose a real tap. Named
-   participants still skip hit-testing, but everything else stays live. */
-::view-transition {
+/* Film grain over everything, after arneshbanerjee.dev. Fixed so it doesn't scroll with the page. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
   pointer-events: none;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* The page under the morphing elements. Slightly quicker than the UA's 250ms
-   default is tempting, but the crossfade has to outlast the morph or the new
-   page lands before the logo does. */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 260ms;
-}
-
-/*
-  A project's logo and its title are the same object on the card and on the
-  project page, so they travel between the two instead of crossfading in place.
-  The components mark the pair with `share="morph"`, which is what puts the
-  `morph` class on these pseudo-elements.
-
-  The blur is doing real work: a view transition interpolates between two
-  bitmaps, and scaling a 40px logo up to 48px — or 15px type up to 24px — makes
-  that obvious. Three pixels of blur at the midpoint hides it.
-*/
-::view-transition-group(.morph) {
-  animation-duration: 380ms;
-  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-::view-transition-image-pair(.morph) {
-  animation: morph-blur 380ms cubic-bezier(0.4, 0, 0.2, 1) both;
-}
-
-@keyframes morph-blur {
-  30% {
-    filter: blur(3px);
-  }
+/* Keyboard focus only; mouse clicks don't leave a ring behind. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 6px;
 }
 
 /*
-  Theme swap. The new palette is clipped in as a circle growing from the toggle
-  button, so the change reads as spreading out from the thing you pressed rather
-  than as the page blinking.
-
-  Scoped to the attribute ThemeToggle sets for the duration of the swap, so
-  these rules never touch a navigation. The three custom properties are measured
-  in JS and set on <html>; the ::view-transition tree inherits from the root
-  element, which is the only reason they're readable in here.
-
-  `mix-blend-mode: normal` is required, not cosmetic — the UA blends the two
-  root snapshots by default, and a circle wipe over a blended pair shows the old
-  palette ghosting through the new one.
+  Theme switch: a circle wiping out from the toggle, via the View Transitions API.
+  Scoped to data-theme-wipe so nothing else is affected. mix-blend-mode is needed,
+  or the old palette ghosts through the new one.
 */
 :root[data-theme-wipe]::view-transition-old(root),
 :root[data-theme-wipe]::view-transition-new(root) {
@@ -315,281 +232,8 @@ a {
   }
 }
 
-/*
-  The pointer-lit border on a project card. Two mask layers composited with
-  `exclude` — one clipped to the content box, one to the border box — leave only
-  the 1px ring between them, so the gradient paints the border and nothing else.
-
-  Longhands rather than the `mask` shorthand, and that is the whole trick: the
-  shorthand resets `mask-composite` to `add`, which puts the gradient back over
-  the entire card as one large blob sitting on top of the copy.
-
-  The radius is set by the element so it tracks the card's own corner, and the
-  position comes from two custom properties the card writes on pointer move.
-*/
-.glow-ring {
-  padding: 1px;
-  /* 220px rather than something tighter because the pointer usually sits in
-     the middle of a card, ~55px from the nearest edge. At a 150px radius that
-     lands around half opacity, which reads clearly on the dark palette and
-     almost not at all on the light one. */
-  background: radial-gradient(
-    220px circle at var(--glow-x, 50%) var(--glow-y, 50%),
-    var(--accent),
-    transparent 70%
-  );
-  mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
-  mask-clip: content-box, border-box;
-  mask-composite: exclude;
-}
-
-/*
-  Section reveal. A short rise and fade as each section comes up the page.
-
-  The range is a fixed 180px rather than a percentage of the element: a named
-  range like `entry 60%` is measured against the element's own height, so a tall
-  section would take most of a screen to finish while a short one snapped in.
-  180px of scrolling is the same gesture either way.
-*/
-.reveal {
-  opacity: 1;
-  translate: none;
-}
-
-/*
-  Contribution grid. The whole widget wipes in left to right, oldest week first,
-  which is the direction it reads in anyway.
-
-  Done with a mask rather than by animating the 365 cells: one animation on one
-  element instead of 365 scroll timelines, and — because the cells each carry an
-  absolutely-positioned tooltip — no per-cell transform to turn every square
-  into its own stacking context.
-
-  The mask layer is deliberately 9x the element's height and centred: masking is
-  a clip, and a layer only as tall as the grid would cut the tooltips off above
-  the top row for good, since the mask stays applied after the sweep ends.
-*/
-.gh-sweep {
-  mask-image: none;
-}
-
-/*
-  Scroll progress. A hairline of accent across the bottom of the sticky header.
-  Base state is empty so a browser without scroll timelines shows nothing at all
-  rather than a permanent full-width rule.
-*/
-.scroll-progress {
-  transform: scaleX(0);
-}
-
-@keyframes reveal-in {
-  from {
-    opacity: 0;
-    translate: 0 12px;
-  }
-}
-
-@keyframes gh-sweep-in {
-  from {
-    mask-position: 120% center;
-  }
-  to {
-    mask-position: 0% center;
-  }
-}
-
-@keyframes scroll-progress-grow {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
-
-@supports (animation-timeline: view()) {
-  /* The reveal is autonomous movement in a way the progress bar isn't, so it's
-     the one that's opted out of entirely below the fold of someone's motion
-     preference. */
-  @media (prefers-reduced-motion: no-preference) {
-    .reveal {
-      animation: reveal-in linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 180px;
-    }
-
-    .gh-sweep {
-      mask-image: linear-gradient(90deg, #000 50%, transparent 60%);
-      mask-size: 200% 900%;
-      mask-repeat: no-repeat;
-      /* Belt and braces: if the timeline ever fails to attach, the animation
-         drops out and mask-position falls back to its initial `0% 0%`, which
-         anchors that 9x-tall layer at the top edge and clips the tooltips off
-         after all. Centring it statically makes the un-animated state the
-         fully-revealed one. */
-      mask-position: 0% center;
-      animation: gh-sweep-in linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 260px;
-    }
-  }
-}
-
-@supports (animation-timeline: scroll()) {
-  .scroll-progress {
-    animation: scroll-progress-grow linear both;
-    animation-timeline: scroll(root block);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  /*
-    The blanket rule further up matches elements, not pseudo-elements, so the
-    view-transition tree needs saying again. Zero duration is the browser's own
-    no-transition behaviour: the page still swaps, it just cuts.
-  */
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*),
-  ::view-transition-image-pair(*) {
-    animation-duration: 0s !important;
-    animation-delay: 0s !important;
-  }
-
-  /*
-    The progress bar is kept. It is scroll-*linked*, not autonomous: it only
-    moves in response to a scroll the reader is already performing, which is not
-    the kind of motion the preference is asking us to stop. It does need the
-    exemption spelled out, though — the blanket 0.01ms above would otherwise
-    pin it at full width.
-  */
-  .scroll-progress {
-    animation-duration: auto !important;
-  }
-}
-
-/* Article body. Hand-rolled rather than @tailwindcss/typography — this is a
-   short list of rules and it keeps the palette tokens in one place. */
-.prose {
-  line-height: 1.75;
-}
-
-.prose > * + * {
-  margin-top: 1.15em;
-}
-
-.prose h2,
-.prose h3 {
-  margin-top: 2em;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-}
-
-.prose h2 {
-  font-size: 1.25rem;
-}
-
-.prose h3 {
-  font-size: 1.05rem;
-}
-
-.prose a {
-  color: var(--accent);
-  text-decoration: underline;
-}
-
-/* Bold in an article is an "important word" too — same treatment as .hl. */
-.prose strong {
-  color: var(--accent);
-  font-weight: 500;
-}
-
-.dark .prose strong {
-  color: var(--accent-strong);
-}
-
-.prose ul,
-.prose ol {
-  padding-left: 1.4em;
-}
-
-.prose ul {
-  list-style: disc;
-}
-
-.prose ol {
-  list-style: decimal;
-}
-
-.prose li + li {
-  margin-top: 0.4em;
-}
-
-.prose blockquote {
-  border-left: 2px solid var(--border);
-  padding-left: 1em;
-  color: var(--fg-muted);
-}
-
-.prose :not(pre) > code {
-  background: var(--bg-subtle);
-  border: 1px solid var(--border);
-  border-radius: 0.25rem;
-  padding: 0.1em 0.35em;
-  font-size: 0.85em;
-}
-
-.prose img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 0.5rem;
-}
-
-.prose hr {
-  border-color: var(--border);
-}
-
-.prose table {
-  display: block;
-  width: 100%;
-  overflow-x: auto;
-  border-collapse: collapse;
-  font-size: 0.9em;
-}
-
-.prose th,
-.prose td {
-  border: 1px solid var(--border);
-  padding: 0.5em 0.75em;
-  text-align: left;
-}
-
-/* rehype-pretty-code output */
-[data-rehype-pretty-code-figure] pre {
-  overflow-x: auto;
-  border-radius: 0.5rem;
-  border: 1px solid var(--border);
-  padding: 1rem 0;
-  font-size: 0.85rem;
-  line-height: 1.6;
-}
-
-[data-rehype-pretty-code-figure] code {
-  display: grid;
-  counter-reset: line;
-}
-
-[data-rehype-pretty-code-figure] [data-line] {
-  padding: 0 1rem;
-  border-left: 2px solid transparent;
-}
-
-[data-rehype-pretty-code-figure] [data-highlighted-line] {
-  background: color-mix(in oklch, var(--accent) 12%, transparent);
-  border-left-color: var(--accent);
-}
-
-/* Swap the Shiki theme with the site theme. */
-.dark [data-rehype-pretty-code-figure] span[data-line] span {
-  color: var(--shiki-dark) !important;
+/* Thin scrollbars inside horizontal scrollers (the contribution graph on mobile). */
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
 }

@@ -1,45 +1,44 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
-import { ThemeScript } from "@/components/theme-toggle";
+import type { Metadata, Viewport } from "next";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { MotionProvider } from "@/components/motion-provider";
+import { ThemeScript } from "@/components/theme";
 import { site } from "@/lib/config";
 import "./globals.css";
 
 const sans = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
 const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
+const display = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-instrument-serif",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: { default: site.name, template: `%s · ${site.name}` },
+  title: site.name,
   description: site.description,
-  openGraph: {
-    title: site.name,
-    description: site.description,
-    url: site.url,
-    siteName: site.name,
-    type: "website",
-  },
-  twitter: { card: "summary_large_image", title: site.name, description: site.description },
+  openGraph: { title: site.name, description: site.description, url: site.url, siteName: site.name, type: "website" },
+  twitter: { card: "summary", title: site.name, description: site.description },
+};
+
+export const viewport: Viewport = {
+  // Lets the dock sit above the iPhone home indicator via env(safe-area-inset-bottom).
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#0d0c0b" },
+    { media: "(prefers-color-scheme: light)", color: "#f5f2ea" },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    // `data-scroll-behavior="smooth"` is not decoration: globals.css sets
-    // `scroll-behavior: smooth` on <html> for the in-page anchor links, and as
-    // of Next 16 the router no longer suspends that during a route change
-    // unless this attribute says to. Without it, navigating smooth-scrolls to
-    // the top of the new page over ~200ms — which the view transition then
-    // snapshots mid-flight, so the morph lands against a page that is still
-    // sliding. With it, anchors stay smooth and navigation jumps instantly.
-    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
+    <html lang="en" suppressHydrationWarning className={`${sans.variable} ${mono.variable} ${display.variable}`}>
       <head>
         <ThemeScript />
       </head>
-      <body className={`${sans.variable} ${mono.variable} font-sans`}>
-        <SiteHeader />
-        <main className="mx-auto max-w-4xl px-5">{children}</main>
-        <SiteFooter />
+      <body className="font-sans">
+        <MotionProvider>{children}</MotionProvider>
       </body>
     </html>
   );

@@ -1,64 +1,62 @@
-import { ComingSoon } from "@/components/coming-soon";
-import { ContributionCalendar } from "@/components/contribution-calendar";
+import { ContributionGraph } from "@/components/contribution-graph";
+import { Dock } from "@/components/dock";
+import { Footer } from "@/components/footer";
 import { Friends } from "@/components/friends";
 import { Guestbook } from "@/components/guestbook";
-import { MotionFeatures } from "@/components/motion-features";
-import { ProfileHeader } from "@/components/profile-header";
-import { ProjectCard } from "@/components/project-card";
-import { ResearchList } from "@/components/research-list";
+import { Hero } from "@/components/hero";
+import { MergedOrgs, MergedPrs } from "@/components/merged-prs";
+import { ProjectList } from "@/components/project-list";
+import { ResearchList } from "@/components/research";
+import { ScrollProgress } from "@/components/scroll-progress";
 import { Section } from "@/components/section";
-import { giscus, projects } from "@/lib/config";
 import { getContributionDays } from "@/lib/contributions";
+import { getContributions } from "@/lib/github";
+import { getGuestbookNotes } from "@/lib/guestbook";
+import { friends, giscus, projects, research } from "@/lib/config";
 
 export default async function Home() {
-  const contributionDays = await getContributionDays(365);
+  // Fetched at build time and baked into the HTML. Either can come back empty
+  // if GitHub has a bad minute, and the sections cope with that.
+  const [days, prs, notes] = await Promise.all([
+    getContributionDays(365),
+    getContributions().catch(() => []),
+    getGuestbookNotes(),
+  ]);
+  const merged = prs.filter((pr) => pr.state === "merged");
+  const total = days.reduce((sum, day) => sum + day.count, 0);
 
   return (
-    // Everything using Motion's `m` components lives on this page — the project
-    // cards and the social pills — so the feature bundle is scoped here rather
-    // than to the root layout, and the blog and project pages stay free of it.
-    <MotionFeatures>
-      <div className="py-16">
-        <ProfileHeader />
+    <>
+      <ScrollProgress />
+      <main className="mx-auto max-w-[680px] px-5">
+        <Hero stats={{ contributions: total, merged: merged.length }} />
 
-        <Section id="projects" title="Projects">
-          <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
-            {projects.filter((p) => !p.hidden).map((p) => (
-              <ProjectCard key={p.slug} project={p} />
-            ))}
-          </div>
+        <Section id="projects" title="Projects" count={projects.length}>
+          <ProjectList />
         </Section>
 
-        {/* Resume section is hidden for now. To restore it: move
-            resume/resume.pdf back to public/, put the "resume" nav link back in
-            config.ts, and re-add <Section id="resume" title="Resume"><ResumeCard />
-            </Section> here with its import. */}
-
-        <Section id="research" title="Research">
+        <Section id="research" title="Research" count={research.length}>
           <ResearchList />
         </Section>
 
-        <Section id="github" title="GitHub">
-          <ContributionCalendar days={contributionDays} />
+        <Section id="open-source" title="Open source">
+          <MergedOrgs prs={merged} />
+          <ContributionGraph days={days} />
+          <MergedPrs prs={merged} />
         </Section>
 
-        <Section id="open-source" title="Open Source">
-          <ComingSoon note="Contributions I've made to other people's projects will show up here." />
-        </Section>
-
-        <Section id="friends" title="My Friends">
+        <Section id="friends" title="Friends" count={friends.length}>
           <Friends />
         </Section>
 
         {giscus.enabled && (
           <Section id="guestbook" title="Guestbook">
-            <p className="text-sm leading-relaxed text-fg-muted">
-              Say hi. Signing in uses your GitHub account.
-            </p>
-            <Guestbook />
+            <Guestbook notes={notes} />
           </Section>
         )}
-      </div>
-    </MotionFeatures>
+      </main>
+      <Footer />
+      <Dock />
+    </>
   );
 }

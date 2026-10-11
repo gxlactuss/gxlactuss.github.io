@@ -7,6 +7,9 @@ on:
   # keep it current without needing a commit.
   schedule:
     - cron: "0 5 * * *"
+  # Guestbook notes are baked in at build time too, so a new one rebuilds.
+  discussion_comment:
+    types: [created, edited, deleted]
   # Lets you redeploy by hand from the Actions tab without pushing a commit.
   workflow_dispatch:
 
@@ -40,6 +43,8 @@ jobs:
           # Empty for a user site (<user>.github.io). For a project repo, set
           # this to /<repo-name> so assets resolve under the subpath.
           BASE_PATH: ""
+          # Lifts the GitHub search rate limit, so the merged PRs never come back empty.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/upload-pages-artifact@v3
         with:
