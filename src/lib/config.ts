@@ -14,6 +14,7 @@ export const site = {
   github: "gxlactuss",
   linkedin: "mohit-samant-7a76302ba",
   x: "Gxlactuss",
+  leetcode: "gxlactus",
 } as const;
 
 export const socials = [
@@ -27,6 +28,7 @@ export const sections = [
   { id: "projects", label: "Projects" },
   { id: "research", label: "Research" },
   { id: "open-source", label: "Open source" },
+  { id: "contests", label: "Contests" },
   { id: "guestbook", label: "Guestbook" },
 ] as const;
 

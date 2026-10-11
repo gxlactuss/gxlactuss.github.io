@@ -1,3 +1,4 @@
+import { Contests } from "@/components/contests";
 import { ContributionGraph } from "@/components/contribution-graph";
 import { Dock } from "@/components/dock";
 import { Footer } from "@/components/footer";
@@ -12,15 +13,17 @@ import { Section } from "@/components/section";
 import { getContributionDays } from "@/lib/contributions";
 import { getContributions } from "@/lib/github";
 import { getGuestbookNotes } from "@/lib/guestbook";
+import { getLeetCodeStats } from "@/lib/leetcode";
 import { friends, giscus, projects, research } from "@/lib/config";
 
 export default async function Home() {
   // Fetched at build time and baked into the HTML. Either can come back empty
   // if GitHub has a bad minute, and the sections cope with that.
-  const [days, prs, notes] = await Promise.all([
+  const [days, prs, notes, leetcode] = await Promise.all([
     getContributionDays(365),
     getContributions().catch(() => []),
     getGuestbookNotes(),
+    getLeetCodeStats(),
   ]);
   const merged = prs.filter((pr) => pr.state === "merged");
   const total = days.reduce((sum, day) => sum + day.count, 0);
@@ -29,7 +32,7 @@ export default async function Home() {
     <>
       <ScrollProgress />
       <main className="mx-auto max-w-[680px] px-5">
-        <Hero stats={{ contributions: total, merged: merged.length }} />
+        <Hero stats={{ contributions: total, merged: merged.length, leetcodeTop: leetcode?.topPercentage }} />
 
         <Section id="projects" title="Projects" count={projects.length}>
           <ProjectList />
@@ -44,6 +47,12 @@ export default async function Home() {
           <ContributionGraph days={days} />
           <MergedPrs prs={merged} />
         </Section>
+
+        {leetcode && (
+          <Section id="contests" title="Competitive programming">
+            <Contests stats={leetcode} />
+          </Section>
+        )}
 
         <Section id="friends" title="Friends" count={friends.length}>
           <Friends />

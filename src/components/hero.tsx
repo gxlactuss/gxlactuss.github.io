@@ -36,7 +36,11 @@ const letter: Variants = {
 // The lines under the name wait for most of the name to land first.
 const afterName: Variants = { show: { transition: { delayChildren: 0.35, staggerChildren: 0.09 } } };
 
-export function Hero({ stats }: { stats: { contributions: number; merged: number } }) {
+export function Hero({
+  stats,
+}: {
+  stats: { contributions: number; merged: number; leetcodeTop?: number };
+}) {
   const words = site.name.split(" ");
 
   return (
@@ -96,6 +100,14 @@ export function Hero({ stats }: { stats: { contributions: number; merged: number
                 <Stat value={stats.contributions} label="contributions this year" />
               )}
               {stats.merged > 0 && <Stat value={stats.merged} label="PRs merged" />}
+              {stats.leetcodeTop !== undefined && (
+                <li className="flex items-center gap-2">
+                  <span className="size-1 rounded-full bg-accent" aria-hidden />
+                  <span>
+                    <span className="text-ink">Top {stats.leetcodeTop}%</span> on LeetCode
+                  </span>
+                </li>
+              )}
             </m.ul>
           )}
 

@@ -25,6 +25,7 @@ const icons: Record<"top" | SectionId, React.ReactNode> = {
       <path d="M6 3v12.5M18 8.5A9.5 9.5 0 0 1 8.5 18" />
     </>
   ),
+  contests: <path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3" />,
   guestbook: <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />,
 };
 
