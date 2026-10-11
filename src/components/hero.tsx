@@ -48,7 +48,7 @@ export function Hero({
       <m.div initial="hidden" animate="show" variants={sequence}>
         <m.div variants={revealItem} className="relative mb-6 size-16">
           <img
-            src="/profile.jpg"
+            src="/profile-samurai.jpg"
             alt=""
             width={64}
             height={64}
