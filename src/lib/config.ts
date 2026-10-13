@@ -5,9 +5,9 @@ export const site = {
   description: "Mohit Samant - iOS app developer & CSE student at KJSIT, I make iOS apps and ML models",
   role: "iOS developer · CSE student at KJSIT",
   intro:
-    "I build native apps for iPhone and Mac, and ML models on the side. Most of them started as something that bugged me in my own life. I also fix bugs in open source iOS apps like Firefox and OneBusAway.",
+    "I build native apps for iPhone and Mac, and ML models on the side. Most of them started as something that bugged me in my own life. I also fix bugs in open source iOS apps like Firefox and OneBusAway, and I like competitive programming too.",
   /** Phrases in `intro` shown in full ink against the muted rest. */
-  introHighlights: ["native apps", "ML models", "open source"],
+  introHighlights: ["native apps", "ML models", "open source", "competitive programming"],
   location: "India",
   timeZone: "Asia/Kolkata",
   email: "mohitsamant1487@gmail.com",
