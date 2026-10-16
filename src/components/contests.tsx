@@ -69,45 +69,88 @@ export function Contests({ stats }: { stats: LeetCodeStats }) {
 
 const levels = [
   { key: "easy", label: "Easy", color: "var(--live)" },
-  { key: "medium", label: "Medium", color: "var(--accent)" },
+  { key: "medium", label: "Med.", color: "var(--accent)" },
   { key: "hard", label: "Hard", color: "light-dark(#cf222e, #f85149)" },
 ] as const;
 
-/** Hand-tracked practice count plus contest solves, split by difficulty. */
+/** Share of the ring the arc covers, leaving the bottom open like LeetCode's. */
+const ARC = 75;
+const GAP = 3;
+
+/** Hand-tracked practice count plus contest solves, split by difficulty, as LeetCode's ring. */
 function ProblemsSolved({ stats }: { stats: LeetCodeStats }) {
   const contest = stats.contestSolved ?? { easy: 0, medium: 0, hard: 0 };
   const counts = levels.map((l) => practiceSolved[l.key] + contest[l.key]);
   const total = counts.reduce((sum, n) => sum + n, 0);
 
+  // Each difficulty gets a slice of the arc sized by its count, with a small gap between.
+  const usable = ARC - GAP * (levels.length - 1);
+  let start = 0;
+  const segments = counts.map((n) => {
+    const len = (n / total) * usable;
+    const seg = { start, len };
+    start += len + GAP;
+    return seg;
+  });
+
   return (
     <m.div variants={revealItem} className="mt-8">
-      <div className="mb-2 flex items-baseline justify-between font-mono text-xs text-faint">
-        <span>Problems solved</span>
-        <span className="font-display text-xl text-ink">
-          <CountUp value={total} />
-        </span>
+      <p className="mb-3 font-mono text-xs text-faint">Problems solved</p>
+      <div className="flex items-center gap-5 rounded-xl border border-line bg-surface p-4">
+        <div className="relative size-32 shrink-0">
+          {/* Rotated so the arc starts bottom-left and runs clockwise over the top. */}
+          <svg viewBox="0 0 100 100" className="size-full rotate-[135deg]" aria-hidden="true">
+            <circle
+              cx="50"
+              cy="50"
+              r="44"
+              pathLength="100"
+              fill="none"
+              stroke="var(--line)"
+              strokeWidth="5"
+              strokeLinecap="round"
+              strokeDasharray={`${ARC} 100`}
+            />
+            {segments.map((s, i) => (
+              <m.circle
+                key={levels[i].key}
+                cx="50"
+                cy="50"
+                r="44"
+                pathLength="100"
+                fill="none"
+                stroke={levels[i].color}
+                strokeWidth="5"
+                strokeLinecap="round"
+                strokeDashoffset={-s.start}
+                initial={{ strokeDasharray: "0 100" }}
+                whileInView={{ strokeDasharray: `${s.len} 100` }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 + i * 0.25, duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
+              />
+            ))}
+          </svg>
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <span className="font-display text-3xl leading-none text-ink">
+              <CountUp value={total} />
+            </span>
+            <span className="mt-1 font-mono text-[11px] text-faint">Solved</span>
+          </div>
+        </div>
+        <ul className="flex min-w-0 flex-1 flex-col gap-2">
+          {levels.map((l, i) => (
+            <li
+              key={l.key}
+              className="flex flex-col items-center rounded-lg bg-surface-2 px-3 py-1.5 text-center"
+            >
+              <span className="text-xs font-medium" style={{ color: l.color }}>
+                {l.label}
+              </span>
+              <span className="text-sm text-ink tabular-nums">{counts[i]}</span>
+            </li>
+          ))}
+        </ul>
       </div>
-      <div className="flex h-2 gap-0.5 overflow-hidden rounded-full" aria-hidden="true">
-        {levels.map((l, i) => (
-          <m.span
-            key={l.key}
-            style={{ backgroundColor: l.color, flexGrow: counts[i] }}
-            className="origin-left"
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.15, duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
-          />
-        ))}
-      </div>
-      <ul className="mt-2 flex gap-4 font-mono text-[11px] text-faint">
-        {levels.map((l, i) => (
-          <li key={l.key} className="flex items-center gap-1.5">
-            <span className="size-2 rounded-full" style={{ backgroundColor: l.color }} aria-hidden="true" />
-            {l.label} <span className="text-ink-2 tabular-nums">{counts[i]}</span>
-          </li>
-        ))}
-      </ul>
     </m.div>
   );
 }
