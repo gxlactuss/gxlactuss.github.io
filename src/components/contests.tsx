@@ -200,13 +200,30 @@ function RatingChart({ stats }: { stats: LeetCodeStats }) {
           {ratings[0]} → <span className="text-ink">{ratings.at(-1)}</span>
         </span>
       </div>
-      <svg
+      <m.svg
         viewBox={`0 0 ${W} ${H}`}
         className="w-full overflow-visible"
         role="img"
         aria-label={`Contest rating went from ${ratings[0]} to ${ratings.at(-1)} over ${contests.length} contests`}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
       >
         <defs>
+          {/* The line draws in by widening this clip. Animating pathLength instead
+              ends short of the last point, since the non-scaling stroke measures
+              its dashes in screen pixels once the chart is scaled up. */}
+          <clipPath id="rating-reveal">
+            <m.rect
+              x={-10}
+              y={-10}
+              height={H + 20}
+              variants={{
+                hidden: { width: 0 },
+                show: { width: W + 20, transition: { duration: 1.1, ease: [0.23, 1, 0.32, 1] } },
+              }}
+            />
+          </clipPath>
           <linearGradient id="rating-fill" x1="0" x2="0" y1="0" y2="1">
             <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.18" />
             <stop offset="100%" stopColor="var(--accent)" stopOpacity="0" />
@@ -220,7 +237,7 @@ function RatingChart({ stats }: { stats: LeetCodeStats }) {
           viewport={{ once: true }}
           transition={{ delay: 0.6, duration: 0.6 }}
         />
-        <m.path
+        <path
           d={line}
           fill="none"
           stroke="var(--accent)"
@@ -228,10 +245,7 @@ function RatingChart({ stats }: { stats: LeetCodeStats }) {
           strokeLinecap="round"
           strokeLinejoin="round"
           vectorEffect="non-scaling-stroke"
-          initial={{ pathLength: 0 }}
-          whileInView={{ pathLength: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.1, ease: [0.23, 1, 0.32, 1] }}
+          clipPath="url(#rating-reveal)"
         />
         {points.map((p, i) => (
           <m.circle
@@ -250,7 +264,7 @@ function RatingChart({ stats }: { stats: LeetCodeStats }) {
             <title>{`${p.contest.title}: rank ${p.contest.rank.toLocaleString("en-US")}, rating ${p.contest.rating}`}</title>
           </m.circle>
         ))}
-      </svg>
+      </m.svg>
       <div className="mt-1 flex justify-between font-mono text-[10px] text-faint">
         <span>{monthYear(contests[0].startTime)}</span>
         <span>{monthYear(contests.at(-1)!.startTime)}</span>
