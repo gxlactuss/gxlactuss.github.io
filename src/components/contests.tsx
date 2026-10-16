@@ -1,8 +1,8 @@
 "use client";
 
 import { m } from "motion/react";
-import { practiceSolved, site } from "@/lib/config";
-import type { LeetCodeStats } from "@/lib/leetcode";
+import { site } from "@/lib/config";
+import type { LeetCodeStats, Solved } from "@/lib/leetcode";
 import { CountUp } from "./count-up";
 import { revealItem } from "./section";
 
@@ -51,18 +51,12 @@ export function Contests({ stats }: { stats: LeetCodeStats }) {
         </m.div>
       )}
 
-      <ProblemsSolved stats={stats} />
+      {stats.solved && <ProblemsSolved solved={stats.solved} />}
 
-      <m.p variants={revealItem} className="mt-5">
-        <a
-          href={`https://leetcode.com/u/${site.leetcode}/`}
-          target="_blank"
-          rel="noopener"
-          className="inline-flex min-h-11 items-center gap-1.5 text-sm text-accent"
-        >
-          LeetCode profile <span aria-hidden="true">↗</span>
-        </a>
-      </m.p>
+      <m.div variants={revealItem} className="mt-5 grid grid-cols-2 gap-2">
+        <LinkButton href={`https://leetcode.com/u/${site.leetcode}/`}>LeetCode profile</LinkButton>
+        <LinkButton href={`https://github.com/${site.solutions}`}>All my solutions</LinkButton>
+      </m.div>
     </>
   );
 }
@@ -77,10 +71,9 @@ const levels = [
 const ARC = 75;
 const GAP = 3;
 
-/** Hand-tracked practice count plus contest solves, split by difficulty, as LeetCode's ring. */
-function ProblemsSolved({ stats }: { stats: LeetCodeStats }) {
-  const contest = stats.contestSolved ?? { easy: 0, medium: 0, hard: 0 };
-  const counts = levels.map((l) => practiceSolved[l.key] + contest[l.key]);
+/** Solved problems split by difficulty, as LeetCode's ring. */
+function ProblemsSolved({ solved }: { solved: Solved }) {
+  const counts = levels.map((l) => solved[l.key]);
   const total = counts.reduce((sum, n) => sum + n, 0);
 
   // Each difficulty gets a slice of the arc sized by its count, with a small gap between.
@@ -151,7 +144,24 @@ function ProblemsSolved({ stats }: { stats: LeetCodeStats }) {
           ))}
         </ul>
       </div>
+      <p className="mt-3 text-sm text-muted">
+        I solve most problems in an Xcode playground. Its debugger makes it easy to see exactly where a solution goes
+        wrong, and it doubles as practice for quickly debugging real projects.
+      </p>
     </m.div>
+  );
+}
+
+function LinkButton({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener"
+      className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl border border-line bg-surface px-3 text-sm text-accent transition-[border-color,translate] hover:-translate-y-px hover:border-line-strong"
+    >
+      {children} <span aria-hidden="true">↗</span>
+    </a>
   );
 }
 

@@ -1,4 +1,5 @@
 import { site } from "./config";
+import { headers as githubHeaders } from "./github";
 
 export type Contest = {
   title: string;
@@ -19,8 +20,8 @@ export type LeetCodeStats = {
   badge?: string;
   /** Rated contests, oldest first. */
   contests: Contest[];
-  /** Problems solved in contests by difficulty, or null if LeetCode didn't say. */
-  contestSolved: Solved | null;
+  /** Every problem solved, from the solutions repo plus contests, or null if either source didn't answer. */
+  solved: Solved | null;
 };
 
 export type Solved = { easy: number; medium: number; hard: number };
@@ -91,7 +92,7 @@ export async function getLeetCodeStats(): Promise<LeetCodeStats | null> {
       topPercentage: ranking.topPercentage,
       badge: ranking.badge?.name,
       contests,
-      contestSolved: await getContestSolved(contests),
+      solved: await getSolved(contests),
     };
   } catch {
     return null;
@@ -112,34 +113,60 @@ function ask(query: string, variables?: Record<string, string>) {
 }
 
 /**
- * Difficulty of each problem solved in contests. The public data only says how
- * many of a contest's problems were solved, not which, so this counts the first
- * N in contest order. They are ordered by difficulty and nearly always solved
- * that way.
+ * Solved problems by difficulty: every `<number>.swift` in the solutions repo,
+ * plus problems solved in contests, counted once each.
+ *
+ * The public contest data only says how many of a contest's problems were
+ * solved, not which, so this takes the first N in contest order. They are
+ * ordered by difficulty and nearly always solved that way.
  */
-async function getContestSolved(contests: Contest[]): Promise<Solved | null> {
-  const played = contests.filter((c) => c.solved > 0);
-  if (played.length === 0) return { easy: 0, medium: 0, hard: 0 };
+async function getSolved(contests: Contest[]): Promise<Solved | null> {
   try {
-    const listRes = await ask(
-      `{ ${played.map((c, i) => `c${i}: contestQuestionList(contestSlug: "${c.slug}") { titleSlug }`).join(" ")} }`,
-    );
-    if (!listRes.ok) return null;
-    const lists = ((await listRes.json()) as { data?: Record<string, { titleSlug: string }[] | null> }).data;
-    if (!lists) return null;
-    const slugs = played.flatMap((c, i) => (lists[`c${i}`] ?? []).slice(0, c.solved).map((q) => q.titleSlug));
+    const played = contests.filter((c) => c.solved > 0);
+    const [treeRes, problemsRes, listRes] = await Promise.all([
+      fetch(`https://api.github.com/repos/${site.solutions}/git/trees/HEAD?recursive=1`, {
+        headers: githubHeaders,
+        next: { revalidate: 3600 },
+      }),
+      // Every problem's number, slug and difficulty (1 easy, 2 medium, 3 hard) in one response.
+      fetch("https://leetcode.com/api/problems/all/", {
+        headers: { Referer: "https://leetcode.com", "User-Agent": "Mozilla/5.0 (compatible; personal-site-build)" },
+        next: { revalidate: 3600 },
+      }),
+      played.length
+        ? ask(`{ ${played.map((c, i) => `c${i}: contestQuestionList(contestSlug: "${c.slug}") { titleSlug }`).join(" ")} }`)
+        : null,
+    ]);
+    if (!treeRes.ok || !problemsRes.ok || (listRes && !listRes.ok)) return null;
 
-    const diffRes = await ask(
-      `{ ${slugs.map((slug, i) => `q${i}: question(titleSlug: "${slug}") { difficulty }`).join(" ")} }`,
-    );
-    if (!diffRes.ok) return null;
-    const diffs = ((await diffRes.json()) as { data?: Record<string, { difficulty: string } | null> }).data;
-    if (!diffs) return null;
+    const { tree } = (await treeRes.json()) as { tree: { path: string }[] };
+    const { stat_status_pairs: problems } = (await problemsRes.json()) as {
+      stat_status_pairs: { stat: { frontend_question_id: number; question__title_slug: string }; difficulty: { level: number } }[];
+    };
+    const lists = listRes
+      ? ((await listRes.json()) as { data?: Record<string, { titleSlug: string }[] | null> }).data ?? {}
+      : {};
+
+    const levelById = new Map(problems.map((p) => [p.stat.frontend_question_id, p.difficulty.level]));
+    const idBySlug = new Map(problems.map((p) => [p.stat.question__title_slug, p.stat.frontend_question_id]));
+
+    const ids = new Set<number>();
+    for (const { path } of tree) {
+      const match = path.match(/(?:^|\/)(\d+)\.swift$/);
+      if (match) ids.add(Number(match[1]));
+    }
+    played.forEach((c, i) => {
+      for (const q of (lists[`c${i}`] ?? []).slice(0, c.solved)) {
+        const id = idBySlug.get(q.titleSlug);
+        if (id) ids.add(id);
+      }
+    });
 
     const solved: Solved = { easy: 0, medium: 0, hard: 0 };
-    for (const q of Object.values(diffs)) {
-      const key = q?.difficulty.toLowerCase();
-      if (key === "easy" || key === "medium" || key === "hard") solved[key]++;
+    const keys: Record<number, keyof Solved | undefined> = { 1: "easy", 2: "medium", 3: "hard" };
+    for (const id of ids) {
+      const key = keys[levelById.get(id) ?? 0];
+      if (key) solved[key]++;
     }
     return solved;
   } catch {

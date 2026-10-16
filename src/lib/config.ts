@@ -15,10 +15,9 @@ export const site = {
   linkedin: "mohit-samant-7a76302ba",
   x: "Gxlactuss",
   leetcode: "gxlactus",
+  /** Repo with one `<problem number>.swift` file per solved problem. */
+  solutions: "gxlactuss/Leetcode",
 } as const;
-
-/** Problems solved outside LeetCode contests, tracked by hand. Contest solves are added on top at build time. */
-export const practiceSolved = { easy: 138, medium: 220, hard: 52 };
 
 export const socials = [
   { label: "GitHub", icon: "github", href: `https://github.com/${site.github}` },
