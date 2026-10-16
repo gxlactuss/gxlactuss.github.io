@@ -1,7 +1,7 @@
 "use client";
 
 import { m } from "motion/react";
-import { site } from "@/lib/config";
+import { practiceSolved, site } from "@/lib/config";
 import type { LeetCodeStats } from "@/lib/leetcode";
 import { CountUp } from "./count-up";
 import { revealItem } from "./section";
@@ -51,6 +51,8 @@ export function Contests({ stats }: { stats: LeetCodeStats }) {
         </m.div>
       )}
 
+      <ProblemsSolved stats={stats} />
+
       <m.p variants={revealItem} className="mt-5">
         <a
           href={`https://leetcode.com/u/${site.leetcode}/`}
@@ -62,6 +64,51 @@ export function Contests({ stats }: { stats: LeetCodeStats }) {
         </a>
       </m.p>
     </>
+  );
+}
+
+const levels = [
+  { key: "easy", label: "Easy", color: "var(--live)" },
+  { key: "medium", label: "Medium", color: "var(--accent)" },
+  { key: "hard", label: "Hard", color: "light-dark(#cf222e, #f85149)" },
+] as const;
+
+/** Hand-tracked practice count plus contest solves, split by difficulty. */
+function ProblemsSolved({ stats }: { stats: LeetCodeStats }) {
+  const contest = stats.contestSolved ?? { easy: 0, medium: 0, hard: 0 };
+  const counts = levels.map((l) => practiceSolved[l.key] + contest[l.key]);
+  const total = counts.reduce((sum, n) => sum + n, 0);
+
+  return (
+    <m.div variants={revealItem} className="mt-8">
+      <div className="mb-2 flex items-baseline justify-between font-mono text-xs text-faint">
+        <span>Problems solved</span>
+        <span className="font-display text-xl text-ink">
+          <CountUp value={total} />
+        </span>
+      </div>
+      <div className="flex h-2 gap-0.5 overflow-hidden rounded-full" aria-hidden="true">
+        {levels.map((l, i) => (
+          <m.span
+            key={l.key}
+            style={{ backgroundColor: l.color, flexGrow: counts[i] }}
+            className="origin-left"
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.15, duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
+          />
+        ))}
+      </div>
+      <ul className="mt-2 flex gap-4 font-mono text-[11px] text-faint">
+        {levels.map((l, i) => (
+          <li key={l.key} className="flex items-center gap-1.5">
+            <span className="size-2 rounded-full" style={{ backgroundColor: l.color }} aria-hidden="true" />
+            {l.label} <span className="text-ink-2 tabular-nums">{counts[i]}</span>
+          </li>
+        ))}
+      </ul>
+    </m.div>
   );
 }
 

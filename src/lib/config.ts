@@ -17,6 +17,9 @@ export const site = {
   leetcode: "gxlactus",
 } as const;
 
+/** Problems solved outside LeetCode contests, tracked by hand. Contest solves are added on top at build time. */
+export const practiceSolved = { easy: 138, medium: 220, hard: 52 };
+
 export const socials = [
   { label: "GitHub", icon: "github", href: `https://github.com/${site.github}` },
   { label: "LinkedIn", icon: "linkedin", href: `https://www.linkedin.com/in/${site.linkedin}/` },
