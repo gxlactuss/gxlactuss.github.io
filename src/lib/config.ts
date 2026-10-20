@@ -15,7 +15,7 @@ export const site = {
   linkedin: "mohit-samant-7a76302ba",
   x: "Gxlactuss",
   leetcode: "gxlactus",
-  /** Repo with one `<problem number>.swift` file per solved problem. */
+  /** Repo with the solutions, and a solved count table in its README. */
   solutions: "gxlactuss/Leetcode",
 } as const;
 
