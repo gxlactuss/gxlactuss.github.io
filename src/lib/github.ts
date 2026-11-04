@@ -8,6 +8,8 @@ export type Contribution = {
   repo: string;
   state: "merged" | "open" | "closed";
   createdAt: string;
+  /** True when the repo belongs to a person rather than an org. */
+  userOwned?: boolean;
   /** Lines added and removed. Only filled in for merged PRs. */
   additions?: number;
   deletions?: number;
@@ -56,8 +58,25 @@ export async function getContributions(): Promise<Contribution[]> {
     createdAt: item.created_at,
   }));
 
+  // Search results leave out the owner type, so ask once per owner.
+  const owners = [...new Set(prs.map((pr) => pr.repo.split("/")[0]))];
+  const userOwners = new Set(
+    (await Promise.all(owners.map(async (o) => ((await isUser(o)) ? o : null)))).filter(Boolean),
+  );
+  for (const pr of prs) pr.userOwned = userOwners.has(pr.repo.split("/")[0]);
+
   // Search results leave out the diff size, so ask for each merged PR on its own.
   return Promise.all(prs.map((pr) => (pr.state === "merged" ? withLineCounts(pr) : pr)));
+}
+
+async function isUser(login: string): Promise<boolean> {
+  try {
+    const res = await fetch(`https://api.github.com/users/${login}`, { headers, next: { revalidate: 3600 } });
+    if (!res.ok) return false;
+    return ((await res.json()) as { type: string }).type === "User";
+  } catch {
+    return false;
+  }
 }
 
 async function withLineCounts(pr: Contribution): Promise<Contribution> {

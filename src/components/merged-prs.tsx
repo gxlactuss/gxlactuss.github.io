@@ -2,6 +2,7 @@
 
 import { m, type Variants } from "motion/react";
 import { useState } from "react";
+import { prPills } from "@/lib/config";
 import type { Contribution } from "@/lib/github";
 import { revealItem } from "./section";
 
@@ -19,38 +20,45 @@ function monthYear(iso: string) {
   return new Date(iso).toLocaleDateString("en-US", { month: "short", year: "numeric", timeZone: "UTC" });
 }
 
-/** One pill per org with a merged PR, most PRs first, each with its count. */
+/**
+ * One pill per org with a merged PR, most PRs first, each with its count. A
+ * repo owned by a person gets its own pill named after the repo.
+ */
 export function MergedOrgs({ prs }: { prs: Contribution[] }) {
   const counts = new Map<string, number>();
   for (const pr of prs) {
-    const org = pr.repo.split("/")[0];
-    counts.set(org, (counts.get(org) ?? 0) + 1);
+    const key = pr.userOwned ? pr.repo : pr.repo.split("/")[0];
+    counts.set(key, (counts.get(key) ?? 0) + 1);
   }
-  const orgs = [...counts].sort((x, y) => y[1] - x[1] || x[0].localeCompare(y[0]));
-  if (orgs.length === 0) return null;
+  const pills = [...counts].sort((x, y) => y[1] - x[1] || x[0].localeCompare(y[0]));
+  if (pills.length === 0) return null;
 
   return (
     <m.div variants={revealItem} className="mb-8 flex flex-wrap justify-center gap-1.5">
-      {orgs.map(([org, count]) => (
-        <a
-          key={org}
-          href={`https://github.com/${org}`}
-          target="_blank"
-          rel="noopener"
-          className="inline-flex h-8 items-center gap-2 rounded-full border border-line bg-surface py-0 pl-1 pr-2.5 text-[13px] text-ink-2 transition-[border-color,color,translate] hover:-translate-y-px hover:border-line-strong hover:text-ink"
-        >
-          <img
-            src={`https://github.com/${org}.png?size=40`}
-            alt=""
-            width={20}
-            height={20}
-            loading="lazy"
-            className="size-5 rounded-full bg-surface-2"
-          />
-          <span>{org}</span>
-          <span className="font-mono text-[11px] text-faint">{count}</span>
-        </a>
-      ))}
+      {pills.map(([key, count]) => {
+        const [owner, repo] = key.split("/");
+        const override = prPills[key];
+        return (
+          <a
+            key={key}
+            href={`https://github.com/${key}`}
+            target="_blank"
+            rel="noopener"
+            className="inline-flex h-8 items-center gap-2 rounded-full border border-line bg-surface py-0 pl-1 pr-2.5 text-[13px] text-ink-2 transition-[border-color,color,translate] hover:-translate-y-px hover:border-line-strong hover:text-ink"
+          >
+            <img
+              src={override?.logo ?? `https://github.com/${owner}.png?size=40`}
+              alt=""
+              width={20}
+              height={20}
+              loading="lazy"
+              className={`size-5 bg-surface-2 ${override?.logo ? "rounded-[5px]" : "rounded-full"}`}
+            />
+            <span>{override?.name ?? repo ?? owner}</span>
+            <span className="font-mono text-[11px] text-faint">{count}</span>
+          </a>
+        );
+      })}
     </m.div>
   );
 }

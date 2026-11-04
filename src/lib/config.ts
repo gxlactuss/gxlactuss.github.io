@@ -139,6 +139,20 @@ export const friends = [
   },
 ] as const;
 
+/**
+ * Merged PR pills show one pill per org, but a repo owned by a person gets its
+ * own pill with the repo's name. These override a pill's name or icon, keyed
+ * by org or by "owner/repo". Without a logo it falls back to the owner's avatar.
+ */
+export const prPills: Record<string, { name?: string; logo?: string }> = {
+  "ArneshBanerjee/FaceUnlock": { logo: "/logos/faceunlock.png" },
+  "LostAion/fathom": { name: "FathomDB", logo: "/logos/fathom.png" },
+  "nicklockwood/SwiftFormat": { logo: "/logos/swiftformat.png" },
+  "onevcat/Kingfisher": { logo: "/logos/kingfisher.png" },
+  "vorssaint/vorssaint-utils": { logo: "/logos/vorssaint-utils.png" },
+  "mozilla-mobile": { logo: "/logos/firefox.png" },
+};
+
 export const giscus = {
   /**
    * Flip to true once the giscus app is installed on the repo. Until then the
