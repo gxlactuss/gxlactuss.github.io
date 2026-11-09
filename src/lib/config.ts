@@ -80,6 +80,16 @@ export const projects: Project[] = [
     ],
   },
   {
+    slug: "faceunlock",
+    title: "Face Unlock",
+    status: "building",
+    summary: "",
+    body: [],
+    tech: [],
+    logo: "/logos/faceunlock-app.png",
+    platforms: "macOS 15+",
+  },
+  {
     slug: "placed",
     title: "Placed",
     status: "shipped",
