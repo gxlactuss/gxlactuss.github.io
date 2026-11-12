@@ -147,6 +147,11 @@ export const friends = [
     href: "https://xevrion.dev/",
     avatar: "https://avatars.githubusercontent.com/u/77008538?v=4",
   },
+  {
+    name: "yuga",
+    href: "https://bys-exe.github.io/",
+    avatar: "https://avatars.githubusercontent.com/u/213983518?v=4",
+  },
 ] as const;
 
 /**
